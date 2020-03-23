@@ -4,9 +4,9 @@ namespace MyCookbook.Data.Models
     using System;
     using System.Collections.Generic;
 
-    using MyCookbook.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using MyCookbook.Data.Common.Models;
+    using MyCookbook.Data.Models.Enums;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -16,6 +16,9 @@ namespace MyCookbook.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.Recipes = new HashSet<Recipe>();
+            this.CookedRecipes = new HashSet<UserCookedRecipe>();
+            this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
         }
 
         // Audit info
@@ -33,5 +36,22 @@ namespace MyCookbook.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        // Additional info
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public DateTime Birthdate { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public string ProfilePhoto { get; set; }
+
+        public virtual ICollection<Recipe> Recipes { get; set; }
+
+        public virtual ICollection<UserCookedRecipe> CookedRecipes { get; set; }
+
+        public virtual ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
     }
 }

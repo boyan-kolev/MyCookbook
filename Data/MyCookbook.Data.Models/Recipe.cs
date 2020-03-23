@@ -15,9 +15,13 @@
             this.Ingredients = new HashSet<Ingredient>();
             this.CookingSteps = new HashSet<CookingStep>();
             this.RecipesCookingMethods = new HashSet<RecipeCookingMethod>();
+            this.CookedBy = new HashSet<UserCookedRecipe>();
+            this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
         }
 
         public string Title { get; set; }
+
+        public string Advices { get; set; }
 
         public int Servings { get; set; }
 
@@ -31,7 +35,7 @@
 
         public int AuthorId { get; set; }
 
-        public ApplicationUser MyProperty { get; set; }
+        public ApplicationUser Author { get; set; }
 
         public int CategoryId { get; set; }
 
@@ -48,5 +52,9 @@
         public ICollection<CookingStep> CookingSteps { get; set; }
 
         public ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
+
+        public ICollection<UserCookedRecipe> CookedBy { get; set; }
+
+        public ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
     }
 }
