@@ -19,7 +19,7 @@ namespace MyCookbook.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Recipes = new HashSet<Recipe>();
             this.CookedRecipes = new HashSet<UserCookedRecipe>();
-            this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
+            this.FavoriteRecipes = new HashSet<UserFavoriteRecipe>();
         }
 
         // Audit info
@@ -59,6 +59,6 @@ namespace MyCookbook.Data.Models
 
         public virtual ICollection<UserCookedRecipe> CookedRecipes { get; set; }
 
-        public virtual ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
+        public virtual ICollection<UserFavoriteRecipe> FavoriteRecipes { get; set; }
     }
 }

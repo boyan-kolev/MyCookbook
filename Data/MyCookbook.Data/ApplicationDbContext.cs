@@ -6,11 +6,10 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using MyCookbook.Data.Common.Models;
-    using MyCookbook.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using MyCookbook.Data.Common.Models;
+    using MyCookbook.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -25,6 +24,26 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<CookingMethod> CookingMethods { get; set; }
+
+        public DbSet<CookingStep> CookingSteps { get; set; }
+
+        public DbSet<Cuisine> Cuisines { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Ingredient> Ingredients { get; set; }
+
+        public DbSet<Recipe> Recipes { get; set; }
+
+        public DbSet<RecipeCookingMethod> RecipeCookingMethods { get; set; }
+
+        public DbSet<UserCookedRecipe> UserCookedRecipes { get; set; }
+
+        public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

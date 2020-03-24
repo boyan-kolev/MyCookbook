@@ -1,8 +1,8 @@
 ﻿namespace MyCookbook.Data.Configurations
 {
-    using MyCookbook.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using MyCookbook.Data.Models;
 
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
@@ -28,6 +28,11 @@
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            appUser
+                .HasMany(x => x.Recipes)
+                .WithOne(x => x.Author)
+                .HasForeignKey(x => x.AuthorId);
         }
     }
 }
