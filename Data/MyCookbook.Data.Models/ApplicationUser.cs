@@ -3,6 +3,7 @@ namespace MyCookbook.Data.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Identity;
     using MyCookbook.Data.Common.Models;
@@ -38,12 +39,18 @@ namespace MyCookbook.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         // Additional info
+        [Required]
+        [MaxLength(20)]
         public string FirstName { get; set; }
 
+        [Required]
+        [MaxLength(20)]
         public string LastName { get; set; }
 
+        [Required]
         public DateTime Birthdate { get; set; }
 
+        [Required]
         public Gender Gender { get; set; }
 
         public string ProfilePhoto { get; set; }

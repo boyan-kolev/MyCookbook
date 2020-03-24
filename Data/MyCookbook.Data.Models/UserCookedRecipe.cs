@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     public class UserCookedRecipe
@@ -11,13 +12,15 @@
             this.AddedOn = DateTime.UtcNow;
         }
 
-        public int UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
+        [Required]
         public int RecipeId { get; set; }
 
-        public Recipe Recipe { get; set; }
+        public virtual Recipe Recipe { get; set; }
 
         public DateTime AddedOn { get; set; }
     }

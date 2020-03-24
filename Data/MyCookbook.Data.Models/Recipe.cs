@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     using MyCookbook.Data.Common.Models;
@@ -19,42 +20,52 @@
             this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
         }
 
+        [Required]
+        [MaxLength(80)]
         public string Title { get; set; }
 
         public string Advices { get; set; }
 
+        [Required]
         public int Servings { get; set; }
 
+        [Required]
         public int PrepTime { get; set; }
 
+        [Required]
         public int CookTime { get; set; }
 
+        [Required]
         public Seasonal SeasonalType { get; set; }
 
+        [Required]
         public SkillLevel SkillLevel { get; set; }
 
-        public int AuthorId { get; set; }
+        [Required]
+        public string AuthorId { get; set; }
 
-        public ApplicationUser Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
 
+        [Required]
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
+        [Required]
         public int CuisineId { get; set; }
 
-        public Cuisine Cuisine { get; set; }
+        public virtual Cuisine Cuisine { get; set; }
 
-        public ICollection<Image> Images { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
 
-        public ICollection<Ingredient> Ingredients { get; set; }
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
 
-        public ICollection<CookingStep> CookingSteps { get; set; }
+        public virtual ICollection<CookingStep> CookingSteps { get; set; }
 
-        public ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
+        public virtual ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
 
-        public ICollection<UserCookedRecipe> CookedBy { get; set; }
+        public virtual ICollection<UserCookedRecipe> CookedBy { get; set; }
 
-        public ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
+        public virtual ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
     }
 }
