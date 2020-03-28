@@ -2,9 +2,8 @@
 {
     using System.Diagnostics;
 
-    using MyCookbook.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using MyCookbook.Web.ViewModels;
 
     public class HomeController : BaseController
     {

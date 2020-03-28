@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data;
     using MyCookbook.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {

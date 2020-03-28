@@ -28,8 +28,6 @@
             builder.HasMany(x => x.CookingSteps)
                 .WithOne(x => x.Recipe)
                 .HasForeignKey(x => x.RecipeId);
-
-
         }
     }
 }

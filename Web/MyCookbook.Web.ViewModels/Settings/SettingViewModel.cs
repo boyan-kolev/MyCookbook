@@ -1,9 +1,8 @@
 ﻿namespace MyCookbook.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

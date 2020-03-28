@@ -3,9 +3,8 @@ namespace MyCookbook.Data.Models
 {
     using System;
 
-    using MyCookbook.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using MyCookbook.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {

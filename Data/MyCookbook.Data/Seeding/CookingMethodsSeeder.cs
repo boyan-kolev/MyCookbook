@@ -1,11 +1,12 @@
 ﻿namespace MyCookbook.Data.Seeding
 {
-    using MyCookbook.Data.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
+    using MyCookbook.Data.Models;
 
     public class CookingMethodsSeeder : ISeeder
     {

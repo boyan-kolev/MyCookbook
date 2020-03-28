@@ -2,17 +2,6 @@
 {
     using System.Reflection;
 
-    using MyCookbook.Data;
-    using MyCookbook.Data.Common;
-    using MyCookbook.Data.Common.Repositories;
-    using MyCookbook.Data.Models;
-    using MyCookbook.Data.Repositories;
-    using MyCookbook.Data.Seeding;
-    using MyCookbook.Services.Data;
-    using MyCookbook.Services.Mapping;
-    using MyCookbook.Services.Messaging;
-    using MyCookbook.Web.ViewModels;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -20,6 +9,17 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using MyCookbook.Data;
+    using MyCookbook.Data.Common;
+    using MyCookbook.Data.Common.Repositories;
+    using MyCookbook.Data.Models;
+    using MyCookbook.Data.Repositories;
+    using MyCookbook.Data.Seeding;
+    using MyCookbook.Services.Data;
+    using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
+    using MyCookbook.Services.Messaging;
+    using MyCookbook.Web.ViewModels;
 
     public class Startup
     {
@@ -59,6 +59,7 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
