@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels.Recipes;
     using MyCookbook.Web.ViewModels.Recipes.InputModels;
@@ -13,30 +14,45 @@
 
     public class RecipesController : BaseController
     {
+        private const string ImagesFolderName = "Рецепти";
         private readonly ICategoriesService categoriesService;
+        private readonly ICloudinaryService cloudinaryService;
 
-        public RecipesController(ICategoriesService categoriesService)
+        public RecipesController(ICategoriesService categoriesService, ICloudinaryService cloudinaryService)
         {
             this.categoriesService = categoriesService;
+            this.cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Create()
         {
-            var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
-            var viewModel = new RecipeCreateInputModel
-            {
-                Categories = categories,
-            };
+            //var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
+            //var viewModel = new RecipeCreateInputModel
+            //{
+            //    Categories = categories,
+            //};
 
-            return this.View(viewModel);
+            //return this.View(viewModel);
+
+            return this.View();
         }
 
         [HttpPost]
-        public IActionResult Create(RecipeCreateInputModel input)
+        public async Task<IActionResult> Create(TestInputModel input)
         {
-            if (this.ModelState.IsValid == false)
+            // if (this.ModelState.IsValid == false)
+            // {
+            //    return this.View(files);
+            // }
+
+            if (!this.ModelState.IsValid)
             {
                 return this.View(input);
+            }
+
+            foreach (var image in input.Images)
+            {
+                await this.cloudinaryService.UploadAsync(image, image.FileName, ImagesFolderName);
             }
 
             return this.Redirect("/");

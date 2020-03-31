@@ -6,9 +6,11 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
+    using Microsoft.AspNetCore.Http;
     using MyCookbook.Common;
     using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
+    using MyCookbook.Web.Infrastructure.ValidationAttributes;
     using MyCookbook.Web.ViewModels.Recipes.ViewModels;
 
     public class RecipeCreateInputModel
@@ -54,7 +56,7 @@
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CuisineId { get; set; }
 
-        public virtual ICollection<Image> Images { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }
 

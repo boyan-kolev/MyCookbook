@@ -1,12 +1,41 @@
-﻿@using MyCookbook.Web.ViewModels.Recipes.InputModels
-@model RecipeCreateInputModel
+﻿@*@using MyCookbook.Web.ViewModels.Recipes.InputModels
+    @model RecipeCreateInputModel
 
-@{
-    var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-}
+    @{
+        var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+    }
 
-<form asp-controller="Recipes" asp-action="Create" class="form-control" method="post">
-    <label asp-for="CategoryId"></label>
-    <select asp-for="CategoryId" asp-items="categories" class="form-control"></select>
-    <span asp-validation-for="CategoryId" class="text-danger"></span>
-</form>
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-control">
+        <div class="form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="categories" class="form-control"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Images" class="form-control"></label>
+            <input asp-for="Images" />
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <hr />
+        <div>
+            <input type="submit" value="Качване" class="form-control"/>
+        </div>
+    </form>*@
+
+@using MyCookbook.Web.ViewModels.Recipes.InputModels
+@model TestInputModel
+
+    <form class="col-md-4" asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Images"></label>
+            <input asp-for="Images" class="form-control" />
+            <span asp-validation-for="Images" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <input type="submit" value="Качване" class="form-control" />
+        </div>
+    </form>

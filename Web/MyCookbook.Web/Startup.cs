@@ -16,6 +16,8 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Data.Repositories;
     using MyCookbook.Data.Seeding;
+    using MyCookbook.Services;
+    using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
@@ -50,6 +52,7 @@
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+
             Account account = new Account(
                 this.configuration["Cloudinary:CloudName"],
                 this.configuration["Cloudinary:ApiKey"],
@@ -70,6 +73,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,7 +94,7 @@
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

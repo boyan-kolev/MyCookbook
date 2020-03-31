@@ -31,7 +31,7 @@
 
             UploadResult uploadResult = null;
 
-            using (var destinationStream = new MemoryStream())
+            using (var destinationStream = new MemoryStream(destinationImage))
             {
                 var uploadparams = new ImageUploadParams()
                 {
