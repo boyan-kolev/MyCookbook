@@ -26,16 +26,20 @@
 @using MyCookbook.Web.ViewModels.Recipes.InputModels
 @model TestInputModel
 
-    <form class="col-md-4" asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label asp-for="Images"></label>
-            <input asp-for="Images" class="form-control" />
-            <span asp-validation-for="Images" class="text-danger"></span>
-        </div>
+<form class="col-md-4" asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Images"></label>
+        <input asp-for="Images" class="form-control" />
+        <span asp-validation-for="Images" class="text-danger"></span>
+    </div>
 
-        <hr />
+    <hr />
 
-        <div class="form-group">
-            <input type="submit" value="Качване" class="form-control" />
-        </div>
-    </form>
+    <div class="form-group">
+        <input type="submit" value="Качване" class="form-control" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

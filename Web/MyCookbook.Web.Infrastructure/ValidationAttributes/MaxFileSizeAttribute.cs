@@ -20,28 +20,18 @@
 
             if (files != null)
             {
-                bool isValidSize = true;
-
                 foreach (var file in files)
                 {
                     if (file != null)
                     {
                         if (file.Length > this.maxFileSize)
                         {
-                            isValidSize = false;
-                            break;
+                            return new ValidationResult(this.ErrorMessage);
                         }
                     }
                 }
 
-                if (isValidSize)
-                {
-                    return ValidationResult.Success;
-                }
-                else
-                {
-                    return new ValidationResult(this.ErrorMessage);
-                }
+                return ValidationResult.Success;
             }
             else
             {

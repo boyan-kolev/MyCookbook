@@ -38,6 +38,8 @@
         }
 
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 700 * 1024 * 1024)]
+        [RequestSizeLimit(700 * 1024 * 1024)]
         public async Task<IActionResult> Create(TestInputModel input)
         {
             // if (this.ModelState.IsValid == false)
@@ -50,10 +52,14 @@
                 return this.View(input);
             }
 
-            foreach (var image in input.Images)
+            if (input.Images != null)
             {
-                await this.cloudinaryService.UploadAsync(image, image.FileName, ImagesFolderName);
+                foreach (var image in input.Images)
+                {
+                    await this.cloudinaryService.UploadAsync(image, image.FileName, ImagesFolderName);
+                }
             }
+
 
             return this.Redirect("/");
         }

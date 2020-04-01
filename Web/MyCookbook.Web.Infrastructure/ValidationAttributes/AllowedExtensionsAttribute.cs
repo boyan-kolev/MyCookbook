@@ -20,18 +20,41 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var file = value as IFormFile;
-            var extension = Path.GetExtension(file.FileName);
-            if (file != null)
+            var files = value as IEnumerable<IFormFile>;
+
+            if (files != null)
             {
-                if (!this.extensions.Contains(extension.ToLower()))
+                foreach (var file in files)
                 {
-                    return new ValidationResult(this.ErrorMessage);
+                    var extension = Path.GetExtension(file.FileName);
+
+                    if (file != null)
+                    {
+                        if (!this.extensions.Contains(extension.ToLower()))
+                        {
+                            return new ValidationResult(this.ErrorMessage);
+                        }
+                    }
                 }
+
+                return ValidationResult.Success;
             }
+            else
+            {
+                var file = value as IFormFile;
 
-            return ValidationResult.Success;
+                if (file != null)
+                {
+                    var extension = Path.GetExtension(file.FileName);
+
+                    if (!this.extensions.Contains(extension.ToLower()))
+                    {
+                        return new ValidationResult(this.ErrorMessage);
+                    }
+                }
+
+                return ValidationResult.Success;
+            }
         }
-
     }
 }
