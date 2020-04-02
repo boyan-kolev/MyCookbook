@@ -1,10 +1,13 @@
 ﻿namespace MyCookbook.Web.Infrastructure.ValidationAttributes
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
+    [AttributeUsage(AttributeTargets.Property)]
     public class MaxFileSizeAttribute : ValidationAttribute
     {
         private readonly int maxFileSize;

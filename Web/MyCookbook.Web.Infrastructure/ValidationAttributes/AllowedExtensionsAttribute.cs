@@ -9,6 +9,7 @@
 
     using Microsoft.AspNetCore.Http;
 
+    [AttributeUsage(AttributeTargets.Property)]
     public class AllowedExtensionsAttribute : ValidationAttribute
     {
         private readonly string[] extensions;

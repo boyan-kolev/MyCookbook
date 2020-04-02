@@ -10,6 +10,7 @@
 
     public class TestInputModel
     {
+        [MaxCountElements(5, ErrorMessage = "Позволени са до 5 снимки!")]
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", ".png" }, ErrorMessage = "Не е позволен този формат!")]
         [MaxFileSize(1 * 1024 * 1024, ErrorMessage = "Не е позволено повече от 1мб!")]
         public IEnumerable<IFormFile> Images { get; set; }
