@@ -10,7 +10,7 @@
     public class Ingredient : BaseDeletableModel<int>
     {
         [Required]
-        [MaxLength(200)]
+        [MaxLength(80)]
         public string Name { get; set; }
 
         [Required]

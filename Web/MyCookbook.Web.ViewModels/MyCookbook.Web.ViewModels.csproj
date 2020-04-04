@@ -26,4 +26,10 @@
     <ProjectReference Include="..\MyCookbook.Web.Infrastructure\MyCookbook.Web.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Categories\InputModels\" />
+    <Folder Include="Cuisines\InputModels\" />
+    <Folder Include="Recipes\ViewModels\" />
+  </ItemGroup>
+
 </Project>

@@ -11,6 +11,7 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Web.Infrastructure.ValidationAttributes;
+    using MyCookbook.Web.ViewModels.Cuisines.ViewModels;
     using MyCookbook.Web.ViewModels.Recipes.ViewModels;
 
     public class RecipeCreateInputModel
@@ -53,8 +54,11 @@
 
         public IEnumerable<CategoryDropDownViewModel> Categories { get; set; }
 
+        [DisplayName("Национална кухня")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CuisineId { get; set; }
+
+        public IEnumerable<CuisineDropDownViewModel> Cuisines { get; set; }
 
         [DisplayName("Снимки")]
         [DataType(DataType.Upload)]
@@ -63,7 +67,16 @@
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
         public IEnumerable<IFormFile> Images { get; set; }
 
-        public IEnumerable<string> IngredientsName { get; set; }
+        [DisplayName("Заглавна снимка")]
+        [DataType(DataType.Upload)]
+        [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
+        [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
+        public IFormFile TitleImage { get; set; }
+
+        [DisplayName("Съставки")]
+        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
+        [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        public string IngredientsNames { get; set; }
 
         public virtual ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
 

@@ -25,7 +25,9 @@
         public const int RecipeImagesMaxCount = 5;
         public const int RecipeImageMaxSize = 5 * 1024 * 1024;
 
-        public const int IngredientMaxLength = 200;
-        public const int IngredientMinLength = 2;
+        public const int IngredientNameMaxLength = 80;
+        public const int IngredientNameMinLength = 2;
+        public const int IngredientsNamesMaxLength = 800;
+        public const int IngredientsNamesMinLength = 25;
     }
 }

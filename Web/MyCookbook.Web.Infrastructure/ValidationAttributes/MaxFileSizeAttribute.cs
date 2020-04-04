@@ -11,6 +11,7 @@
     public class MaxFileSizeAttribute : ValidationAttribute
     {
         private readonly int maxFileSize;
+        private bool isCollection;
 
         public MaxFileSizeAttribute(int maxFileSize)
         {
@@ -19,7 +20,18 @@
 
         public string GetErrorMessage()
         {
-            return $"Файловете трябва да бъдат с размер до {this.maxFileSize}мб!";
+            string erorrMessage = string.Empty;
+
+            if (this.isCollection)
+            {
+                erorrMessage = $"Файловете трябва да бъдат с размер до {this.maxFileSize}мб!";
+            }
+            else
+            {
+                erorrMessage = $"Файлът трябва да бъде с размер до {this.maxFileSize}мб!";
+            }
+
+            return erorrMessage;
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -28,6 +40,8 @@
 
             if (files != null)
             {
+                this.isCollection = true;
+
                 foreach (var file in files)
                 {
                     if (file != null)
@@ -47,6 +61,8 @@
 
                 if (file != null)
                 {
+                    this.isCollection = false;
+
                     if (file.Length > this.maxFileSize)
                     {
                         return new ValidationResult(this.ErrorMessage);
