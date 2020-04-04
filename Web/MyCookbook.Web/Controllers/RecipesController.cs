@@ -47,19 +47,10 @@
             //    return this.View(files);
             // }
 
-            if (!this.ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 return this.View(input);
             }
-
-            if (input.Images != null)
-            {
-                foreach (var image in input.Images)
-                {
-                    await this.cloudinaryService.UploadAsync(image, image.FileName, ImagesFolderName);
-                }
-            }
-
 
             return this.Redirect("/");
         }

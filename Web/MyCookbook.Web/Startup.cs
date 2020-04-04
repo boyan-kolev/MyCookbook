@@ -50,7 +50,7 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
 
 
@@ -87,7 +87,7 @@
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (env.IsDevelopment())
+                if (env.IsDevelopment() || env.IsProduction())
                 {
                     dbContext.Database.Migrate();
                 }

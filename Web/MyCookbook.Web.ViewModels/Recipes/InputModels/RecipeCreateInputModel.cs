@@ -56,11 +56,14 @@
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CuisineId { get; set; }
 
+        [DisplayName("Снимки")]
+        [DataType(DataType.Upload)]
+        [MaxCountElements(AttributesConstraints.RecipeImagesMaxCount)]
+        [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
+        [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
         public IEnumerable<IFormFile> Images { get; set; }
 
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
-
-        public virtual ICollection<CookingStep> CookingSteps { get; set; }
+        public IEnumerable<string> IngredientsName { get; set; }
 
         public virtual ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
 

@@ -21,5 +21,11 @@
 
         public const int RecipeCookTimeMinValue = 0;
         public const int RecipeCookTimeMaxValue = 500;
+
+        public const int RecipeImagesMaxCount = 5;
+        public const int RecipeImageMaxSize = 5 * 1024 * 1024;
+
+        public const int IngredientMaxLength = 200;
+        public const int IngredientMinLength = 2;
     }
 }

@@ -19,6 +19,11 @@
             this.extensions = extensions;
         }
 
+        public string GetErrorMessage()
+        {
+            return $"Единствено следните формати са позволени: {string.Join(", ", this.extensions)}";
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var files = value as IEnumerable<IFormFile>;
@@ -33,7 +38,7 @@
                     {
                         if (!this.extensions.Contains(extension.ToLower()))
                         {
-                            return new ValidationResult(this.ErrorMessage);
+                            return new ValidationResult(this.GetErrorMessage());
                         }
                     }
                 }

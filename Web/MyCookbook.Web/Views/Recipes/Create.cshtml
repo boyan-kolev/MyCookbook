@@ -25,21 +25,69 @@
 
 @using MyCookbook.Web.ViewModels.Recipes.InputModels
 @model TestInputModel
-
 <form class="col-md-4" asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Images"></label>
-        <input asp-for="Images" class="form-control" />
-        <span asp-validation-for="Images" class="text-danger"></span>
+    <div id="divCont" class="form-group">
+        <div>
+            <input type="text" name="Ingredients[0].key" />
+            <input type="file" name="Ingredients[0].value" />
+            <input type="text" name="Ingredients[1].key" />
+            <input type="file" name="Ingredients[1].value" />
+        </div>
     </div>
+    <input type="button" onclick="AddTextBox()" value="Add" />
+    <input type="submit" value="Submit" name="test" id="test" />
 
-    <hr />
-
-    <div class="form-group">
-        <input type="submit" value="Качване" class="form-control" />
-    </div>
+    <input type="text" id="member" name="member" value="3">Number of members: (max. 10)
+    <br />
+    <a href="#" id="filldetails" onclick="addFields()">Fill Details</a>
+    <div id="container" />
 </form>
+
+<input type="button" name="butnTest" value="butnTest" id="butnTest" class="butnTest" />
+
+<div class="container">
+    <div class="hello">Hello</div>
+    <div class="goodbye">Goodbye</div>
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+        function GetDynamicTextBox(value) {
+            var a = document.getElementById("divCont").childElementCount + 1;
+
+            return '<input type="text" name="Ingredients[' + a + '].key" /><input type="file" name="Ingredients[' + a + '].value" /><input type="button" onclick="RemoveTextBox(this)" value="Remove" />';
+        }
+
+        function AddTextBox() {
+            var div = document.createElement('DIV');
+            div.innerHTML = GetDynamicTextBox("");
+            document.getElementById("divCont").appendChild(div);
+        }
+
+        function RemoveTextBox(div) {
+            document.getElementById("divCont").removeChild(div.parentNode);
+        }
+
+        function addFields() {
+            var number = document.getElementById("member").value;
+            var container = document.getElementById("container");
+            while (container.hasChildNodes()) {
+                container.removeChild(container.lastChild);
+            }
+            for (i = 0; i < number; i++) {
+                container.appendChild(document.createTextNode("Member " + (i + 1)));
+                var input = document.createElement("input");
+                input.type = "text";
+                container.appendChild(input);
+                container.appendChild(document.createElement("br"));
+            }
+        }
+
+        $(".butnTest").click(function(){
+        $( ".hello" ).clone().appendTo( ".goodbye" );
+    });
+    </script>
 }

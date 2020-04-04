@@ -17,6 +17,11 @@
             this.maxFileSize = maxFileSize;
         }
 
+        public string GetErrorMessage()
+        {
+            return $"Файловете трябва да бъдат с размер до {this.maxFileSize}мб!";
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var files = value as IEnumerable<IFormFile>;
@@ -29,7 +34,7 @@
                     {
                         if (file.Length > this.maxFileSize)
                         {
-                            return new ValidationResult(this.ErrorMessage);
+                            return new ValidationResult(this.GetErrorMessage());
                         }
                     }
                 }

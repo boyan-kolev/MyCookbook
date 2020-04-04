@@ -29,8 +29,6 @@
 
         public DbSet<CookingMethod> CookingMethods { get; set; }
 
-        public DbSet<CookingStep> CookingSteps { get; set; }
-
         public DbSet<Cuisine> Cuisines { get; set; }
 
         public DbSet<Image> Images { get; set; }

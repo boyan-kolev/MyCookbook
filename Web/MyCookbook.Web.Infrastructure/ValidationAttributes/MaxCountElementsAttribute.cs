@@ -8,13 +8,19 @@
 
     using Microsoft.AspNetCore.Http;
 
+    [AttributeUsage(AttributeTargets.Property)]
     public class MaxCountElementsAttribute : ValidationAttribute
     {
         private readonly int maxCountElements;
 
-        public MaxCountElementsAttribute(int maxCountFiles)
+        public MaxCountElementsAttribute(int maxCountElements)
         {
-            this.maxCountElements = maxCountFiles;
+            this.maxCountElements = maxCountElements;
+        }
+
+        public string GetErrorMessage()
+        {
+            return $"Можете да качите максимум {this.maxCountElements} файла!";
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -23,7 +29,7 @@
 
             if (files.Count() > this.maxCountElements)
             {
-                return new ValidationResult(this.ErrorMessage);
+                return new ValidationResult(this.GetErrorMessage());
             }
 
             return ValidationResult.Success;

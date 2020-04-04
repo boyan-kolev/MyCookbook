@@ -14,7 +14,6 @@
         {
             this.Images = new HashSet<Image>();
             this.Ingredients = new HashSet<Ingredient>();
-            this.CookingSteps = new HashSet<CookingStep>();
             this.RecipesCookingMethods = new HashSet<RecipeCookingMethod>();
             this.CookedBy = new HashSet<UserCookedRecipe>();
             this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
@@ -60,8 +59,6 @@
         public virtual ICollection<Image> Images { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }
-
-        public virtual ICollection<CookingStep> CookingSteps { get; set; }
 
         public virtual ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
 
