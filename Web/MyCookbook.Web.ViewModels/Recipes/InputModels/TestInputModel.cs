@@ -1,18 +1,20 @@
 ﻿namespace MyCookbook.Web.ViewModels.Recipes.InputModels
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
 
-    using Microsoft.AspNetCore.Http;
     using MyCookbook.Common;
     using MyCookbook.Web.Infrastructure.ValidationAttributes;
+    using MyCookbook.Web.ViewModels.CookingMethods.ViewModels;
+    using MyCookbook.Web.ViewModels.Recipes.ViewModels;
 
     public class TestInputModel
     {
+        [DisplayName("Категория")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
-        public ICollection<string> Ingredients { get; set; }
+        public int[] CategoryId { get; set; }
+
+        public IEnumerable<CategoryDropDownViewModel> Categories { get; set; }
     }
 }

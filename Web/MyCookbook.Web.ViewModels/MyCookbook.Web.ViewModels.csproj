@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Categories\InputModels\" />
+    <Folder Include="CookingMethods\InputModels\" />
     <Folder Include="Cuisines\InputModels\" />
     <Folder Include="Recipes\ViewModels\" />
   </ItemGroup>

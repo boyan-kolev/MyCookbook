@@ -11,6 +11,7 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Web.Infrastructure.ValidationAttributes;
+    using MyCookbook.Web.ViewModels.CookingMethods.ViewModels;
     using MyCookbook.Web.ViewModels.Cuisines.ViewModels;
     using MyCookbook.Web.ViewModels.Recipes.ViewModels;
 
@@ -21,6 +22,11 @@
         [StringLength(AttributesConstraints.RecipeTitleMaxLength, MinimumLength = AttributesConstraints.RecipeTitleMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
         public string Title { get; set; }
 
+        [DisplayName("Начин на приготвяне")]
+        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
+        [StringLength(AttributesConstraints.RecipeDescriptionMaxLength, MinimumLength = AttributesConstraints.RecipeDescriptionMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        public string Description { get; set; }
+
         [DisplayName("Съвети")]
         [StringLength(AttributesConstraints.RecipeAdviceMaxLength, MinimumLength = AttributesConstraints.RecipeAdviceMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
         public string Advices { get; set; }
@@ -30,11 +36,13 @@
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int Servings { get; set; }
 
+        [DataType(DataType.Duration)]
         [DisplayName("Време за подготовка")]
         [Range(AttributesConstraints.RecipePrepTimeMinValue, AttributesConstraints.RecipePrepTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int PrepTime { get; set; }
 
+        [DataType(DataType.Duration)]
         [DisplayName("Време за готвене")]
         [Range(AttributesConstraints.RecipeCookTimeMinValue, AttributesConstraints.RecipeCookTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
@@ -78,10 +86,7 @@
         [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
         public string IngredientsNames { get; set; }
 
-        public virtual ICollection<RecipeCookingMethod> RecipesCookingMethods { get; set; }
-
-        public virtual ICollection<UserCookedRecipe> CookedBy { get; set; }
-
-        public virtual ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
+        [DisplayName("Метод на приготвяне")]
+        public CookingMethodsCheckboxViewModel[] RecipesCookingMethods { get; set; }
     }
 }

@@ -23,6 +23,10 @@
         [MaxLength(80)]
         public string Title { get; set; }
 
+        [Required]
+        [MaxLength(2000)]
+        public string Description { get; set; }
+
         [MaxLength(800)]
         public string Advices { get; set; }
 

@@ -1,93 +1,69 @@
-﻿@*@using MyCookbook.Web.ViewModels.Recipes.InputModels
-    @model RecipeCreateInputModel
+﻿@using MyCookbook.Web.ViewModels.Recipes.InputModels
+@model RecipeCreateInputModel
 
-    @{
-        var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-    }
+@{
+    var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+    this.ViewData["Title"] = "Добавяне на рецепта";
+}
 
     <form asp-action="Create" method="post" enctype="multipart/form-data" class="form-control">
         <div class="form-group">
-            <label asp-for="CategoryId"></label>
-            <select asp-for="CategoryId" asp-items="categories" class="form-control"></select>
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
+            <label asp-for="Title"></label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Images" class="form-control"></label>
-            <input asp-for="Images" />
-            <span asp-validation-for="Images" class="text-danger"></span>
+            <label asp-for="IngredientsNames"></label>
+            <textarea asp-for="IngredientsNames" rows="5" />
+            <span asp-validation-for="IngredientsNames" class="text-danger"></span>
         </div>
-
+        <div class="form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="categories"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
         <hr />
         <div>
-            <input type="submit" value="Качване" class="form-control"/>
+            <input type="submit" value="Качване" class="form-control" />
         </div>
+    </form>
+
+@*@using MyCookbook.Web.ViewModels.Recipes.InputModels
+    @model TestInputModel
+    <form class="col-md-4" asp-action="Create" method="post" id="chktech">
+        <ul id="checkBox">
+            @for (var i = 0; i < Model.CookingMethods.Length; i++)
+            {
+                <li>
+                    <input type="checkbox" asp-for="@Model.CookingMethods[i].Selected" />
+                    <label asp-for="@Model.CookingMethods[i].Selected">@Model.CookingMethods[i].Name</label>
+                    <input type="hidden" asp-for="@Model.CookingMethods[i].Id" />
+                    <input type="hidden" asp-for="@Model.CookingMethods[i].Name" />
+                    <span asp-validation-for="@Model.CookingMethods[i].Name"></span>
+                </li>
+            }
+        </ul>
+        <span asp-validation-for="CookingMethods"></span>
+        <button type="submit" id="btnSubmit">Filtrer</button>
     </form>*@
-
-@using MyCookbook.Web.ViewModels.Recipes.InputModels
-@model TestInputModel
-<form class="col-md-4" asp-action="Create" method="post" enctype="multipart/form-data">
-    <div id="divCont" class="form-group">
-        <div>
-            <input type="text" name="Ingredients[0].key" />
-            <input type="file" name="Ingredients[0].value" />
-            <input type="text" name="Ingredients[1].key" />
-            <input type="file" name="Ingredients[1].value" />
-        </div>
-    </div>
-    <input type="button" onclick="AddTextBox()" value="Add" />
-    <input type="submit" value="Submit" name="test" id="test" />
-
-    <input type="text" id="member" name="member" value="3">Number of members: (max. 10)
-    <br />
-    <a href="#" id="filldetails" onclick="addFields()">Fill Details</a>
-    <div id="container" />
-</form>
-
-<input type="button" name="butnTest" value="butnTest" id="butnTest" class="butnTest" />
-
-<div class="container">
-    <div class="hello">Hello</div>
-    <div class="goodbye">Goodbye</div>
-</div>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
-
-        function GetDynamicTextBox(value) {
-            var a = document.getElementById("divCont").childElementCount + 1;
-
-            return '<input type="text" name="Ingredients[' + a + '].key" /><input type="file" name="Ingredients[' + a + '].value" /><input type="button" onclick="RemoveTextBox(this)" value="Remove" />';
-        }
-
-        function AddTextBox() {
-            var div = document.createElement('DIV');
-            div.innerHTML = GetDynamicTextBox("");
-            document.getElementById("divCont").appendChild(div);
-        }
-
-        function RemoveTextBox(div) {
-            document.getElementById("divCont").removeChild(div.parentNode);
-        }
-
-        function addFields() {
-            var number = document.getElementById("member").value;
-            var container = document.getElementById("container");
-            while (container.hasChildNodes()) {
-                container.removeChild(container.lastChild);
-            }
-            for (i = 0; i < number; i++) {
-                container.appendChild(document.createTextNode("Member " + (i + 1)));
-                var input = document.createElement("input");
-                input.type = "text";
-                container.appendChild(input);
-                container.appendChild(document.createElement("br"));
-            }
-        }
-
-        $(".butnTest").click(function(){
-        $( ".hello" ).clone().appendTo( ".goodbye" );
-    });
+        var isPushedButton = false;
+        $(document).ready(function () {
+            $('#btnSubmit').click(function () {
+                if ($('#chktech input:checked').length > 0) {
+                    return true;
+                }
+                else {
+                    if (isPushedButton == false) {
+                        document.getElementById("checkBox").innerHTML += "Моля изберете поне един метод на приготвяне!";
+                    }
+                    isPushedButton = true;
+                    return false;
+                }
+            })
+        });
     </script>
 }

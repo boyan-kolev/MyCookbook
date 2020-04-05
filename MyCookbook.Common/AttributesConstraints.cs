@@ -29,5 +29,8 @@
         public const int IngredientNameMinLength = 2;
         public const int IngredientsNamesMaxLength = 800;
         public const int IngredientsNamesMinLength = 25;
+
+        public const int RecipeDescriptionMaxLength = 2000;
+        public const int RecipeDescriptionMinLength = 50;
     }
 }
