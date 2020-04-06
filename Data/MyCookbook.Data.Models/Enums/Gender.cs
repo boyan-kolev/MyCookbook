@@ -3,14 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     public enum Gender
     {
-        [Description("Мъж")]
+        [Display(Name = "Мъж")]
         Male = 1,
 
-        [Description("Жена")]
+        [Display(Name = "Жена")]
         Female = 2,
     }
 }

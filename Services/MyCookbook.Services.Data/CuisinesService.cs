@@ -10,18 +10,18 @@
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
 
-    public class CategoriesService : ICategoriesService
+    public class CuisinesService : ICuisinesService
     {
-        private readonly IDeletableEntityRepository<Category> categoriesRepository;
+        private readonly IDeletableEntityRepository<Cuisine> cuisinesRepository;
 
-        public CategoriesService(IDeletableEntityRepository<Category> categoriesRepository)
+        public CuisinesService(IDeletableEntityRepository<Cuisine> cuisinesRepository)
         {
-            this.categoriesRepository = categoriesRepository;
+            this.cuisinesRepository = cuisinesRepository;
         }
 
         public IEnumerable<T> GetAll<T>(int? count = null)
         {
-            IQueryable<Category> query = this.categoriesRepository
+            IQueryable<Cuisine> query = this.cuisinesRepository
                 .All()
                 .OrderBy(x => x.Name);
 

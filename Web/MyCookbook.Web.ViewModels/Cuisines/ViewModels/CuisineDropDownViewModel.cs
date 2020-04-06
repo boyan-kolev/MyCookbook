@@ -4,7 +4,10 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class CuisineDropDownViewModel
+    using MyCookbook.Data.Models;
+    using MyCookbook.Services.Mapping;
+
+    public class CuisineDropDownViewModel : IMapFrom<Cuisine>
     {
         public int Id { get; set; }
 

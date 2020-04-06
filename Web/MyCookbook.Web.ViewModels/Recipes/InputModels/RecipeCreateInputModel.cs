@@ -81,7 +81,7 @@
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
         public IFormFile TitleImage { get; set; }
 
-        [DisplayName("Съставки")]
+        [DisplayName("Съставки (по една на ред)")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
         public string IngredientsNames { get; set; }

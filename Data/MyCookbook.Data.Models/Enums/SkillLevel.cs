@@ -3,17 +3,18 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     public enum SkillLevel
     {
-        [Description("Начинаещ")]
+        [Display(Name = "Начинаещ")]
         Beginner = 1,
 
-        [Description("Напреднал")]
+        [Display(Name = "Напреднал")]
         Advanced = 2,
 
-        [Description("Професионалист")]
+        [Display(Name = "Професионалист")]
         Professional = 3,
     }
 }

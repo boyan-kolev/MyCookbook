@@ -3,23 +3,24 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     public enum Seasonal
     {
-        [Description("Всесезонни рецепти")]
+        [Display(Name = "Всесезонни рецепти")]
         AllSeason = 1,
 
-        [Description("Пролетни рецепти")]
+        [Display(Name = "Пролетни рецепти")]
         Spring = 2,
 
-        [Description("Летни ястия")]
+        [Display(Name = "Летни ястия")]
         Summer = 3,
 
-        [Description("Есенни ястия")]
+        [Display(Name = "Есенни ястия")]
         Autumn = 4,
 
-        [Description("Зимни ястия")]
+        [Display(Name = "Зимни ястия")]
         Winter = 5,
     }
 }

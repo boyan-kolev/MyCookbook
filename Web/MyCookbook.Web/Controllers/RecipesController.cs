@@ -10,6 +10,7 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels.CookingMethods.ViewModels;
+    using MyCookbook.Web.ViewModels.Cuisines.ViewModels;
     using MyCookbook.Web.ViewModels.Recipes;
     using MyCookbook.Web.ViewModels.Recipes.InputModels;
     using MyCookbook.Web.ViewModels.Recipes.ViewModels;
@@ -20,12 +21,14 @@
         private readonly ICategoriesService categoriesService;
         private readonly ICloudinaryService cloudinaryService;
         private readonly ICookingMethodsService cookingMethodsService;
+        private readonly ICuisinesService cuisinesService;
 
-        public RecipesController(ICategoriesService categoriesService, ICloudinaryService cloudinaryService, ICookingMethodsService cookingMethodsService)
+        public RecipesController(ICategoriesService categoriesService, ICloudinaryService cloudinaryService, ICookingMethodsService cookingMethodsService, ICuisinesService cuisinesService)
         {
             this.categoriesService = categoriesService;
             this.cloudinaryService = cloudinaryService;
             this.cookingMethodsService = cookingMethodsService;
+            this.cuisinesService = cuisinesService;
         }
 
 
@@ -35,10 +38,21 @@
         public IActionResult Create()
         {
             var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
-            RecipeCreateInputModel viewModel = new RecipeCreateInputModel();
-            viewModel.Categories = categories;
+            var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
+
+            RecipeCreateInputModel viewModel = new RecipeCreateInputModel() 
+            {
+                Categories = categories,
+                Cuisines = cuisines,
+            };
 
             return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Create(RecipeCreateInputModel input)
+        {
+            return this.Redirect("/");
         }
 
         //[HttpPost]
