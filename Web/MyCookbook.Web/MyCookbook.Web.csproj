@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\MyCookbook.Data.Models\MyCookbook.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\MyCookbook.Data\MyCookbook.Data.csproj" />
+    <ProjectReference Include="..\..\MyCookbook.Web.InputModels\MyCookbook.Web.InputModels.csproj" />
     <ProjectReference Include="..\..\Services\MyCookbook.Services.Data\MyCookbook.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\MyCookbook.Services.Mapping\MyCookbook.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\MyCookbook.Services.Messaging\MyCookbook.Services.Messaging.csproj" />

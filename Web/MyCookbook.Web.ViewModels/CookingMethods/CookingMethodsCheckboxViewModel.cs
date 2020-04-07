@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.ViewModels.CookingMethods.ViewModels
+﻿namespace MyCookbook.Web.ViewModels.CookingMethods
 {
     using System;
     using System.Collections.Generic;

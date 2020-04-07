@@ -10,10 +10,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702</NoWarn>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <ItemGroup>
-    <AdditionalFiles Include="..\..\stylecop.json" />
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,14 +26,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\MyCookbook.Data.Models\MyCookbook.Data.Models.csproj" />
-    <ProjectReference Include="..\..\MyCookbook.Common\MyCookbook.Common.csproj" />
-    <ProjectReference Include="..\..\Services\MyCookbook.Services.Mapping\MyCookbook.Services.Mapping.csproj" />
-    <ProjectReference Include="..\MyCookbook.Web.Infrastructure\MyCookbook.Web.Infrastructure.csproj" />
+    <Folder Include="Administration\" />
+    <Folder Include="Categories\" />
+    <Folder Include="CookingMethods\" />
+    <Folder Include="Cuisines\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Recipes\" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\MyCookbook.Data.Models\MyCookbook.Data.Models.csproj" />
+    <ProjectReference Include="..\MyCookbook.Common\MyCookbook.Common.csproj" />
+    <ProjectReference Include="..\Web\MyCookbook.Web.ViewModels\MyCookbook.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

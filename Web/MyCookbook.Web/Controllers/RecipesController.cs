@@ -1,19 +1,12 @@
 ﻿namespace MyCookbook.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Web.ViewModels.CookingMethods.ViewModels;
-    using MyCookbook.Web.ViewModels.Cuisines.ViewModels;
-    using MyCookbook.Web.ViewModels.Recipes;
-    using MyCookbook.Web.ViewModels.Recipes.InputModels;
-    using MyCookbook.Web.ViewModels.Recipes.ViewModels;
+    using MyCookbook.Web.InputModels.Recipes;
+    using MyCookbook.Web.ViewModels;
+    using MyCookbook.Web.ViewModels.CookingMethods;
+    using MyCookbook.Web.ViewModels.Cuisines;
 
     public class RecipesController : BaseController
     {
@@ -39,11 +32,13 @@
         {
             var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
             var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
+            var cookingMethods = this.cookingMethodsService.GetAll<CookingMethodsCheckboxViewModel>();
 
-            RecipeCreateInputModel viewModel = new RecipeCreateInputModel() 
+            RecipeCreateInputModel viewModel = new RecipeCreateInputModel()
             {
                 Categories = categories,
                 Cuisines = cuisines,
+                CookingMethods = cookingMethods,
             };
 
             return this.View(viewModel);

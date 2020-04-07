@@ -1,19 +1,17 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.InputModels
+﻿namespace MyCookbook.Web.InputModels.Recipes
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Text;
 
     using Microsoft.AspNetCore.Http;
     using MyCookbook.Common;
-    using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Web.Infrastructure.ValidationAttributes;
-    using MyCookbook.Web.ViewModels.CookingMethods.ViewModels;
-    using MyCookbook.Web.ViewModels.Cuisines.ViewModels;
-    using MyCookbook.Web.ViewModels.Recipes.ViewModels;
+    using MyCookbook.Web.ViewModels;
+    using MyCookbook.Web.ViewModels.CookingMethods;
+    using MyCookbook.Web.ViewModels.Cuisines;
 
     public class RecipeCreateInputModel
     {
@@ -81,12 +79,12 @@
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
         public IFormFile TitleImage { get; set; }
 
-        [DisplayName("Съставки (по една на ред)")]
+        [DisplayName("Съставки")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
         public string IngredientsNames { get; set; }
 
         [DisplayName("Метод на приготвяне")]
-        public CookingMethodsCheckboxViewModel[] RecipesCookingMethods { get; set; }
+        public CookingMethodsCheckboxViewModel[] CookingMethods { get; set; }
     }
 }
