@@ -60,6 +60,8 @@
 
         public virtual Cuisine Cuisine { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public virtual ICollection<Image> Images { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }
