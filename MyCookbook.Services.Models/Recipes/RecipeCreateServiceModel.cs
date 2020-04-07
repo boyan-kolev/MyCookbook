@@ -3,12 +3,15 @@
     using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Http;
+    using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Web.ViewModels.CookingMethods;
 
     public class RecipeCreateServiceModel
     {
         public string Title { get; set; }
+
+        public string AuthorId { get; set; }
 
         public string Description { get; set; }
 
@@ -28,9 +31,9 @@
 
         public int CuisineId { get; set; }
 
-        public IEnumerable<IFormFile> Images { get; set; }
+        public IEnumerable<string> ImageUrls { get; set; }
 
-        public IFormFile TitleImage { get; set; }
+        public string TitleImageUrl { get; set; }
 
         public string IngredientsNames { get; set; }
 

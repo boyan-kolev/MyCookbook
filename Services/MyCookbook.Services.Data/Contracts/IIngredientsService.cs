@@ -5,10 +5,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using MyCookbook.Services.Models.Recipes;
-
-    public interface IRecipesService
+    public interface IIngredientsService
     {
-        Task AddAsync(RecipeCreateServiceModel model);
+        Task SetIngredientToRecipeAsync(string ingredientName, int recipeId);
     }
 }
