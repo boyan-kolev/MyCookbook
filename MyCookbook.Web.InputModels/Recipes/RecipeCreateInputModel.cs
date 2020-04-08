@@ -17,16 +17,16 @@
     {
         [DisplayName("Заглавие")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
-        [StringLength(AttributesConstraints.RecipeTitleMaxLength, MinimumLength = AttributesConstraints.RecipeTitleMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        [StringLength(AttributesConstraints.RecipeTitleMaxLength, MinimumLength = AttributesConstraints.RecipeTitleMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Title { get; set; }
 
         [DisplayName("Начин на приготвяне")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
-        [StringLength(AttributesConstraints.RecipeDescriptionMaxLength, MinimumLength = AttributesConstraints.RecipeDescriptionMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        [StringLength(AttributesConstraints.RecipeDescriptionMaxLength, MinimumLength = AttributesConstraints.RecipeDescriptionMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Description { get; set; }
 
         [DisplayName("Съвети")]
-        [StringLength(AttributesConstraints.RecipeAdviceMaxLength, MinimumLength = AttributesConstraints.RecipeAdviceMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        [StringLength(AttributesConstraints.RecipeAdviceMaxLength, MinimumLength = AttributesConstraints.RecipeAdviceMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Advices { get; set; }
 
         [DisplayName("Порции")]
@@ -70,7 +70,7 @@
         [DataType(DataType.Upload)]
         [MaxCountElements(AttributesConstraints.RecipeImagesMaxCount)]
         [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
-        [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
+        [AllowedExtensions(new string[] { ".jpeg", ".jpg", ".png" })]
         public IEnumerable<IFormFile> Images { get; set; }
 
         [DisplayName("Заглавна снимка")]
@@ -81,7 +81,7 @@
 
         [DisplayName("Съставки")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
-        [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthMessage)]
+        [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string IngredientsNames { get; set; }
 
         [DisplayName("Метод на приготвяне")]

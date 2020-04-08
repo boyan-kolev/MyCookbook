@@ -1,27 +1,41 @@
 ﻿namespace MyCookbook.Web.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Models.Recipes;
     using MyCookbook.Web.InputModels.Recipes;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
+    using System.Threading.Tasks;
 
     public class RecipesController : BaseController
     {
         private const string ImagesFolderName = "Рецепти";
+        private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
         private readonly ICloudinaryService cloudinaryService;
         private readonly ICookingMethodsService cookingMethodsService;
         private readonly ICuisinesService cuisinesService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public RecipesController(ICategoriesService categoriesService, ICloudinaryService cloudinaryService, ICookingMethodsService cookingMethodsService, ICuisinesService cuisinesService)
+        public RecipesController(
+            IRecipesService recipesService,
+            ICategoriesService categoriesService,
+            ICloudinaryService cloudinaryService,
+            ICookingMethodsService cookingMethodsService,
+            ICuisinesService cuisinesService,
+            UserManager<ApplicationUser> userManager)
         {
+            this.recipesService = recipesService;
             this.categoriesService = categoriesService;
             this.cloudinaryService = cloudinaryService;
             this.cookingMethodsService = cookingMethodsService;
             this.cuisinesService = cuisinesService;
+            this.userManager = userManager;
         }
 
 
@@ -45,8 +59,44 @@
         }
 
         [HttpPost]
-        public IActionResult Create(RecipeCreateInputModel input)
+        public async Task<IActionResult> Create(RecipeCreateInputModel input)
         {
+            if (!this.ModelState.IsValid)
+            {
+                var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
+                var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
+                var cookingMethods = this.cookingMethodsService.GetAll<CookingMethodsCheckboxViewModel>();
+
+                input.Categories = categories;
+                input.Cuisines = cuisines;
+                input.CookingMethods = cookingMethods;
+
+                return this.View(input);
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var serviceModel = new RecipeCreateServiceModel
+            {
+                Title = input.Title,
+                AuthorId = user.Id,
+                Description = input.Description,
+                Advices = input.Advices,
+                Servings = input.Servings,
+                PrepTime = input.PrepTime,
+                CookTime = input.CookTime,
+                SeasonalType = input.SeasonalType,
+                SkillLevel = input.SkillLevel,
+                CategoryId = input.CategoryId,
+                CuisineId = input.CuisineId,
+                Images = input.Images,
+                TitleImage = input.TitleImage,
+                IngredientsNames = input.IngredientsNames,
+                CookingMethods = input.CookingMethods,
+            };
+
+            await this.recipesService.AddAsync(serviceModel);
+
             return this.Redirect("/");
         }
 

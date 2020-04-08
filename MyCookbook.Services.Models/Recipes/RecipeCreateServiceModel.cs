@@ -31,9 +31,9 @@
 
         public int CuisineId { get; set; }
 
-        public IEnumerable<string> ImageUrls { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; }
 
-        public string TitleImageUrl { get; set; }
+        public IFormFile TitleImage { get; set; }
 
         public string IngredientsNames { get; set; }
 
