@@ -55,7 +55,7 @@
 
                     if (!this.extensions.Contains(extension.ToLower()))
                     {
-                        return new ValidationResult(this.ErrorMessage);
+                        return new ValidationResult(this.GetErrorMessage());
                     }
                 }
 

@@ -10,5 +10,9 @@
     public interface IRecipesService
     {
         Task AddAsync(RecipeCreateServiceModel model);
+
+        T GetById<T>(int recipeId);
+
+        bool IsExistRecipeTitle(string recipeTtile);
     }
 }

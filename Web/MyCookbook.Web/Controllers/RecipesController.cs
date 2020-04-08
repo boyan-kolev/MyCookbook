@@ -1,5 +1,7 @@
 ﻿namespace MyCookbook.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Models;
@@ -10,7 +12,6 @@
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
-    using System.Threading.Tasks;
 
     public class RecipesController : BaseController
     {
@@ -38,10 +39,6 @@
             this.userManager = userManager;
         }
 
-
-        // [RequestFormLimits(MultipartBodyLengthLimit = 700 * 1024 * 1024)]
-        // [RequestSizeLimit(700 * 1024 * 1024)]
-        // [HttpPost]
         public IActionResult Create()
         {
             var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
@@ -58,10 +55,24 @@
             return this.View(viewModel);
         }
 
+        [RequestSizeLimit(700 * 1024 * 1024)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 700 * 1024 * 1024)]
         [HttpPost]
         public async Task<IActionResult> Create(RecipeCreateInputModel input)
         {
-            if (!this.ModelState.IsValid)
+            var isExist = this.recipesService.IsExistRecipeTitle(input.Title);
+
+            var isAtLeastChecked = false;
+            foreach (var cookingMethod in input.CookingMethods)
+            {
+                if (cookingMethod.Selected)
+                {
+                    isAtLeastChecked = true;
+                    break;
+                }
+            }
+
+            if (!this.ModelState.IsValid || !isAtLeastChecked || isExist)
             {
                 var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
                 var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
@@ -99,31 +110,5 @@
 
             return this.Redirect("/");
         }
-
-        //[HttpPost]
-        //public IActionResult Create(TestInputModel input)
-        //{
-        //    var isAtLeastChecked = false;
-        //    foreach (var cookingMethod in input.CookingMethods)
-        //    {
-        //        if (cookingMethod.Selected)
-        //        {
-        //            isAtLeastChecked = true;
-        //            break;
-        //        }
-        //    }
-
-        //    if (!this.ModelState.IsValid || !isAtLeastChecked)
-        //    {
-        //        return this.View(input);
-        //    }
-
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        return this.View();
-        //    }
-
-        //    return this.Redirect("/");
-        //}
     }
 }

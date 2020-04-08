@@ -33,7 +33,7 @@
         public const int RecipeDescriptionMaxLength = 2000;
         public const int RecipeDescriptionMinLength = 50;
 
-        //Users
+        // Users
         public const int UserPasswordMaxLength = 100;
         public const int UserPasswordMinLength = 6;
 

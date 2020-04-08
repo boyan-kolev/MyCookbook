@@ -1,42 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using MyCookbook.Common;
-using MyCookbook.Data.Models;
-using MyCookbook.Data.Models.Enums;
-
-namespace MyCookbook.Web.Areas.Identity.Pages.Account
+﻿namespace MyCookbook.Web.Areas.Identity.Pages.Account
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.Logging;
+    using MyCookbook.Common;
+    using MyCookbook.Data.Models;
+    using MyCookbook.Data.Models.Enums;
+    using MyCookbook.Services.Contracts;
+    using MyCookbook.Web.Infrastructure.ValidationAttributes;
+
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private const string CloudinaryFolderName = "Профилни снимки";
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ICloudinaryService cloudinaryService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICloudinaryService cloudinaryService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _emailSender = emailSender;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this._logger = logger;
+            this._emailSender = emailSender;
+            this.cloudinaryService = cloudinaryService;
         }
 
         [BindProperty]
@@ -93,10 +101,18 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account
 
             [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
             [DataType(DataType.Date)]
+            [Display(Name = "Рождена дата")]
             public DateTime Birthdate { get; set; }
 
             [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
+            [Display(Name = "Пол")]
             public Gender Gender { get; set; }
+
+            [Display(Name = "Заглавна снимка")]
+            [DataType(DataType.Upload)]
+            [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
+            [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
+            public IFormFile ProfilePhoto { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -111,6 +127,11 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
+                var profilePhotoUrl = await this.cloudinaryService.UploadAsync(
+                    this.Input.ProfilePhoto,
+                    this.Input.ProfilePhoto.FileName,
+                    CloudinaryFolderName);
+
                 var user = new ApplicationUser
                 {
                     UserName = this.Input.UserName,
@@ -119,6 +140,7 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account
                     LastName = this.Input.LastName,
                     Birthdate = this.Input.Birthdate,
                     Gender = this.Input.Gender,
+                    ProfilePhoto = profilePhotoUrl,
                 };
                 var result = await this._userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)

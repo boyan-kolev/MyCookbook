@@ -27,9 +27,12 @@
         {
             var files = value as IEnumerable<IFormFile>;
 
-            if (files.Count() > this.maxCountElements)
+            if (files != null)
             {
-                return new ValidationResult(this.GetErrorMessage());
+                if (files.Count() > this.maxCountElements)
+                {
+                    return new ValidationResult(this.GetErrorMessage());
+                }
             }
 
             return ValidationResult.Success;

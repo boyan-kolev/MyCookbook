@@ -2,12 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
     using MyCookbook.Services.Models.Recipes;
     using MyCookbook.Web.ViewModels.CookingMethods;
 
@@ -46,27 +49,35 @@
             };
 
             await this.recipesRepository.AddAsync(recipe);
-            foreach (var imageFile in model.Images)
+            await this.recipesRepository.SaveChangesAsync();
+
+            if (model.Images != null)
             {
-                var imageUrl = await this.cloudinaryService.UploadAsync(imageFile, imageFile.FileName, CloudinaryFolderName);
-
-                var image = new Image()
+                foreach (var imageFile in model.Images)
                 {
-                    Url = imageUrl,
-                    RecipeId = recipe.Id,
-                };
+                    var imageUrl = await this.cloudinaryService.UploadAsync(imageFile, imageFile.FileName, CloudinaryFolderName);
 
-                recipe.Images.Add(image);
+                    var image = new Image()
+                    {
+                        Url = imageUrl,
+                        RecipeId = recipe.Id,
+                    };
+
+                    recipe.Images.Add(image);
+                }
             }
 
-            var titleImageUrl = await this.cloudinaryService.UploadAsync(model.TitleImage, model.TitleImage.FileName, CloudinaryFolderName);
-            var titleImage = new Image()
+            if (model.TitleImage != null)
             {
-                Url = titleImageUrl,
-                IsTitlePhoto = true,
-                RecipeId = recipe.Id,
-            };
-            recipe.Images.Add(titleImage);
+                var titleImageUrl = await this.cloudinaryService.UploadAsync(model.TitleImage, model.TitleImage.FileName, CloudinaryFolderName);
+                var titleImage = new Image()
+                {
+                    Url = titleImageUrl,
+                    IsTitlePhoto = true,
+                    RecipeId = recipe.Id,
+                };
+                recipe.Images.Add(titleImage);
+            }
 
             var ingredientsNames = model.IngredientsNames.Split("\r\n");
 
@@ -76,6 +87,20 @@
             }
 
             await this.SetRecipeToRecipeCookingMthods(model.CookingMethods, recipe.Id);
+            await this.recipesRepository.SaveChangesAsync();
+        }
+
+        public T GetById<T>(int recipeId)
+        {
+            var recipe = this.recipesRepository.All().Where(x => x.Id == recipeId)
+                .To<T>().FirstOrDefault();
+
+            return recipe;
+        }
+
+        public bool IsExistRecipeTitle(string recipeTtile)
+        {
+            return this.recipesRepository.All().Any(x => x.Title == recipeTtile);
         }
 
         private async Task SetRecipeToRecipeCookingMthods(CookingMethodsCheckboxViewModel[] cookingMethodsCheckBox, int recipeId)
@@ -85,11 +110,14 @@
             foreach (var cookingMethodModel in cookingMethodsCheckBox)
             {
                 // TODO add validation if null
-                var cookingMethod = await this.cookingMethodsRepository.GetByIdWithDeletedAsync(cookingMethodModel.Id);
-                recipe.RecipesCookingMethods.Add(new RecipeCookingMethod
+                if (cookingMethodModel.Selected)
                 {
-                    CookingMethod = cookingMethod,
-                });
+                    var cookingMethod = await this.cookingMethodsRepository.GetByIdWithDeletedAsync(cookingMethodModel.Id);
+                    recipe.RecipesCookingMethods.Add(new RecipeCookingMethod
+                    {
+                        CookingMethod = cookingMethod,
+                    });
+                }
             }
 
             this.recipesRepository.Update(recipe);

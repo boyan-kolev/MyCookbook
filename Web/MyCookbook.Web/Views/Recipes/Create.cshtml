@@ -46,6 +46,7 @@
                         Качи заглавна снимка
                     </span>
                 </label>
+                <span asp-validation-for="TitleImage" class="text-danger"></span>
             </div>
             <div class="form-group"></div>
             <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб! Максимум до 5 снимки!">
@@ -58,6 +59,7 @@
                         Качи допълнителни снимки
                     </span>
                 </label>
+                <span asp-validation-for="Images" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-7">
@@ -168,7 +170,7 @@
         });
     </script>
     <script>
-        // Add the following code if you want the name of the file appear on select
+        // Add the following code if you want the name of the file(for image) appear on select
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);

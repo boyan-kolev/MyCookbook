@@ -24,11 +24,11 @@
 
             if (this.isCollection)
             {
-                erorrMessage = $"Файловете трябва да бъдат с размер до {this.maxFileSize}мб!";
+                erorrMessage = $"Файловете трябва да бъдат с размер до {this.maxFileSize / 1024 / 1024}мб!";
             }
             else
             {
-                erorrMessage = $"Файлът трябва да бъде с размер до {this.maxFileSize}мб!";
+                erorrMessage = $"Файлът трябва да бъде с размер до {this.maxFileSize / 1024 / 1024}мб!";
             }
 
             return erorrMessage;
@@ -65,7 +65,7 @@
 
                     if (file.Length > this.maxFileSize)
                     {
-                        return new ValidationResult(this.ErrorMessage);
+                        return new ValidationResult(this.GetErrorMessage());
                     }
                 }
 

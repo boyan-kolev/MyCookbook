@@ -1,17 +1,24 @@
 ﻿@page
+@using MyCookbook.Data.Models.Enums
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Регистрация";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+            <h4>Създайте нов профил</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.UserName"></label>
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Потребителското име, трябва да бъде между 3 и 256 символа!"></i>
+                <input asp-for="Input.UserName" class="form-control" />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
@@ -19,6 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Паролата, трябва да бъде между 6 и 100 символа!"></i>
                 <input asp-for="Input.Password" class="form-control" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
@@ -27,7 +35,40 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Името, трябва да бъде между 3 и 20 символа!"></i>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Фамилията, трябва да бъде между 3 и 20 символа!"></i>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Birthdate"></label>
+                <input asp-for="Input.Birthdate" class="form-control" />
+                <span asp-validation-for="Input.Birthdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Gender"></label>
+                <select asp-for="Input.Gender" asp-items="@Html.GetEnumSelectList<Gender>()" class="form-control"></select>
+                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+            </div>
+            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
+                <input asp-for="Input.ProfilePhoto" class="custom-file-input form-control" />
+                <label asp-for="Input.ProfilePhoto" class="custom-file-label form-control">
+                    <span class="badge badge-light">
+                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    </span>
+                    <span>
+                        Качи профилна снимка
+                    </span>
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">
@@ -64,4 +105,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Add the following code if you want the name of the file(for image) appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 }
