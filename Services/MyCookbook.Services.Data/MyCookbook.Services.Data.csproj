@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Data\MyCookbook.Data.Models\MyCookbook.Data.Models.csproj" />
     <ProjectReference Include="..\..\MyCookbook.Services.Models\MyCookbook.Services.Models.csproj" />
     <ProjectReference Include="..\MyCookbook.Services.Mapping\MyCookbook.Services.Mapping.csproj" />
+    <ProjectReference Include="..\MyCookbook.Services.Models\MyCookbook.Services.Models.csproj" />
     <ProjectReference Include="..\MyCookbook.Services\MyCookbook.Services.csproj" />
   </ItemGroup>
 

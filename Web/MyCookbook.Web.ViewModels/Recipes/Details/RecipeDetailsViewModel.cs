@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+
     using AutoMapper;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
@@ -38,12 +39,5 @@
         public IEnumerable<RecipeDetailsIngredientsViewModel> Ingredients { get; set; }
 
         public IEnumerable<RecipeDetailsCookingMethodsViewModel> RecipesCookingMethods { get; set; }
-
-        //public void CreateMappings(IProfileExpression configuration)
-        //{
-        //    configuration.CreateMap<IEnumerable<Ingredient>, RecipeDetailsViewModel>().ForMember(
-        //        dest => dest.IngredientsName,
-        //        opt => opt.MapFrom(n => n.Select(x => x.Name)));
-        //}
     }
 }

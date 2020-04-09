@@ -43,6 +43,7 @@
     <ProjectReference Include="..\..\Services\MyCookbook.Services.Messaging\MyCookbook.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\MyCookbook.Services\MyCookbook.Services.csproj" />
     <ProjectReference Include="..\MyCookbook.Web.Infrastructure\MyCookbook.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\MyCookbook.Web.InputModels\MyCookbook.Web.InputModels.csproj" />
     <ProjectReference Include="..\MyCookbook.Web.ViewModels\MyCookbook.Web.ViewModels.csproj" />
   </ItemGroup>
 </Project>

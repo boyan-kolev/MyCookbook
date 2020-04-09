@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using MyCookbook.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using MyCookbook.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

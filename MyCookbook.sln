@@ -39,9 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCookbook.Web.Tests", "Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCookbook.Web.ViewModels", "Web\MyCookbook.Web.ViewModels\MyCookbook.Web.ViewModels.csproj", "{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCookbook.Web.InputModels", "MyCookbook.Web.InputModels\MyCookbook.Web.InputModels.csproj", "{98E83878-E025-41DD-B10E-BFCA52997D28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCookbook.Web.InputModels", "Web\MyCookbook.Web.InputModels\MyCookbook.Web.InputModels.csproj", "{98E83878-E025-41DD-B10E-BFCA52997D28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCookbook.Services.Models", "MyCookbook.Services.Models\MyCookbook.Services.Models.csproj", "{0F9ACF6B-D128-4156-B685-5717A7A6A86C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCookbook.Services.Models", "Services\MyCookbook.Services.Models\MyCookbook.Services.Models.csproj", "{0F9ACF6B-D128-4156-B685-5717A7A6A86C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
