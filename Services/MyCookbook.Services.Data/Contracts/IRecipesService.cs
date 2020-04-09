@@ -4,8 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
-
-    using MyCookbook.Services.Models.Recipes;
+    using MyCookbook.Services.Models.Recipes.Create;
 
     public interface IRecipesService
     {

@@ -11,7 +11,7 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
-    using MyCookbook.Services.Models.Recipes;
+    using MyCookbook.Services.Models.Recipes.Create;
     using MyCookbook.Web.ViewModels.CookingMethods;
 
     public class RecipesService : IRecipesService

@@ -4,7 +4,10 @@
     using System.Collections.Generic;
     using System.Text;
 
-    public class RecipeDetailsUserViewModel
+    using MyCookbook.Data.Models;
+    using MyCookbook.Services.Mapping;
+
+    public class RecipeDetailsUserViewModel : IMapFrom<ApplicationUser>
     {
         public string FirstName { get; set; }
 

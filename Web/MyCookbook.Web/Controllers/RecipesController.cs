@@ -7,11 +7,12 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Services.Models.Recipes;
+    using MyCookbook.Services.Models.Recipes.Create;
     using MyCookbook.Web.InputModels.Recipes;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
+    using MyCookbook.Web.ViewModels.Recipes.Details;
 
     public class RecipesController : BaseController
     {
@@ -109,6 +110,13 @@
             await this.recipesService.AddAsync(serviceModel);
 
             return this.Redirect("/");
+        }
+
+        public IActionResult Details(int id)
+        {
+            var viewModel = this.recipesService.GetById<RecipeDetailsViewModel>(id);
+
+            return this.View();
         }
     }
 }

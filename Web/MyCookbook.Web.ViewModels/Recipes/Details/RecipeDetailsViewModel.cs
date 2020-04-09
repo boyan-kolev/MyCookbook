@@ -2,8 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
-
+    using AutoMapper;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.CookingMethods;
@@ -26,18 +27,23 @@
 
         public string SkillLevel { get; set; }
 
-        public string AuthorId { get; set; }
+        public RecipeDetailsUserViewModel Author { get; set; }
 
-        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
 
-        public int CuisineId { get; set; }
+        public string CuisineName { get; set; }
 
-        public string TitlePhotoUrl { get; set; }
+        public IEnumerable<RecipeDetailsImagesViewModel> Images { get; set; }
 
-        public IEnumerable<string> ImageUrls { get; set; }
+        public IEnumerable<RecipeDetailsIngredientsViewModel> Ingredients { get; set; }
 
-        public IEnumerable<string> IngredientsName { get; set; }
+        public IEnumerable<RecipeDetailsCookingMethodsViewModel> RecipesCookingMethods { get; set; }
 
-        public IEnumerable<RecipeDetailsCookingMethodsViewModel> CookingMethods { get; set; }
+        //public void CreateMappings(IProfileExpression configuration)
+        //{
+        //    configuration.CreateMap<IEnumerable<Ingredient>, RecipeDetailsViewModel>().ForMember(
+        //        dest => dest.IngredientsName,
+        //        opt => opt.MapFrom(n => n.Select(x => x.Name)));
+        //}
     }
 }

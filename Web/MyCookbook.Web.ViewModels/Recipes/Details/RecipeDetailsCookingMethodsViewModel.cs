@@ -3,13 +3,25 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using AutoMapper;
+    using MyCookbook.Data.Models;
+    using MyCookbook.Services.Mapping;
 
-    public class RecipeDetailsCookingMethodsViewModel
+    public class RecipeDetailsCookingMethodsViewModel : IMapFrom<RecipeCookingMethod>, IHaveCustomMappings
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<RecipeCookingMethod, RecipeDetailsCookingMethodsViewModel>()
+                .ForMember(
+                dest => dest.Name,
+                opt => opt.MapFrom(x => x.CookingMethod.Name))
+                .ForMember(
+                dest => dest.ImageUrl,
+                opt => opt.MapFrom(x => x.CookingMethod.ImageUrl));
+        }
     }
 }
