@@ -49,12 +49,16 @@
             </div>
         </nav>
     </header>
-
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @this.RenderBody()
-        </main>
+    <div class="container-fluid row">
+        <div class="col-md-3">
+            <h1>View component</h1>
+        </div>
+        <div class="col-md-9">
+            <partial name="_CookieConsentPartial" />
+            <main role="main" class="pb-3">
+                @this.RenderBody()
+            </main>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

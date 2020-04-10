@@ -12,17 +12,12 @@
     {
         public string Name { get; set; }
 
-        public string ImageUrl { get; set; }
-
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<RecipeCookingMethod, RecipeDetailsCookingMethodsViewModel>()
                 .ForMember(
                 dest => dest.Name,
-                opt => opt.MapFrom(x => x.CookingMethod.Name))
-                .ForMember(
-                dest => dest.ImageUrl,
-                opt => opt.MapFrom(x => x.CookingMethod.ImageUrl));
+                opt => opt.MapFrom(x => x.CookingMethod.Name));
         }
     }
 }

@@ -23,6 +23,7 @@
         private readonly ICookingMethodsService cookingMethodsService;
         private readonly ICuisinesService cuisinesService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUsersService usersService;
 
         public RecipesController(
             IRecipesService recipesService,
@@ -30,7 +31,8 @@
             ICloudinaryService cloudinaryService,
             ICookingMethodsService cookingMethodsService,
             ICuisinesService cuisinesService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IUsersService usersService)
         {
             this.recipesService = recipesService;
             this.categoriesService = categoriesService;
@@ -38,6 +40,7 @@
             this.cookingMethodsService = cookingMethodsService;
             this.cuisinesService = cuisinesService;
             this.userManager = userManager;
+            this.usersService = usersService;
         }
 
         public IActionResult Create()
@@ -115,8 +118,11 @@
         public IActionResult Details(int id)
         {
             var viewModel = this.recipesService.GetById<RecipeDetailsViewModel>(id);
+            int authorAge = this.usersService.GetAge(viewModel.Author.Birthdate);
+            viewModel.Author.Age = authorAge;
 
-            return this.View();
+            
+            return this.View(viewModel);
         }
     }
 }

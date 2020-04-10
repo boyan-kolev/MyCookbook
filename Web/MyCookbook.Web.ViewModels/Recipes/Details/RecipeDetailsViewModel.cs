@@ -32,9 +32,9 @@
 
         public string CategoryName { get; set; }
 
-        public string CuisineName { get; set; }
+        public RecipeDetailsCuisineViewModel Cuisine { get; set; }
 
-        public IEnumerable<RecipeDetailsImagesViewModel> Images { get; set; }
+        public RecipeDetailsImagesViewModel[] Images { get; set; }
 
         public IEnumerable<RecipeDetailsIngredientsViewModel> Ingredients { get; set; }
 
