@@ -120,8 +120,7 @@
             var viewModel = this.recipesService.GetById<RecipeDetailsViewModel>(id);
             int authorAge = this.usersService.GetAge(viewModel.Author.Birthdate);
             viewModel.Author.Age = authorAge;
-
-            
+ 
             return this.View(viewModel);
         }
     }

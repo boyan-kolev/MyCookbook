@@ -8,13 +8,13 @@
 
     public enum SkillLevel
     {
-        [Display(Name = "Начинаещ")]
+        [Display(Name = "Начинаещи")]
         Beginner = 1,
 
-        [Display(Name = "Напреднал")]
+        [Display(Name = "Напреднали")]
         Advanced = 2,
 
-        [Display(Name = "Професионалист")]
+        [Display(Name = "Професионалисти")]
         Professional = 3,
     }
 }

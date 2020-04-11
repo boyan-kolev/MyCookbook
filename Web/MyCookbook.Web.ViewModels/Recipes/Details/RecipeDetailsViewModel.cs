@@ -7,6 +7,7 @@
 
     using AutoMapper;
     using MyCookbook.Data.Models;
+    using MyCookbook.Data.Models.Enums;
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.CookingMethods;
 
@@ -24,9 +25,11 @@
 
         public int CookTime { get; set; }
 
+        public int TotalTime => this.CookTime + this.PrepTime;
+
         public string SeasonalType { get; set; }
 
-        public string SkillLevel { get; set; }
+        public SkillLevel SkillLevel { get; set; }
 
         public RecipeDetailsUserViewModel Author { get; set; }
 
