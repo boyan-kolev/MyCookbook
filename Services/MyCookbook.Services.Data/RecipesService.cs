@@ -1,9 +1,7 @@
 ﻿namespace MyCookbook.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using MyCookbook.Data.Common.Repositories;
@@ -11,8 +9,8 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
-    using MyCookbook.Services.Models.Recipes.Create;
     using MyCookbook.Web.ViewModels.CookingMethods;
+    using MyCookbook.Web.ViewModels.Recipes.Create;
 
     public class RecipesService : IRecipesService
     {
@@ -96,6 +94,21 @@
                 .To<T>().FirstOrDefault();
 
             return recipe;
+        }
+
+        public IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null)
+        {
+            IQueryable<Recipe> query = this.recipesRepository
+                .All()
+                .Where(r => r.CategoryId == categoryId)
+                .OrderBy(r => r.CreatedOn);
+
+            if (count.HasValue)
+            {
+                query = query.Take(count.Value);
+            }
+
+            return query.To<T>().ToList();
         }
 
         public bool IsExistRecipeTitle(string recipeTtile)

@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.InputModels.Recipes
+﻿namespace MyCookbook.Web.ViewModels.Recipes.Create
 {
     using System;
     using System.Collections.Generic;

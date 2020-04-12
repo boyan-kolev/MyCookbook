@@ -33,6 +33,8 @@
 
         public RecipeDetailsUserViewModel Author { get; set; }
 
+        public int CategoryId { get; set; }
+
         public string CategoryName { get; set; }
 
         public RecipeDetailsCuisineViewModel Cuisine { get; set; }
@@ -42,5 +44,7 @@
         public IEnumerable<RecipeDetailsIngredientsViewModel> Ingredients { get; set; }
 
         public IEnumerable<RecipeDetailsCookingMethodsViewModel> RecipesCookingMethods { get; set; }
+
+        public IEnumerable<RecipesDetailsSimilarRecipesViewModel> SimilarRecipes { get; set; }
     }
 }

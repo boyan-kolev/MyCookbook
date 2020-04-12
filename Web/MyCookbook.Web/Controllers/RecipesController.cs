@@ -7,16 +7,16 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Services.Models.Recipes.Create;
-    using MyCookbook.Web.InputModels.Recipes;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
+    using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
 
     public class RecipesController : BaseController
     {
         private const string ImagesFolderName = "Рецепти";
+        private const int DetailsCountOfSimilarRecipes = 20;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
         private readonly ICloudinaryService cloudinaryService;
@@ -119,8 +119,12 @@
         {
             var viewModel = this.recipesService.GetById<RecipeDetailsViewModel>(id);
             int authorAge = this.usersService.GetAge(viewModel.Author.Birthdate);
+            var similarRecipes = this.recipesService
+                .GetAllFromCategory<RecipesDetailsSimilarRecipesViewModel>(viewModel.CategoryId, DetailsCountOfSimilarRecipes);
             viewModel.Author.Age = authorAge;
- 
+            viewModel.SimilarRecipes = similarRecipes;
+            viewModel.SimilarRecipes = similarRecipes;
+
             return this.View(viewModel);
         }
     }

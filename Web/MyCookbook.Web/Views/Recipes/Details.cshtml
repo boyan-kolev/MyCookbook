@@ -83,3 +83,16 @@
         </div>
     </div>
 </div>
+<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var similarRecipe in Model.SimilarRecipes)
+    {
+        <div class="col mb-4">
+            <div class="card">
+                <img src="@similarRecipe.TitlePhotoUrl" class="card-img-top" alt="Снимка на рецептата">
+                <div class="card-body">
+                    <h5 class="card-title">@similarRecipe.Title</h5>
+                </div>
+            </div>
+        </div>
+    }
+</div>
