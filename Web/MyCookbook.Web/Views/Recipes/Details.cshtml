@@ -1,8 +1,9 @@
-﻿@using MyCookbook.Web.ViewModels.Recipes.Details
+﻿@using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
 @using MyCookbook.Data.Models.Enums
 @using MyCookbook.Web.Infrastructure
 @using MyCookbook.Web.Infrastructure.Extensions
 @using System.ComponentModel.DataAnnotations;
+@using MyCookbook.Common
 @model RecipeDetailsViewModel
 
 @{
@@ -28,13 +29,13 @@
                     if (Model.Images[i].IsTitlePhoto)
                     {
                         <div class="carousel-item active">
-                            <img class="d-block w-100" height="300" src="@Model.Images[i].Url" alt="@i slide">
+                            <img class="d-block w-100" height="300" src="@Model.Images[i].Url" alt="Снимка @i">
                         </div>
                     }
                     else
                     {
                         <div class="carousel-item">
-                            <img class="d-block w-100" height="300" src="@Model.Images[i].Url" alt="@i slide">
+                            <img class="d-block w-100" height="300" src="@Model.Images[i].Url" alt="Снимка @i">
                         </div>
                     }
                 }
@@ -47,6 +48,43 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
+        </div>
+        <hr class="border" />
+        <div class="row rounded border" style="background-color:lightgray">
+            <div class="col-md-3">
+                <p></p>
+                <div>
+                    <div class="text-md-center"><i class="far fa-clock fa-2x"></i></div>
+                    <div class="text-md-center"><strong>Приготвяне</strong></div>
+                    <div class="text-md-center">@Model.PrepTime мин.</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <p></p>
+                <div>
+                    <div class="text-md-center"><i class="far fa-clock fa-2x"></i></div>
+                    <div class="text-md-center"><strong>Готвене</strong></div>
+                    <div class="text-md-center">@Model.CookTime мин.</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <p></p>
+                <div>
+                    <div class="text-md-center"><i class="fas fa-stopwatch fa-2x"></i></div>
+                    <div class="text-md-center"><strong>Общо</strong></div>
+                    <div class="text-md-center">@Model.TotalTime мин.</div>
+                </div>
+            </div>
+            <hr style="width: 1px; height: 80px; background: black; border: none;" />
+            <div class="col-md-3">
+                <p></p>
+                <div>
+                    <div class="text-md-center"><i class="fas fa-utensils fa-2x"></i></div>
+                    <div class="text-md-center"><strong>Порции</strong></div>
+                    <div class="text-md-center">@Model.Servings</div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
         </div>
     </div>
     <div class="col-md-5">
@@ -69,7 +107,7 @@
             <span>@Model.CategoryName</span>
         </div>
         <div class="media">
-            <span class="font-weight-bold">Метод на приготвяне:&nbsp;</span>
+            <span class="font-weight-bold">Метод на приготвяне: </span>
             @string.Join(", ", Model.RecipesCookingMethods.Select(x => x.Name))
         </div>
         <div>
@@ -81,18 +119,74 @@
                 @skillLevel.Name
             </span>
         </div>
+        <div>
+            <span class="font-weight-bold">Подходяща за: </span>
+            <span>
+                @{
+                    var seazonalType = Model.SeasonalType.GetAttribute<DisplayAttribute>();
+                }
+                @seazonalType.Name
+            </span>
+        </div>
+        <div>
+            <span class="font-weight-bold">Сготвена: </span>
+            <span>
+                @Model.Cooked пъти
+            </span>
+        </div>
     </div>
 </div>
+<p>123</p>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Съставки</h3>
+        <ul>
+            @foreach (var ingredinet in Model.Ingredients)
+            {
+                <li>@ingredinet.Name</li>
+            }
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <h3>Начин на приготвяне</h3>
+        @Model.Description
+    </div>
+</div>
+<hr class="border" />
+<h4>Още рецепти от категория "@Model.CategoryName"</h4>
 <div class="row row-cols-1 row-cols-md-3">
     @foreach (var similarRecipe in Model.SimilarRecipes)
     {
         <div class="col mb-4">
             <div class="card">
-                <img src="@similarRecipe.TitlePhotoUrl" class="card-img-top" alt="Снимка на рецептата">
-                <div class="card-body">
-                    <h5 class="card-title">@similarRecipe.Title</h5>
-                </div>
+                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@similarRecipe.Id">
+                    @if (@similarRecipe.TitlePhotoUrl == null)
+                    {
+                        <img src="@GlobalConstants.DefaultRecipeImageUrl " class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+                    else
+                    {
+                        <img src="@similarRecipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@similarRecipe.Title</h5>
+                    </div>
+                </a>
             </div>
         </div>
     }
 </div>
+<h6 class="text-md-center">Виж всички рецепти от категория "@Model.CategoryName"</h6>
+<div class="test">999</div>
+
+@section Scripts {
+    <script>
+        $(".test").hover(function () {
+            $(this).css("background-color", "yellow");
+        }, function () {
+            $(this).css("background-color", "white");
+        });
+    </script>
+
+}

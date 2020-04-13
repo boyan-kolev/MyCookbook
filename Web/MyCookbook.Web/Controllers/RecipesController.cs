@@ -11,7 +11,8 @@
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
     using MyCookbook.Web.ViewModels.Recipes.Create;
-    using MyCookbook.Web.ViewModels.Recipes.Details;
+    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
+    using MyCookbook.Services.Mapping;
 
     public class RecipesController : BaseController
     {
@@ -117,13 +118,8 @@
 
         public IActionResult Details(int id)
         {
-            var viewModel = this.recipesService.GetById<RecipeDetailsViewModel>(id);
-            int authorAge = this.usersService.GetAge(viewModel.Author.Birthdate);
-            var similarRecipes = this.recipesService
-                .GetAllFromCategory<RecipesDetailsSimilarRecipesViewModel>(viewModel.CategoryId, DetailsCountOfSimilarRecipes);
-            viewModel.Author.Age = authorAge;
-            viewModel.SimilarRecipes = similarRecipes;
-            viewModel.SimilarRecipes = similarRecipes;
+            var serviceModel = this.recipesService.GetById(id, DetailsCountOfSimilarRecipes);
+            var viewModel = AutoMapperConfig.MapperInstance.Map<RecipeDetailsViewModel>(serviceModel);
 
             return this.View(viewModel);
         }

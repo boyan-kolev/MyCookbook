@@ -1,14 +1,12 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.Details
+﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     using AutoMapper;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
 
-    public class RecipeDetailsUserViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
+    public class RecipeDetailsUserServiceModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public string FullName { get; set; }
 
@@ -22,7 +20,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<ApplicationUser, RecipeDetailsUserViewModel>()
+            configuration.CreateMap<ApplicationUser, RecipeDetailsUserServiceModel>()
             .ForMember(
                 dest => dest.FullName,
                 opt => opt.MapFrom(x => $"{x.FirstName} {x.LastName}"));

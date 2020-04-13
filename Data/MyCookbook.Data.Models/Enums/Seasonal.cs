@@ -8,19 +8,19 @@
 
     public enum Seasonal
     {
-        [Display(Name = "Всесезонни рецепти")]
+        [Display(Name = "Всички сезони")]
         AllSeason = 1,
 
-        [Display(Name = "Пролетни рецепти")]
+        [Display(Name = "Пролетния сезон")]
         Spring = 2,
 
-        [Display(Name = "Летни ястия")]
+        [Display(Name = "Летния сезон")]
         Summer = 3,
 
-        [Display(Name = "Есенни ястия")]
+        [Display(Name = "Есения сезон")]
         Autumn = 4,
 
-        [Display(Name = "Зимни ястия")]
+        [Display(Name = "Зимния сезон")]
         Winter = 5,
     }
 }

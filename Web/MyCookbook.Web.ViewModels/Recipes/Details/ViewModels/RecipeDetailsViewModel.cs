@@ -1,17 +1,12 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.Details
+﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
-    using AutoMapper;
-    using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Services.Mapping;
-    using MyCookbook.Web.ViewModels.CookingMethods;
+    using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
 
-    public class RecipeDetailsViewModel : IMapFrom<Recipe>
+    public class RecipeDetailsViewModel : IMapFrom<RecipeDetailsServiceModel>
     {
         public string Title { get; set; }
 
@@ -25,9 +20,11 @@
 
         public int CookTime { get; set; }
 
-        public int TotalTime => this.CookTime + this.PrepTime;
+        public int TotalTime { get; set; }
 
-        public string SeasonalType { get; set; }
+        public int Cooked { get; set; }
+
+        public Seasonal SeasonalType { get; set; }
 
         public SkillLevel SkillLevel { get; set; }
 
@@ -45,6 +42,6 @@
 
         public IEnumerable<RecipeDetailsCookingMethodsViewModel> RecipesCookingMethods { get; set; }
 
-        public IEnumerable<RecipesDetailsSimilarRecipesViewModel> SimilarRecipes { get; set; }
+        public IEnumerable<RecipeDetailsSimilarRecipesViewModel> SimilarRecipes { get; set; }
     }
 }

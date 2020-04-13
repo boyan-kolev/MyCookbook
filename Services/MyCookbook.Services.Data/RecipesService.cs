@@ -3,14 +3,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using MyCookbook.Common;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
+    using MyCookbook.Data.Models.Enums;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Recipes.Create;
+    using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
 
     public class RecipesService : IRecipesService
     {
@@ -20,13 +22,20 @@
         private readonly IDeletableEntityRepository<CookingMethod> cookingMethodsRepository;
         private readonly IIngredientsService ingredientsService;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly IUsersService usersService;
 
-        public RecipesService(IDeletableEntityRepository<Recipe> recipesRepository, IDeletableEntityRepository<CookingMethod> cookingMethodRepository, IIngredientsService ingredientsService, ICloudinaryService cloudinaryService)
+        public RecipesService(
+            IDeletableEntityRepository<Recipe> recipesRepository,
+            IDeletableEntityRepository<CookingMethod> cookingMethodRepository,
+            IIngredientsService ingredientsService,
+            ICloudinaryService cloudinaryService,
+            IUsersService usersService)
         {
             this.recipesRepository = recipesRepository;
             this.cookingMethodsRepository = cookingMethodRepository;
             this.ingredientsService = ingredientsService;
             this.cloudinaryService = cloudinaryService;
+            this.usersService = usersService;
         }
 
         public async Task AddAsync(RecipeCreateServiceModel model)
@@ -88,20 +97,61 @@
             await this.recipesRepository.SaveChangesAsync();
         }
 
-        public T GetById<T>(int recipeId)
+        public RecipeDetailsServiceModel GetById(int recipeId, int countOfSimilarRecipes)
         {
-            var recipe = this.recipesRepository.All().Where(x => x.Id == recipeId)
-                .To<T>().FirstOrDefault();
+            var serviceModel = this.recipesRepository
+                .All()
+                .Where(x => x.Id == recipeId)
+                .To<RecipeDetailsServiceModel>()
+                .FirstOrDefault();
 
-            return recipe;
+            int authorAge = this.usersService.GetAge(serviceModel.Author.Birthdate);
+            var similarRecipes = this.GetAllFromCategory<RecipeDetailsSimilarRecipesServiceModel>(
+                serviceModel.CategoryId,
+                countOfSimilarRecipes,
+                recipeId);
+
+            serviceModel.Author.Age = authorAge;
+            serviceModel.SimilarRecipes = similarRecipes;
+
+            if (serviceModel.Images.Length < 1)
+            {
+                serviceModel.Images = new RecipeDetailsImagesServiceModel[1];
+                RecipeDetailsImagesServiceModel recipeDefaultImage = new RecipeDetailsImagesServiceModel
+                {
+                    Url = GlobalConstants.DefaultRecipeImageUrl,
+                    IsTitlePhoto = true,
+                };
+
+                serviceModel.Images[0] = recipeDefaultImage;
+            }
+
+            if (serviceModel.Author.ProfilePhoto == null)
+            {
+                if (serviceModel.Author.Gender == Gender.Male.ToString())
+                {
+                    serviceModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoMaleUrl;
+                }
+                else
+                {
+                    serviceModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoFemaleUrl;
+                }
+            }
+
+            return serviceModel;
         }
 
-        public IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null)
+        public IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null)
         {
             IQueryable<Recipe> query = this.recipesRepository
                 .All()
                 .Where(r => r.CategoryId == categoryId)
                 .OrderBy(r => r.CreatedOn);
+
+            if (withoutRecipeId.HasValue)
+            {
+                query = query.Where(r => r.Id != withoutRecipeId);
+            }
 
             if (count.HasValue)
             {

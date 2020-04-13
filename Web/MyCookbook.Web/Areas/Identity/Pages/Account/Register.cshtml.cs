@@ -128,10 +128,14 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var profilePhotoUrl = await this.cloudinaryService.UploadAsync(
-                    this.Input.ProfilePhoto,
-                    this.Input.ProfilePhoto.FileName,
-                    CloudinaryFolderName);
+                string profilePhotoUrl = null;
+                if (this.Input.ProfilePhoto != null)
+                {
+                    profilePhotoUrl = await this.cloudinaryService.UploadAsync(
+                        this.Input.ProfilePhoto,
+                        this.Input.ProfilePhoto.FileName,
+                        CloudinaryFolderName);
+                }
 
                 var user = new ApplicationUser
                 {
