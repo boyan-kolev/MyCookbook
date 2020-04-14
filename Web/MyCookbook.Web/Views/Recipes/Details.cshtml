@@ -134,11 +134,34 @@
                 @Model.Cooked пъти
             </span>
         </div>
+        <hr class="border"/>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Оцени рецептата:</strong>
+            </div>
+            <div id="divStars" class="col-md-8">
+                @for (int i = 0; i < 5; i++)
+                {
+                    if (i < 3)
+                    {
+                        <a href="#" onclick="vote(@i)" style="color:gold">
+                            <i class="fas fa-star fa-2x"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="#" onclick="vote(@i)" style="color:gray">
+                            <i class="fas fa-star fa-2x"></i>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
     </div>
 </div>
-<p>123</p>
+<p></p>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 border rounded">
         <h3>Съставки</h3>
         <ul>
             @foreach (var ingredinet in Model.Ingredients)
@@ -147,7 +170,7 @@
             }
         </ul>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8 border rounded">
         <h3>Начин на приготвяне</h3>
         @Model.Description
     </div>
@@ -178,15 +201,41 @@
     }
 </div>
 <h6 class="text-md-center">Виж всички рецепти от категория "@Model.CategoryName"</h6>
-<div class="test">999</div>
 
 @section Scripts {
     <script>
-        $(".test").hover(function () {
-            $(this).css("background-color", "yellow");
-        }, function () {
-            $(this).css("background-color", "white");
-        });
+        function vote(countStars) {
+
+            var div = document.getElementById("divStars");
+            var anchor = div.getElementsByTagName("a");
+
+            for (i = 0; i < anchor.length; i++) {
+
+                if (i <= countStars) {
+                    anchor[i].style.color = 'gold'
+                }
+                else {
+                    anchor[i].style.color = 'gray'
+                }
+
+            }
+        }
+        function loadStars(countStars) {
+
+            var div = document.getElementById("divStars");
+            var anchor = div.getElementsByTagName("a");
+
+            for (i = 0; i < anchor.length; i++) {
+
+                if (i <= countStars) {
+                    anchor[i].style.color = 'red'
+                }
+                else {
+                    anchor[i].style.color = 'red'
+                }
+
+            }
+        }
     </script>
 
 }
