@@ -134,23 +134,30 @@
                 @Model.Cooked пъти
             </span>
         </div>
+        <div>
+            <span class="font-weight-bold">Рейтинг: </span>
+            <span id="rating">
+                @Model.Ratings
+            </span>
+            <span>/5</span>
+        </div>
         <hr class="border"/>
         <div class="row">
             <div class="col-md-4">
                 <strong>Оцени рецептата:</strong>
             </div>
             <div id="divStars" class="col-md-8">
-                @for (int i = 0; i < 5; i++)
+                @for (int i = 1; i <= 5; i++)
                 {
-                    if (i < 3)
+                    if (i <= Model.UsersStars)
                     {
-                        <a href="#" onclick="vote(@i)" style="color:gold">
+                        <a href="#" onclick="rating(@Model.Id, @i)" style="color:gold">
                             <i class="fas fa-star fa-2x"></i>
                         </a>
                     }
                     else
                     {
-                        <a href="#" onclick="vote(@i)" style="color:gray">
+                        <a href="#" onclick="rating(@Model.Id, @i)" style="color:gray">
                             <i class="fas fa-star fa-2x"></i>
                         </a>
                     }
@@ -204,14 +211,13 @@
 
 @section Scripts {
     <script>
-        function vote(countStars) {
-
-            var div = document.getElementById("divStars");
+        function rating(recipeId, countStars) {
+             var div = document.getElementById("divStars");
             var anchor = div.getElementsByTagName("a");
 
             for (i = 0; i < anchor.length; i++) {
 
-                if (i <= countStars) {
+                if (i <= countStars - 1) {
                     anchor[i].style.color = 'gold'
                 }
                 else {
@@ -219,23 +225,37 @@
                 }
 
             }
-        }
-        function loadStars(countStars) {
 
-            var div = document.getElementById("divStars");
-            var anchor = div.getElementsByTagName("a");
-
-            for (i = 0; i < anchor.length; i++) {
-
-                if (i <= countStars) {
-                    anchor[i].style.color = 'red'
+            var json = { recipeId: recipeId, stars: countStars };
+            $.ajax({
+                url: "/api/ratings",
+                type: "POST",
+                data: JSON.stringify(json),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#rating").html(data.ratings);
                 }
-                else {
-                    anchor[i].style.color = 'red'
-                }
+            });
 
-            }
+           
         }
+        //function loadStars(countStars) {
+
+        //    var div = document.getElementById("divStars");
+        //    var anchor = div.getElementsByTagName("a");
+
+        //    for (i = 0; i < anchor.length; i++) {
+
+        //        if (i <= countStars) {
+        //            anchor[i].style.color = 'red'
+        //        }
+        //        else {
+        //            anchor[i].style.color = 'red'
+        //        }
+
+        //    }
+        //}
     </script>
 
 }

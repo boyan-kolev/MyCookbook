@@ -10,7 +10,7 @@
     {
         Task AddAsync(RecipeCreateServiceModel model);
 
-        RecipeDetailsServiceModel GetById(int recipeId, int countOfSimilarRecipes);
+        RecipeDetailsServiceModel GetById(int recipeId, string userId, int countOfSimilarRecipes);
 
         IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null);
 

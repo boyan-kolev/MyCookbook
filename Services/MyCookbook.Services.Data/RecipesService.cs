@@ -97,7 +97,7 @@
             await this.recipesRepository.SaveChangesAsync();
         }
 
-        public RecipeDetailsServiceModel GetById(int recipeId, int countOfSimilarRecipes)
+        public RecipeDetailsServiceModel GetById(int recipeId, string userId, int countOfSimilarRecipes)
         {
             var serviceModel = this.recipesRepository
                 .All()
@@ -105,7 +105,9 @@
                 .To<RecipeDetailsServiceModel>()
                 .FirstOrDefault();
 
-            int authorAge = this.usersService.GetAge(serviceModel.Author.Birthdate);
+            var recipe = this.recipesRepository.All().Where(x => x.Id == recipeId).Select(x => x.Ratings.FirstOrDefault(f => f.UserId == userId).Stars).FirstOrDefault();
+            // var userStars = recipe.Ratings.Where(x => x.UserId == userId).Select(r => r.Stars).FirstOrDefault();
+            var authorAge = this.usersService.GetAge(serviceModel.Author.Birthdate);
             var similarRecipes = this.GetAllFromCategory<RecipeDetailsSimilarRecipesServiceModel>(
                 serviceModel.CategoryId,
                 countOfSimilarRecipes,
@@ -113,6 +115,7 @@
 
             serviceModel.Author.Age = authorAge;
             serviceModel.SimilarRecipes = similarRecipes;
+            serviceModel.UsersStars = recipe;
 
             if (serviceModel.Images.Length < 1)
             {

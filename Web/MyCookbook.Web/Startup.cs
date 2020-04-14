@@ -51,9 +51,9 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
-            services.AddControllersWithViews(options => 
+            services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
 
@@ -83,6 +83,7 @@
             services.AddTransient<IIngredientsService, IngredientsService>();
             services.AddTransient<IRecipesService, RecipesService>();
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IRatingsService, RatingsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

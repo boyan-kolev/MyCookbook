@@ -8,6 +8,8 @@
 
     public class RecipeDetailsViewModel : IMapFrom<RecipeDetailsServiceModel>
     {
+        public int Id { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -23,6 +25,10 @@
         public int TotalTime { get; set; }
 
         public int Cooked { get; set; }
+
+        public double Ratings { get; set; }
+
+        public int UsersStars { get; set; }
 
         public Seasonal SeasonalType { get; set; }
 
