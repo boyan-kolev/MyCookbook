@@ -141,7 +141,17 @@
             </span>
             <span>/5</span>
         </div>
-        <hr class="border"/>
+        <hr class="border" />
+        <div>
+            <span>
+                <strong>Добави в любими</strong>
+            </span>
+            <span id="favoriteSpan">
+                <a href="#" onclick="addTofavorite(@Model.Id)" style="color:gray">
+                    <i class="fas fa-heart fa-2x"></i>
+                </a>
+            </span>
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <strong>Оцени рецептата:</strong>
@@ -149,15 +159,17 @@
             <div id="divStars" class="col-md-8">
                 @for (int i = 1; i <= 5; i++)
                 {
+                    var isUserLoggedIn = this.User.Identity.IsAuthenticated ? 1 : 0;
+
                     if (i <= Model.UsersStars)
                     {
-                        <a href="#" onclick="rating(@Model.Id, @i)" style="color:gold">
+                        <a href="#" onclick="rating(@Model.Id, @i, @isUserLoggedIn)" style="color:gold">
                             <i class="fas fa-star fa-2x"></i>
                         </a>
                     }
                     else
                     {
-                        <a href="#" onclick="rating(@Model.Id, @i)" style="color:gray">
+                        <a href="#" onclick="rating(@Model.Id, @i, @isUserLoggedIn)" style="color:gray">
                             <i class="fas fa-star fa-2x"></i>
                         </a>
                     }
@@ -211,51 +223,65 @@
 
 @section Scripts {
     <script>
-        function rating(recipeId, countStars) {
-             var div = document.getElementById("divStars");
-            var anchor = div.getElementsByTagName("a");
+        var isPushedButton = false;
 
-            for (i = 0; i < anchor.length; i++) {
+        function rating(recipeId, countStars, isUserLoggedIn) {
+            if (isUserLoggedIn == 0) {
 
-                if (i <= countStars - 1) {
-                    anchor[i].style.color = 'gold'
+                if (isPushedButton == false) {
+                    document.getElementById("divStars").innerHTML += "Само за регистрирани потребители!";
                 }
-                else {
-                    anchor[i].style.color = 'gray'
-                }
-
+                isPushedButton = true;
             }
+            else {
+                var json = { recipeId: recipeId, stars: countStars };
+                $.ajax({
+                    url: "/api/ratings",
+                    type: "POST",
+                    data: JSON.stringify(json),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#rating").html(data.ratings);
+                        var div = document.getElementById("divStars");
+                        var anchor = div.getElementsByTagName("a");
 
-            var json = { recipeId: recipeId, stars: countStars };
+                        for (i = 0; i < anchor.length; i++) {
+
+                            if (i <= countStars - 1) {
+                                anchor[i].style.color = 'gold'
+                            }
+                            else {
+                                anchor[i].style.color = 'gray'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+    <script>
+        function addTofavorite(recipeId) {
+            var json = { recipeId: recipeId };
             $.ajax({
-                url: "/api/ratings",
+                url: "/api/favorites",
                 type: "POST",
                 data: JSON.stringify(json),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    $("#rating").html(data.ratings);
+                    var span = document.getElementById("favoriteSpan");
+                    var anchor = span.getElementsByTagName("a");
+
+                    if (data == 1) {
+                        anchor[0].style.color = 'red'
+                    }
+                    else {
+                        anchor[0].style.color = 'gray'
+                    }
                 }
             });
-
-           
         }
-        //function loadStars(countStars) {
-
-        //    var div = document.getElementById("divStars");
-        //    var anchor = div.getElementsByTagName("a");
-
-        //    for (i = 0; i < anchor.length; i++) {
-
-        //        if (i <= countStars) {
-        //            anchor[i].style.color = 'red'
-        //        }
-        //        else {
-        //            anchor[i].style.color = 'red'
-        //        }
-
-        //    }
-        //}
     </script>
 
 }

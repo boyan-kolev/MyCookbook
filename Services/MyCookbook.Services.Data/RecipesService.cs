@@ -93,7 +93,7 @@
                 await this.ingredientsService.SetIngredientToRecipeAsync(ingredientName, recipe.Id);
             }
 
-            await this.SetRecipeToRecipeCookingMthods(model.CookingMethods, recipe.Id);
+            await this.SetRecipeToRecipeCookingMthodsAsync(model.CookingMethods, recipe.Id);
             await this.recipesRepository.SaveChangesAsync();
         }
 
@@ -169,7 +169,32 @@
             return this.recipesRepository.All().Any(x => x.Title == recipeTtile);
         }
 
-        private async Task SetRecipeToRecipeCookingMthods(CookingMethodsCheckboxViewModel[] cookingMethodsCheckBox, int recipeId)
+        public async Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId)
+        {
+            var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
+            var userFavoriteRecipe = this.recipesRepository.All().Where(x => x.Id == recipeId).Select(x => x.FavoritedBy.FirstOrDefault(r => r.UserId == userId)).FirstOrDefault();
+            // var userFavoriteRecipe = recipe.FavoritedBy.FirstOrDefault(x => x.UserId == userId);
+            var result = false;
+
+            if (userFavoriteRecipe != null)
+            {
+                recipe.FavoritedBy.Remove(userFavoriteRecipe);
+                result = false;
+            }
+            else
+            {
+                recipe.FavoritedBy.Add(new UserFavoriteRecipe { UserId = userId });
+                result = true;
+            }
+
+            await this.recipesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        private async Task SetRecipeToRecipeCookingMthodsAsync(
+            CookingMethodsCheckboxViewModel[] cookingMethodsCheckBox,
+            int recipeId)
         {
             var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
 
@@ -178,7 +203,9 @@
                 // TODO add validation if null
                 if (cookingMethodModel.Selected)
                 {
-                    var cookingMethod = await this.cookingMethodsRepository.GetByIdWithDeletedAsync(cookingMethodModel.Id);
+                    var cookingMethod = await this.cookingMethodsRepository
+                        .GetByIdWithDeletedAsync(cookingMethodModel.Id);
+
                     recipe.RecipesCookingMethods.Add(new RecipeCookingMethod
                     {
                         CookingMethod = cookingMethod,

@@ -15,5 +15,7 @@
         IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null);
 
         bool IsExistRecipeTitle(string recipeTtile);
+
+        Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId);
     }
 }

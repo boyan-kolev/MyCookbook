@@ -2,17 +2,18 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
-    using MyCookbook.Services.Mapping;
 
     public class RecipesController : BaseController
     {
@@ -60,6 +61,7 @@
             return this.View(viewModel);
         }
 
+        [Authorize]
         [RequestSizeLimit(700 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 700 * 1024 * 1024)]
         [HttpPost]

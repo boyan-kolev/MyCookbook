@@ -45,5 +45,9 @@
 
         public const int UserLastNameMaxLength = 20;
         public const int UserLastNameMinLength = 3;
+
+        // Rating
+        public const int RatingStarsMaxCount = 5;
+        public const int RatingStarsMinCount = 1;
     }
 }
