@@ -190,6 +190,7 @@
             </span>
         </div>
         <hr class="border" />
+        <form id="ratingForm" method="post"></form>
         <div class="row">
             <div class="col-md-4">
                 <strong>Оцени рецептата:</strong>
@@ -271,6 +272,7 @@
                 isPushedButtonStars = true;
             }
             else {
+                var token = $("#ratingForm input[name=__RequestVerificationToken]").val();
                 var json = { recipeId: recipeId, stars: countStars };
                 $.ajax({
                     url: "/api/ratings",
@@ -278,6 +280,7 @@
                     data: JSON.stringify(json),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    headers: { 'X-CSRF-TOKEN': token },
                     success: function (data) {
                         $("#rating").html(data.ratings);
                         var div = document.getElementById("divStars");
@@ -310,6 +313,7 @@
                 isPushedButtonfavorite = true;
             }
             else {
+                var token = $("#ratingForm input[name=__RequestVerificationToken]").val();
                 var json = { recipeId: recipeId };
                 $.ajax({
                     url: "/api/favorites",
@@ -317,6 +321,7 @@
                     data: JSON.stringify(json),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    headers: { 'X-CSRF-TOKEN': token },
                     success: function (data) {
                         var span = document.getElementById("favoriteSpan");
                         var anchor = span.getElementsByTagName("a");
@@ -345,6 +350,7 @@
                 isPushedButtonCooked = true;
             }
             else {
+                var token = $("#ratingForm input[name=__RequestVerificationToken]").val();
                 var json = { recipeId: recipeId };
                 $.ajax({
                     url: "/api/Cooked",
@@ -352,6 +358,7 @@
                     data: JSON.stringify(json),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    headers: { 'X-CSRF-TOKEN': token },
                     success: function (data) {
                         $("#cookTimes").html(data.cookTimes);
                         var span = document.getElementById("cookedSpan");
