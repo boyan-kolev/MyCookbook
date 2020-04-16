@@ -7,16 +7,16 @@
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Web.ViewModels.Favorites;
+    using MyCookbook.Web.ViewModels.Cooked;
 
     [ApiController]
     [Route("api/[controller]")]
-    public class FavoritesController : ControllerBase
+    public class CookedController : ControllerBase
     {
         private readonly IRecipesService recipesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public FavoritesController(
+        public CookedController(
             IRecipesService recipesService,
             UserManager<ApplicationUser> userManager)
         {
@@ -26,12 +26,19 @@
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<FavoriteResponseModel>> Post(FavoriteInputModel input)
+        public async Task<ActionResult<CookedResponseModel>> Post(CookedInputModel input)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var isAdded = await this.recipesService.SetRecipeToUserFavoriteRecipesAsync(input.RecipeId, userId);
+            var isAdded = await this.recipesService.SetRecipeToUserCookedRecipesAsync(input.RecipeId, userId);
+            var cookTimes = this.recipesService.GetCookTimes(input.RecipeId);
 
-            return new FavoriteResponseModel { IsAdded = isAdded };
+            var responseModel = new CookedResponseModel
+            {
+                IsAdded = isAdded,
+                CookTimes = cookTimes,
+            };
+
+            return responseModel;
         }
     }
 }

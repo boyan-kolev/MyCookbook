@@ -17,5 +17,9 @@
         bool IsExistRecipeTitle(string recipeTtile);
 
         Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId);
+
+        Task<bool> SetRecipeToUserCookedRecipesAsync(int recipeId, string userId);
+
+        int GetCookTimes(int recipeId);
     }
 }

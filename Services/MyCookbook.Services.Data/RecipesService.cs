@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using MyCookbook.Common;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
@@ -105,7 +106,45 @@
                 .To<RecipeDetailsServiceModel>()
                 .FirstOrDefault();
 
-            var recipe = this.recipesRepository.All().Where(x => x.Id == recipeId).Select(x => x.Ratings.FirstOrDefault(f => f.UserId == userId).Stars).FirstOrDefault();
+            //var recipe = this.recipesRepository.All()
+            //    .Where(r => r.Id == recipeId).FirstOrDefault();
+
+            // var userStars = recipe.Ratings.FirstOrDefault(r => r.UserId == userId).Stars;
+            // var userFavorite = recipe.FavoritedBy.Any(f => f.UserId == userId);
+
+            if (userId != null)
+            {
+                var userInfo = this.recipesRepository
+                    .All()
+                    .Where(r => r.Id == recipeId)
+                    .Select(x => new RecipeDetailsUserServiceModel
+                    {
+                        UsersStars = x.Ratings.FirstOrDefault(r => r.UserId == userId).Stars,
+                        IsUserFavorite = x.FavoritedBy.Any(f => f.UserId == userId),
+                        IsUserCooked = x.CookedBy.Any(c => c.UserId == userId),
+                    })
+                    .FirstOrDefault();
+
+                serviceModel.User = userInfo;
+
+                //serviceModel.User = new RecipeDetailsUserServiceModel
+                //{
+                //    UsersStars = userId.Ratings.Where(r => r.RecipeId == recipeId).Select(r => r.Stars).FirstOrDefault(),
+                //    IsUserFavorite = userId.FavoriteRecipes.Any(r => r.RecipeId == recipeId),
+                //    IsUserCooked = userId.CookedRecipes.Any(r => r.RecipeId == recipeId),
+                //};
+
+                //serviceModel.User = userInfo;
+            }
+
+
+            //var userStars = this.recipesRepository
+            //    .All()
+            //    .Where(x => x.Id == recipeId)
+            //    .Select(x => x.Ratings.FirstOrDefault(f => f.UserId == userId).Stars)
+            //    .FirstOrDefault();
+
+
             // var userStars = recipe.Ratings.Where(x => x.UserId == userId).Select(r => r.Stars).FirstOrDefault();
             var authorAge = this.usersService.GetAge(serviceModel.Author.Birthdate);
             var similarRecipes = this.GetAllFromCategory<RecipeDetailsSimilarRecipesServiceModel>(
@@ -115,7 +154,7 @@
 
             serviceModel.Author.Age = authorAge;
             serviceModel.SimilarRecipes = similarRecipes;
-            serviceModel.UsersStars = recipe;
+            //serviceModel.UsersStars = userStars;
 
             if (serviceModel.Images.Length < 1)
             {
@@ -144,7 +183,10 @@
             return serviceModel;
         }
 
-        public IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null)
+        public IEnumerable<T> GetAllFromCategory<T>(
+            int categoryId,
+            int? count = null,
+            int? withoutRecipeId = null)
         {
             IQueryable<Recipe> query = this.recipesRepository
                 .All()
@@ -172,8 +214,13 @@
         public async Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId)
         {
             var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
-            var userFavoriteRecipe = this.recipesRepository.All().Where(x => x.Id == recipeId).Select(x => x.FavoritedBy.FirstOrDefault(r => r.UserId == userId)).FirstOrDefault();
-            // var userFavoriteRecipe = recipe.FavoritedBy.FirstOrDefault(x => x.UserId == userId);
+            var userFavoriteRecipe = this.recipesRepository
+                .All()
+                .Where(x => x.Id == recipeId)
+                .Select(x => x.FavoritedBy
+                .FirstOrDefault(r => r.UserId == userId))
+                .FirstOrDefault();
+
             var result = false;
 
             if (userFavoriteRecipe != null)
@@ -190,6 +237,45 @@
             await this.recipesRepository.SaveChangesAsync();
 
             return result;
+        }
+
+        public async Task<bool> SetRecipeToUserCookedRecipesAsync(int recipeId, string userId)
+        {
+            var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
+            var userCookedRecipe = this.recipesRepository
+                .All()
+                .Where(x => x.Id == recipeId)
+                .Select(x => x.CookedBy
+                .FirstOrDefault(r => r.UserId == userId))
+                .FirstOrDefault();
+
+            var result = false;
+
+            if (userCookedRecipe != null)
+            {
+                recipe.CookedBy.Remove(userCookedRecipe);
+                result = false;
+            }
+            else
+            {
+                recipe.CookedBy.Add(new UserCookedRecipe { UserId = userId });
+                result = true;
+            }
+
+            await this.recipesRepository.SaveChangesAsync();
+
+            return result;
+        }
+
+        public int GetCookTimes(int recipeId)
+        {
+            var cookTimes = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .Select(r => r.CookedBy.Count)
+                .FirstOrDefault();
+
+            return cookTimes;
         }
 
         private async Task SetRecipeToRecipeCookingMthodsAsync(

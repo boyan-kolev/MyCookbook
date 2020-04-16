@@ -8,6 +8,7 @@
 
 @{
     this.ViewData["Title"] = Model.Title;
+    var isUserLoggedIn = this.User.Identity.IsAuthenticated ? 1 : 0;
 }
 
 <div class="row">
@@ -130,9 +131,9 @@
         </div>
         <div>
             <span class="font-weight-bold">Сготвена: </span>
-            <span>
-                @Model.Cooked пъти
-            </span>
+            <span id="cookTimes">
+                @Model.Cooked
+            </span> пъти
         </div>
         <div>
             <span class="font-weight-bold">Рейтинг: </span>
@@ -142,16 +143,53 @@
             <span>/5</span>
         </div>
         <hr class="border" />
-        <div>
+        <div id="favoriteDiv" class="form-group">
             <span>
                 <strong>Добави в любими</strong>
             </span>
             <span id="favoriteSpan">
-                <a href="#" onclick="addTofavorite(@Model.Id)" style="color:gray">
+                @{
+                    var colorFavorite = "color:gray";
+                }
+
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    @if (Model.User.IsUserFavorite)
+                    {
+                        colorFavorite = "color:red";
+                    }
+                }
+
+                <a href="#" onclick="addToFavorite(@Model.Id, @isUserLoggedIn)" style=@colorFavorite>
                     <i class="fas fa-heart fa-2x"></i>
                 </a>
+
             </span>
         </div>
+        <div id="cookedDiv">
+            <span>
+                <strong>Аз сготвих</strong>
+            </span>
+            <span id="cookedSpan">
+                @{
+                    var colorCooked = "color:gray";
+                }
+
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    @if (Model.User.IsUserCooked)
+                    {
+                        colorCooked = "color:limegreen";
+                    }
+                }
+
+                <a href="#" onclick="addToCooked(@Model.Id, @isUserLoggedIn)" style=@colorCooked>
+                    <i class="fas fa-check fa-3x"></i>
+                </a>
+
+            </span>
+        </div>
+        <hr class="border" />
         <div class="row">
             <div class="col-md-4">
                 <strong>Оцени рецептата:</strong>
@@ -159,20 +197,19 @@
             <div id="divStars" class="col-md-8">
                 @for (int i = 1; i <= 5; i++)
                 {
-                    var isUserLoggedIn = this.User.Identity.IsAuthenticated ? 1 : 0;
+                    var colorStars = "color:gray";
 
-                    if (i <= Model.UsersStars)
+                    @if (this.User.Identity.IsAuthenticated)
                     {
-                        <a href="#" onclick="rating(@Model.Id, @i, @isUserLoggedIn)" style="color:gold">
-                            <i class="fas fa-star fa-2x"></i>
-                        </a>
+                        if (i <= Model.User.UsersStars)
+                        {
+                            colorStars = "color:gold";
+                        }
                     }
-                    else
-                    {
-                        <a href="#" onclick="rating(@Model.Id, @i, @isUserLoggedIn)" style="color:gray">
-                            <i class="fas fa-star fa-2x"></i>
-                        </a>
-                    }
+
+                    <a href="#" onclick="rating(@Model.Id, @i, @isUserLoggedIn)" style=@colorStars>
+                        <i class="fas fa-star fa-2x"></i>
+                    </a>
                 }
             </div>
         </div>
@@ -223,15 +260,15 @@
 
 @section Scripts {
     <script>
-        var isPushedButton = false;
+        var isPushedButtonStars = false;
 
         function rating(recipeId, countStars, isUserLoggedIn) {
             if (isUserLoggedIn == 0) {
 
-                if (isPushedButton == false) {
+                if (isPushedButtonStars == false) {
                     document.getElementById("divStars").innerHTML += "Само за регистрирани потребители!";
                 }
-                isPushedButton = true;
+                isPushedButtonStars = true;
             }
             else {
                 var json = { recipeId: recipeId, stars: countStars };
@@ -261,27 +298,74 @@
         }
     </script>
     <script>
-        function addTofavorite(recipeId) {
-            var json = { recipeId: recipeId };
-            $.ajax({
-                url: "/api/favorites",
-                type: "POST",
-                data: JSON.stringify(json),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    var span = document.getElementById("favoriteSpan");
-                    var anchor = span.getElementsByTagName("a");
+        var isPushedButtonfavorite = false;
 
-                    if (data == 1) {
-                        anchor[0].style.color = 'red'
-                    }
-                    else {
-                        anchor[0].style.color = 'gray'
-                    }
+        function addToFavorite(recipeId, isUserLoggedIn) {
+
+            if (isUserLoggedIn == 0) {
+
+                if (isPushedButtonfavorite == false) {
+                    document.getElementById("favoriteDiv").innerHTML += "Само за регистрирани потребители!";
                 }
-            });
+                isPushedButtonfavorite = true;
+            }
+            else {
+                var json = { recipeId: recipeId };
+                $.ajax({
+                    url: "/api/favorites",
+                    type: "POST",
+                    data: JSON.stringify(json),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var span = document.getElementById("favoriteSpan");
+                        var anchor = span.getElementsByTagName("a");
+
+                        if (data.isAdded) {
+                            anchor[0].style.color = 'red'
+                        }
+                        else {
+                            anchor[0].style.color = 'gray'
+                        }
+                    }
+                });
+            }
         }
     </script>
+    <script>
+        var isPushedButtonCooked = false;
 
+        function addToCooked(recipeId, isUserLoggedIn) {
+
+            if (isUserLoggedIn == 0) {
+
+                if (isPushedButtonCooked == false) {
+                    document.getElementById("cookedDiv").innerHTML += "Само за регистрирани потребители!";
+                }
+                isPushedButtonCooked = true;
+            }
+            else {
+                var json = { recipeId: recipeId };
+                $.ajax({
+                    url: "/api/Cooked",
+                    type: "POST",
+                    data: JSON.stringify(json),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#cookTimes").html(data.cookTimes);
+                        var span = document.getElementById("cookedSpan");
+                        var anchor = span.getElementsByTagName("a");
+
+                        if (data.isAdded) {
+                            anchor[0].style.color = 'limegreen'
+                        }
+                        else {
+                            anchor[0].style.color = 'gray'
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 }

@@ -120,8 +120,8 @@
 
         public IActionResult Details(int id)
         {
-            var userId = this.userManager.GetUserId(this.User);
-            var serviceModel = this.recipesService.GetById(id, userId, DetailsCountOfSimilarRecipes);
+            var user = this.userManager.GetUserId(this.User);
+            var serviceModel = this.recipesService.GetById(id, user, DetailsCountOfSimilarRecipes);
             var viewModel = AutoMapperConfig.MapperInstance.Map<RecipeDetailsViewModel>(serviceModel);
 
             return this.View(viewModel);

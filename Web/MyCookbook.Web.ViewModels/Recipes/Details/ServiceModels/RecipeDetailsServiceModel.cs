@@ -30,13 +30,13 @@
 
         public double Ratings { get; set; }
 
-        public int UsersStars { get; set; }
+        public RecipeDetailsUserServiceModel User { get; set; }
 
         public Seasonal SeasonalType { get; set; }
 
         public SkillLevel SkillLevel { get; set; }
 
-        public RecipeDetailsUserServiceModel Author { get; set; }
+        public RecipeDetailsAuthorServiceModel Author { get; set; }
 
         public int CategoryId { get; set; }
 
