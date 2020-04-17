@@ -1,6 +1,9 @@
 ﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
 {
-    public class RecipeDetailsUserViewModel
+    using MyCookbook.Data.Models;
+    using MyCookbook.Services.Mapping;
+
+    public class RecipeDetailsUserViewModel : IMapFrom<ApplicationUser>
     {
         public int UsersStars { get; set; }
 

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
     using MyCookbook.Common;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
@@ -13,7 +12,7 @@
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Recipes.Create;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
+    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
 
     public class RecipesService : IRecipesService
     {
@@ -98,26 +97,20 @@
             await this.recipesRepository.SaveChangesAsync();
         }
 
-        public RecipeDetailsServiceModel GetById(int recipeId, string userId, int countOfSimilarRecipes)
+        public RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes)
         {
-            var serviceModel = this.recipesRepository
+            var viewModel = this.recipesRepository
                 .All()
                 .Where(x => x.Id == recipeId)
-                .To<RecipeDetailsServiceModel>()
+                .To<RecipeDetailsViewModel>()
                 .FirstOrDefault();
-
-            //var recipe = this.recipesRepository.All()
-            //    .Where(r => r.Id == recipeId).FirstOrDefault();
-
-            // var userStars = recipe.Ratings.FirstOrDefault(r => r.UserId == userId).Stars;
-            // var userFavorite = recipe.FavoritedBy.Any(f => f.UserId == userId);
 
             if (userId != null)
             {
                 var userInfo = this.recipesRepository
                     .All()
                     .Where(r => r.Id == recipeId)
-                    .Select(x => new RecipeDetailsUserServiceModel
+                    .Select(x => new RecipeDetailsUserViewModel
                     {
                         UsersStars = x.Ratings.FirstOrDefault(r => r.UserId == userId).Stars,
                         IsUserFavorite = x.FavoritedBy.Any(f => f.UserId == userId),
@@ -125,62 +118,43 @@
                     })
                     .FirstOrDefault();
 
-                serviceModel.User = userInfo;
-
-                //serviceModel.User = new RecipeDetailsUserServiceModel
-                //{
-                //    UsersStars = userId.Ratings.Where(r => r.RecipeId == recipeId).Select(r => r.Stars).FirstOrDefault(),
-                //    IsUserFavorite = userId.FavoriteRecipes.Any(r => r.RecipeId == recipeId),
-                //    IsUserCooked = userId.CookedRecipes.Any(r => r.RecipeId == recipeId),
-                //};
-
-                //serviceModel.User = userInfo;
+                viewModel.User = userInfo;
             }
 
-
-            //var userStars = this.recipesRepository
-            //    .All()
-            //    .Where(x => x.Id == recipeId)
-            //    .Select(x => x.Ratings.FirstOrDefault(f => f.UserId == userId).Stars)
-            //    .FirstOrDefault();
-
-
-            // var userStars = recipe.Ratings.Where(x => x.UserId == userId).Select(r => r.Stars).FirstOrDefault();
-            var authorAge = this.usersService.GetAge(serviceModel.Author.Birthdate);
-            var similarRecipes = this.GetAllFromCategory<RecipeDetailsSimilarRecipesServiceModel>(
-                serviceModel.CategoryId,
+            var authorAge = this.usersService.GetAge(viewModel.Author.Birthdate);
+            var similarRecipes = this.GetAllFromCategory<RecipeDetailsSimilarRecipesViewModel>(
+                viewModel.CategoryId,
                 countOfSimilarRecipes,
                 recipeId);
 
-            serviceModel.Author.Age = authorAge;
-            serviceModel.SimilarRecipes = similarRecipes;
-            //serviceModel.UsersStars = userStars;
+            viewModel.Author.Age = authorAge;
+            viewModel.SimilarRecipes = similarRecipes;
 
-            if (serviceModel.Images.Length < 1)
+            if (viewModel.Images.Length < 1)
             {
-                serviceModel.Images = new RecipeDetailsImagesServiceModel[1];
-                RecipeDetailsImagesServiceModel recipeDefaultImage = new RecipeDetailsImagesServiceModel
+                viewModel.Images = new RecipeDetailsImagesViewModel[1];
+                RecipeDetailsImagesViewModel recipeDefaultImage = new RecipeDetailsImagesViewModel
                 {
                     Url = GlobalConstants.DefaultRecipeImageUrl,
                     IsTitlePhoto = true,
                 };
 
-                serviceModel.Images[0] = recipeDefaultImage;
+                viewModel.Images[0] = recipeDefaultImage;
             }
 
-            if (serviceModel.Author.ProfilePhoto == null)
+            if (viewModel.Author.ProfilePhoto == null)
             {
-                if (serviceModel.Author.Gender == Gender.Male.ToString())
+                if (viewModel.Author.Gender == Gender.Male.ToString())
                 {
-                    serviceModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoMaleUrl;
+                    viewModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoMaleUrl;
                 }
                 else
                 {
-                    serviceModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoFemaleUrl;
+                    viewModel.Author.ProfilePhoto = GlobalConstants.DefaultUserPhotoFemaleUrl;
                 }
             }
 
-            return serviceModel;
+            return viewModel;
         }
 
         public IEnumerable<T> GetAllFromCategory<T>(
@@ -267,7 +241,7 @@
             return result;
         }
 
-        public int GetCookTimes(int recipeId)
+        public int GetCookTimesById(int recipeId)
         {
             var cookTimes = this.recipesRepository
                 .All()

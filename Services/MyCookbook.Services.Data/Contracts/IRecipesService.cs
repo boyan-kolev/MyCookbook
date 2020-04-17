@@ -4,13 +4,15 @@
     using System.Threading.Tasks;
 
     using MyCookbook.Web.ViewModels.Recipes.Create;
+    using MyCookbook.Web.ViewModels.Recipes.Details;
     using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
+    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
 
     public interface IRecipesService
     {
         Task AddAsync(RecipeCreateServiceModel model);
 
-        RecipeDetailsServiceModel GetById(int recipeId, string userId, int countOfSimilarRecipes);
+        RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes);
 
         IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null);
 
@@ -20,6 +22,6 @@
 
         Task<bool> SetRecipeToUserCookedRecipesAsync(int recipeId, string userId);
 
-        int GetCookTimes(int recipeId);
+        int GetCookTimesById(int recipeId);
     }
 }

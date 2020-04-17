@@ -8,7 +8,6 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Cuisines;
@@ -18,7 +17,7 @@
     public class RecipesController : BaseController
     {
         private const string ImagesFolderName = "Рецепти";
-        private const int DetailsCountOfSimilarRecipes = 20;
+        private const int DetailsCountOfSimilarRecipes = 9;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
         private readonly ICloudinaryService cloudinaryService;
@@ -121,8 +120,7 @@
         public IActionResult Details(int id)
         {
             var user = this.userManager.GetUserId(this.User);
-            var serviceModel = this.recipesService.GetById(id, user, DetailsCountOfSimilarRecipes);
-            var viewModel = AutoMapperConfig.MapperInstance.Map<RecipeDetailsViewModel>(serviceModel);
+            var viewModel = this.recipesService.GetById(id, user, DetailsCountOfSimilarRecipes);
 
             return this.View(viewModel);
         }

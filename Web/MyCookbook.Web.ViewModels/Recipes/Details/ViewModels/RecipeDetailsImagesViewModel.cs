@@ -1,9 +1,9 @@
 ﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
 {
+    using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
 
-    public class RecipeDetailsImagesViewModel : IMapFrom<RecipeDetailsImagesServiceModel>
+    public class RecipeDetailsImagesViewModel : IMapFrom<Image>
     {
         public string Url { get; set; }
 

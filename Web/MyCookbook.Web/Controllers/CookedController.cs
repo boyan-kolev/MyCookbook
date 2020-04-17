@@ -30,7 +30,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var isAdded = await this.recipesService.SetRecipeToUserCookedRecipesAsync(input.RecipeId, userId);
-            var cookTimes = this.recipesService.GetCookTimes(input.RecipeId);
+            var cookTimes = this.recipesService.GetCookTimesById(input.RecipeId);
 
             var responseModel = new CookedResponseModel
             {
