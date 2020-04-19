@@ -5,7 +5,6 @@
     using Microsoft.AspNetCore.Http;
     using MyCookbook.Data.Models;
     using MyCookbook.Data.Models.Enums;
-    using MyCookbook.Web.ViewModels.CookingMethods;
 
     public class RecipeCreateServiceModel
     {
@@ -37,6 +36,6 @@
 
         public string IngredientsNames { get; set; }
 
-        public CookingMethodsCheckboxViewModel[] CookingMethods { get; set; }
+        public RecipeCreateCookingMethodsCheckboxViewModel[] CookingMethods { get; set; }
     }
 }

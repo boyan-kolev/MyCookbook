@@ -1,8 +1,10 @@
 ﻿namespace MyCookbook.Services.Data
 {
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using MyCookbook.Common;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
@@ -10,9 +12,8 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
-    using MyCookbook.Web.ViewModels.CookingMethods;
     using MyCookbook.Web.ViewModels.Recipes.Create;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
+    using MyCookbook.Web.ViewModels.Recipes.Details;
 
     public class RecipesService : IRecipesService
     {
@@ -154,6 +155,40 @@
                 }
             }
 
+            foreach (var comment in viewModel.Comments)
+            {
+                comment.User.Age = this.usersService.GetAge(comment.User.Birthdate);
+
+                if (comment.User.ProfilePhoto == null)
+                {
+                    if (comment.User.Gender == Gender.Male)
+                    {
+                        comment.User.ProfilePhoto = GlobalConstants.DefaultUserPhotoMaleUrl;
+                    }
+                    else
+                    {
+                        comment.User.ProfilePhoto = GlobalConstants.DefaultUserPhotoFemaleUrl;
+                    }
+                }
+
+                foreach (var reply in comment.Replies)
+                {
+                    if (reply.User.ProfilePhoto == null)
+                    {
+                        if (reply.User.Gender == Gender.Male)
+                        {
+                            reply.User.ProfilePhoto = GlobalConstants.DefaultUserPhotoMaleUrl;
+                        }
+                        else
+                        {
+                            reply.User.ProfilePhoto = GlobalConstants.DefaultUserPhotoFemaleUrl;
+                        }
+                    }
+
+                    reply.User.Age = this.usersService.GetAge(reply.User.Birthdate);
+                }
+            }
+
             return viewModel;
         }
 
@@ -252,8 +287,18 @@
             return cookTimes;
         }
 
+        public IEnumerable<T> GetAll<T>()
+        {
+            var recipes = this.recipesRepository
+                .All()
+                .OrderByDescending(r => r.CreatedOn)
+                .To<T>();
+
+            return recipes;
+        }
+
         private async Task SetRecipeToRecipeCookingMthodsAsync(
-            CookingMethodsCheckboxViewModel[] cookingMethodsCheckBox,
+            RecipeCreateCookingMethodsCheckboxViewModel[] cookingMethodsCheckBox,
             int recipeId)
         {
             var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);

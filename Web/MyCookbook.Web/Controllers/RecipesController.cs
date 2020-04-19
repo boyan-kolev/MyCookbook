@@ -8,11 +8,9 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Web.ViewModels;
-    using MyCookbook.Web.ViewModels.CookingMethods;
-    using MyCookbook.Web.ViewModels.Cuisines;
+    using MyCookbook.Web.ViewModels.Recipes.All;
     using MyCookbook.Web.ViewModels.Recipes.Create;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
+    using MyCookbook.Web.ViewModels.Recipes.Search;
 
     public class RecipesController : BaseController
     {
@@ -46,9 +44,9 @@
 
         public IActionResult Create()
         {
-            var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
-            var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
-            var cookingMethods = this.cookingMethodsService.GetAll<CookingMethodsCheckboxViewModel>();
+            var categories = this.categoriesService.GetAll<RecipeCreateCategoryDropDownViewModel>();
+            var cuisines = this.cuisinesService.GetAll<RecipeCreateCuisineDropDownViewModel>();
+            var cookingMethods = this.cookingMethodsService.GetAll<RecipeCreateCookingMethodsCheckboxViewModel>();
 
             RecipeCreateInputModel viewModel = new RecipeCreateInputModel()
             {
@@ -80,9 +78,9 @@
 
             if (!this.ModelState.IsValid || !isAtLeastChecked || isExist)
             {
-                var categories = this.categoriesService.GetAll<CategoryDropDownViewModel>();
-                var cuisines = this.cuisinesService.GetAll<CuisineDropDownViewModel>();
-                var cookingMethods = this.cookingMethodsService.GetAll<CookingMethodsCheckboxViewModel>();
+                var categories = this.categoriesService.GetAll<RecipeCreateCategoryDropDownViewModel>();
+                var cuisines = this.cuisinesService.GetAll<RecipeCreateCuisineDropDownViewModel>();
+                var cookingMethods = this.cookingMethodsService.GetAll<RecipeCreateCookingMethodsCheckboxViewModel>();
 
                 input.Categories = categories;
                 input.Cuisines = cuisines;
@@ -123,6 +121,52 @@
             var viewModel = this.recipesService.GetById(id, user, DetailsCountOfSimilarRecipes);
 
             return this.View(viewModel);
+        }
+
+        public IActionResult All()
+        {
+            var recipes = this.recipesService.GetAll<RecipeAllRecipesViewModel>();
+            var viewModel = new RecipeAllViewModel { Recipes = recipes };
+
+            return this.View(viewModel);
+        }
+
+        public IActionResult Search()
+        {
+            var categories = this.categoriesService.GetAll<RecipeSearchCategoryDropDownViewModel>();
+            var cuisines = this.cuisinesService.GetAll<RecipeSearchCuisineDropDownViewModel>();
+            var cookingMethods = this.cookingMethodsService.GetAll<RecipeSearchCookingMethodsDropDownViewModel>();
+
+            var viewModel = new RecipeSearchInputModel()
+            {
+                Categories = categories,
+                Cuisines = cuisines,
+                CookingMethods = cookingMethods,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Search(RecipeSearchInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                var categories = this.categoriesService.GetAll<RecipeSearchCategoryDropDownViewModel>();
+                var cuisines = this.cuisinesService.GetAll<RecipeSearchCuisineDropDownViewModel>();
+                var cookingMethods = this.cookingMethodsService.GetAll<RecipeSearchCookingMethodsDropDownViewModel>();
+
+                var viewModel = new RecipeSearchInputModel()
+                {
+                    Categories = categories,
+                    Cuisines = cuisines,
+                    CookingMethods = cookingMethods,
+                };
+
+                return this.View(viewModel);
+            }
+
+            return this.Redirect("/");
         }
     }
 }

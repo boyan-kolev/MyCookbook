@@ -33,7 +33,7 @@
         public const int RecipeDescriptionMaxLength = 2000;
         public const int RecipeDescriptionMinLength = 50;
 
-        // Users
+        // User
         public const int UserPasswordMaxLength = 100;
         public const int UserPasswordMinLength = 6;
 
@@ -49,5 +49,9 @@
         // Rating
         public const int RatingStarsMaxCount = 5;
         public const int RatingStarsMinCount = 1;
+
+        // Comment
+        public const int CommentContentMaxLength = 500;
+        public const int CommentContentMinLength = 30;
     }
 }

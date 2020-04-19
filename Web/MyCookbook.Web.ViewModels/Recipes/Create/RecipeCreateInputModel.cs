@@ -2,89 +2,85 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Http;
     using MyCookbook.Common;
     using MyCookbook.Data.Models.Enums;
     using MyCookbook.Web.Infrastructure.ValidationAttributes;
-    using MyCookbook.Web.ViewModels;
-    using MyCookbook.Web.ViewModels.CookingMethods;
-    using MyCookbook.Web.ViewModels.Cuisines;
 
     public class RecipeCreateInputModel
     {
-        [DisplayName("Заглавие")]
+        [Display(Name = "Заглавие")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [StringLength(AttributesConstraints.RecipeTitleMaxLength, MinimumLength = AttributesConstraints.RecipeTitleMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Title { get; set; }
 
-        [DisplayName("Начин на приготвяне")]
+        [Display(Name = "Начин на приготвяне")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [StringLength(AttributesConstraints.RecipeDescriptionMaxLength, MinimumLength = AttributesConstraints.RecipeDescriptionMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Description { get; set; }
 
-        [DisplayName("Съвети")]
+        [Display(Name = "Съвети")]
         [StringLength(AttributesConstraints.RecipeAdviceMaxLength, MinimumLength = AttributesConstraints.RecipeAdviceMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string Advices { get; set; }
 
-        [DisplayName("Порции")]
+        [Display(Name = "Порции")]
         [Range(AttributesConstraints.RecipeServingsMinValue, AttributesConstraints.RecipeServingsMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int Servings { get; set; }
 
         [DataType(DataType.Duration)]
-        [DisplayName("Време за подготовка")]
+        [Display(Name = "Време за подготовка")]
         [Range(AttributesConstraints.RecipePrepTimeMinValue, AttributesConstraints.RecipePrepTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int PrepTime { get; set; }
 
         [DataType(DataType.Duration)]
-        [DisplayName("Време за готвене")]
+        [Display(Name = "Време за готвене")]
         [Range(AttributesConstraints.RecipeCookTimeMinValue, AttributesConstraints.RecipeCookTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CookTime { get; set; }
 
-        [DisplayName("Сезонен тип")]
+        [Display(Name = "Сезонен тип")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public Seasonal SeasonalType { get; set; }
 
-        [DisplayName("Ниво на трудност")]
+        [Display(Name = "Ниво на трудност")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public SkillLevel SkillLevel { get; set; }
 
-        [DisplayName("Категория")]
+        [Display(Name = "Категория")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CategoryId { get; set; }
 
-        public IEnumerable<CategoryDropDownViewModel> Categories { get; set; }
+        public IEnumerable<RecipeCreateCategoryDropDownViewModel> Categories { get; set; }
 
-        [DisplayName("Национална кухня")]
+        [Display(Name = "Национална кухня")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CuisineId { get; set; }
 
-        public IEnumerable<CuisineDropDownViewModel> Cuisines { get; set; }
+        public IEnumerable<RecipeCreateCuisineDropDownViewModel> Cuisines { get; set; }
 
-        [DisplayName("Снимки")]
+        [Display(Name = "Снимки")]
         [DataType(DataType.Upload)]
         [MaxCountElements(AttributesConstraints.RecipeImagesMaxCount)]
         [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", ".png" })]
         public IEnumerable<IFormFile> Images { get; set; }
 
-        [DisplayName("Заглавна снимка")]
+        [Display(Name = "Заглавна снимка")]
         [DataType(DataType.Upload)]
         [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
         [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
         public IFormFile TitleImage { get; set; }
 
-        [DisplayName("Съставки")]
+        [Display(Name = "Съставки")]
         [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [StringLength(AttributesConstraints.IngredientsNamesMaxLength, MinimumLength = AttributesConstraints.IngredientsNamesMinLength, ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
         public string IngredientsNames { get; set; }
 
-        [DisplayName("Метод на приготвяне")]
-        public CookingMethodsCheckboxViewModel[] CookingMethods { get; set; }
+        [Display(Name = "Метод на приготвяне")]
+        public RecipeCreateCookingMethodsCheckboxViewModel[] CookingMethods { get; set; }
     }
 }

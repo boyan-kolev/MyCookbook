@@ -5,8 +5,6 @@
 
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ServiceModels;
-    using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels;
 
     public interface IRecipesService
     {
@@ -23,5 +21,7 @@
         Task<bool> SetRecipeToUserCookedRecipesAsync(int recipeId, string userId);
 
         int GetCookTimesById(int recipeId);
+
+        public IEnumerable<T> GetAll<T>();
     }
 }

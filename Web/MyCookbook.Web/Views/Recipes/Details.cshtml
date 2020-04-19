@@ -1,4 +1,4 @@
-﻿@using MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
+﻿@using MyCookbook.Web.ViewModels.Recipes.Details
 @using MyCookbook.Data.Models.Enums
 @using MyCookbook.Web.Infrastructure
 @using MyCookbook.Web.Infrastructure.Extensions
@@ -242,7 +242,7 @@
                 <a asp-controller="Recipes" asp-action="Details" asp-route-id="@similarRecipe.Id">
                     @if (@similarRecipe.TitlePhotoUrl == null)
                     {
-                        <img src="@GlobalConstants.DefaultRecipeImageUrl " class="card-img-top" height="200" alt="Снимка на рецептата">
+                        <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
                     }
                     else
                     {
@@ -259,7 +259,98 @@
 </div>
 <h6 class="text-md-center">Виж всички рецепти от категория "@Model.CategoryName"</h6>
 
+@if (this.User.Identity.IsAuthenticated)
+{
+    <div class="px-4 pt-3"> <button type="button" class="btn btn-primary float-right" onclick="showAddCommentForm(null)"><i class="fa fa-plus"></i>&nbsp; Коментирай</button> </div>
+    <div class="clearfix"></div>
+}
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="container-fluid mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="media flex-wrap w-100 align-items-center">
+                            <img src=@comment.User.ProfilePhoto height="40" width="40" class="align-self-center mr-3 rounded-circle" alt="Снимка на коментатора" />
+                            <div class="media-body">
+                                @comment.User.FullName, @comment.User.Age
+                                <div class="text-muted small">
+                                    <time datetime="@comment.CreatedOn.ToString("O")"></time>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <article>
+                            @comment.Content
+                        </article>
+
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            <div class="px-4 pt-3 mt-1"> <button type="button" class="btn btn-secondary float-right mb-1" onclick='showAddCommentForm("@comment.Id")'><i class="fa fa-comment"></i>&nbsp; Отговор</button> </div>
+                            <div class="clearfix"></div>
+                        }
+                        @foreach (var reply in comment.Replies)
+                        {
+                            <div class="container-fluid mt-100">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <div class="media flex-wrap w-100 align-items-center">
+                                                    <img src=@reply.User.ProfilePhoto height="40" width="40" class="align-self-center mr-3 rounded-circle" alt="Снимка на коментатора" />
+                                                    <div class="media-body">
+                                                        @reply.User.FullName, @reply.User.Age
+                                                        <div class="text-muted small">
+                                                            <time datetime="@reply.CreatedOn.ToString("O")"></time>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <article>
+                                                    @reply.Content
+                                                </article>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <form asp-controller="Comments" asp-action="Create" method="post" id="AddCommentForm" style="display: none">
+        <input type="hidden" name="RecipeId" value="@this.Model.Id" />
+        <input type="hidden" name="CommentId" value="null" />
+        <div>
+            <label for="Content"></label>
+            <textarea name="Content" id="Content" class="form-control" rows="5"></textarea>
+        </div>
+        <div>
+            <input type="submit" class="btn btn-primary" value="Добави коментар" />
+        </div>
+    </form>
+</div>
+
+
 @section Scripts {
+    <script>
+        function showAddCommentForm(commentId) {
+            $("#AddCommentForm input[name='CommentId']").val(commentId);
+            $("#AddCommentForm").show();
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $("#AddCommentForm").offset().top
+            }, 1000);
+        }
+    </script>
     <script>
         var isPushedButtonStars = false;
 

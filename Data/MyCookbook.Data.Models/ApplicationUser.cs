@@ -21,6 +21,8 @@ namespace MyCookbook.Data.Models
             this.CookedRecipes = new HashSet<UserCookedRecipe>();
             this.FavoriteRecipes = new HashSet<UserFavoriteRecipe>();
             this.Ratings = new HashSet<Rating>();
+            this.Comments = new HashSet<Comment>();
+            this.Replies = new HashSet<Reply>();
         }
 
         // Audit info
@@ -63,5 +65,9 @@ namespace MyCookbook.Data.Models
         public virtual ICollection<UserFavoriteRecipe> FavoriteRecipes { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Reply> Replies { get; set; }
     }
 }

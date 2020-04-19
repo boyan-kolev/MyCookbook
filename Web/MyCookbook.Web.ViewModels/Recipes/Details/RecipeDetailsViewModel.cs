@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
+﻿namespace MyCookbook.Web.ViewModels.Recipes.Details
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -24,7 +24,7 @@
 
         public int CookTime { get; set; }
 
-        public int TotalTime => CookTime + PrepTime;
+        public int TotalTime => this.CookTime + this.PrepTime;
 
         public int Cooked { get; set; }
 
@@ -51,6 +51,8 @@
         public IEnumerable<RecipeDetailsCookingMethodsViewModel> RecipesCookingMethods { get; set; }
 
         public IEnumerable<RecipeDetailsSimilarRecipesViewModel> SimilarRecipes { get; set; }
+
+        public IEnumerable<RecipeDetailsCommentsViewModel> Comments { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

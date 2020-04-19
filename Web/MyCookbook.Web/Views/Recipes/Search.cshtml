@@ -1,0 +1,161 @@
+﻿@using MyCookbook.Web.ViewModels.Recipes.Search
+@using MyCookbook.Data.Models.Enums
+@model RecipeSearchInputModel
+
+@{
+    var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
+    var defaultSelectListItem = new SelectListItem("---", "-1");
+    categories.Insert(0, defaultSelectListItem);
+
+    var cuisines = Model.Cuisines.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
+    cuisines.Insert(0, defaultSelectListItem);
+
+    var cookingMethods = Model.CookingMethods.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
+    cookingMethods.Insert(0, defaultSelectListItem);
+
+    this.ViewData["Title"] = "Търсене на рецепта";
+}
+
+<form asp-controller="Recipes" asp-action="Search" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Заглавие на рецептата"></i>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="categories" class="form-control"></select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="CuisineId"></label>
+            <select asp-for="CuisineId" asp-items="cuisines" class="form-control"></select>
+            <span asp-validation-for="CuisineId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="CookingMethodId"></label>
+            <select asp-for="CookingMethodId" asp-items="cookingMethods" class="form-control"></select>
+            <span asp-validation-for="CookingMethodId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label asp-for="PrepTime"></label>
+            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Време за приготвяне в минути! Времето трябва да бъде между 0 и 300 минути!"></i>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input asp-for="IsCheckedPrepTime" style="width:18px; height:18px" id="prepTimeCheckBox" />
+                    </div>
+                </div>
+                <input asp-for="PrepTime" class="form-control" id="prepTimeInput" disabled />
+                <span asp-validation-for="PrepTime" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="CookTime"></label>
+            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Време за приготвяне в минути! Времето трябва да бъде между 0 и 300 минути!"></i>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input asp-for="IsCheckedCookTime" style="width:18px; height:18px" id="cookTimeCheckBox" />
+                    </div>
+                </div>
+                <input asp-for="CookTime" class="form-control" id="cookTimeInput" disabled />
+                <span asp-validation-for="CookTime" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="SeasonalType"></label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input asp-for="IsCheckedSeasonalType" style="width:18px; height:18px" id="seasonalTypeCheckBox" />
+                    </div>
+                </div>
+                <select asp-for="SeasonalType" asp-items="@Html.GetEnumSelectList<Seasonal>()" class="form-control" id="seasonalTypeDropDown" disabled></select>
+                <span asp-validation-for="SeasonalType" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label asp-for="SkillLevel"></label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input asp-for="IsCheckedSkillLevel" style="width:18px; height:18px" id="skillLevelCheckBox" />
+                    </div>
+                </div>
+                <select asp-for="SkillLevel" asp-items="@Html.GetEnumSelectList<SkillLevel>()" class="form-control" id="skillLevelDropDown" disabled></select>
+                <span asp-validation-for="SkillLevel" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4 form-group">
+            <label asp-for="SortedType"></label>
+            <select asp-for="SortedType" asp-items="@Html.GetEnumSelectList<SortedType>()" class="form-control"></select>
+            <span asp-validation-for="SortedType" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Търсене" class="btn btn-primary btn-md btn-lg mt-4 ml-4 " id="btnSubmit" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+        </div>
+        
+    </div>
+</form>
+
+
+
+@section Scripts{
+    <script>
+        $('#prepTimeCheckBox').click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the submit button.
+                $('#prepTimeInput').attr("disabled", false);
+            } else {
+                //If it is not checked, disable the button.
+                $('#prepTimeInput').attr("disabled", true);
+            }
+        });
+
+        $('#cookTimeCheckBox').click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the submit button.
+                $('#cookTimeInput').attr("disabled", false);
+            } else {
+                //If it is not checked, disable the button.
+                $('#cookTimeInput').attr("disabled", true);
+            }
+        });
+
+        $('#seasonalTypeCheckBox').click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the submit button.
+                $('#seasonalTypeDropDown').attr("disabled", false);
+            } else {
+                //If it is not checked, disable the button.
+                $('#seasonalTypeDropDown').attr("disabled", true);
+            }
+        });
+
+        $('#skillLevelCheckBox').click(function () {
+            //If the checkbox is checked.
+            if ($(this).is(':checked')) {
+                //Enable the submit button.
+                $('#skillLevelDropDown').attr("disabled", false);
+            } else {
+                //If it is not checked, disable the button.
+                $('#skillLevelDropDown').attr("disabled", true);
+            }
+        });
+    </script>
+}

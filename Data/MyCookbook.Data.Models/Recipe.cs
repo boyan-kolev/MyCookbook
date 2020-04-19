@@ -18,6 +18,7 @@
             this.CookedBy = new HashSet<UserCookedRecipe>();
             this.FavoritedBy = new HashSet<UserFavoriteRecipe>();
             this.Ratings = new HashSet<Rating>();
+            this.Comments = new HashSet<Comment>();
         }
 
         [Required]
@@ -74,5 +75,7 @@
         public virtual ICollection<UserFavoriteRecipe> FavoritedBy { get; set; }
 
         public virtual ICollection<Rating> Ratings { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

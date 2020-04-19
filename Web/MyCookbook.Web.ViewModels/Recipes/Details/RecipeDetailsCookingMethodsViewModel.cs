@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.Details.ViewModels
+﻿namespace MyCookbook.Web.ViewModels.Recipes.Details
 {
     using AutoMapper;
     using MyCookbook.Data.Models;
