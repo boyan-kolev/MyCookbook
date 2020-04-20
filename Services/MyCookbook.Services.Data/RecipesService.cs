@@ -1,6 +1,6 @@
 ﻿namespace MyCookbook.Services.Data
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,6 +14,8 @@
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
+    using MyCookbook.Web.ViewModels.Recipes.Filtered;
+    using MyCookbook.Web.ViewModels.Recipes.Search;
 
     public class RecipesService : IRecipesService
     {
@@ -24,19 +26,28 @@
         private readonly IIngredientsService ingredientsService;
         private readonly ICloudinaryService cloudinaryService;
         private readonly IUsersService usersService;
+        private readonly ICategoriesService categoriesService;
+        private readonly ICuisinesService cuisinesService;
+        private readonly ICookingMethodsService cookingMethodsService;
 
         public RecipesService(
             IDeletableEntityRepository<Recipe> recipesRepository,
             IDeletableEntityRepository<CookingMethod> cookingMethodRepository,
             IIngredientsService ingredientsService,
             ICloudinaryService cloudinaryService,
-            IUsersService usersService)
+            IUsersService usersService,
+            ICategoriesService categoriesService,
+            ICuisinesService cuisinesService,
+            ICookingMethodsService cookingMethodsService)
         {
             this.recipesRepository = recipesRepository;
             this.cookingMethodsRepository = cookingMethodRepository;
             this.ingredientsService = ingredientsService;
             this.cloudinaryService = cloudinaryService;
             this.usersService = usersService;
+            this.categoriesService = categoriesService;
+            this.cuisinesService = cuisinesService;
+            this.cookingMethodsService = cookingMethodsService;
         }
 
         public async Task AddAsync(RecipeCreateServiceModel model)
@@ -295,6 +306,89 @@
                 .To<T>();
 
             return recipes;
+        }
+
+        public RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input)
+        {
+            var viewModel = new RecipeFilteredViewModel();
+            var query = this.recipesRepository.All();
+
+            if (!string.IsNullOrEmpty(input.Title) && !string.IsNullOrWhiteSpace(input.Title))
+            {
+                query = query.Where(x => x.Title.Contains(input.Title));
+            }
+
+            if (input.CategoryId > 0)
+            {
+                query = query.Where(x => x.CategoryId == input.CategoryId);
+                viewModel.Category = this.categoriesService.GetNameById(input.CategoryId);
+            }
+
+            if (input.CuisineId > 0)
+            {
+                query = query.Where(x => x.CuisineId == input.CuisineId);
+                viewModel.Cuisine = this.cuisinesService.GetById<RecipeFilteredCuisineViewModel>(input.CuisineId);
+            }
+
+            if (input.CookingMethodId > 0)
+            {
+                query = query.Where(x => x.RecipesCookingMethods.Any(c => c.CookingMethodId == input.CookingMethodId));
+                viewModel.CookingMethod = this.cookingMethodsService.GetNameById(input.CookingMethodId);
+            }
+
+            if (input.IsCheckedPrepTime)
+            {
+                query = query.Where(x => x.PrepTime <= input.PrepTime);
+                viewModel.PrepTime = input.PrepTime;
+                viewModel.IsCheckedPrepTime = true;
+            }
+
+            if (input.IsCheckedCookTime)
+            {
+                query = query.Where(x => x.CookTime <= input.CookTime);
+                viewModel.CookTime = input.CookTime;
+                viewModel.IsCheckedCookTime = true;
+            }
+
+            if (input.IsCheckedSeasonalType)
+            {
+                query = query.Where(x => x.SeasonalType == input.SeasonalType);
+                viewModel.IsCheckedSeasonalType = true;
+            }
+
+            if (input.IsCheckedSkillLevel)
+            {
+                query = query.Where(x => x.SkillLevel == input.SkillLevel);
+                viewModel.IsCheckedSkillLevel = true;
+            }
+
+            switch (input.SortedType)
+            {
+                case SortedType.DateAscending:
+                    query = query.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case SortedType.DateDescending:
+                    query = query.OrderBy(x => x.CreatedOn);
+                    break;
+                case SortedType.RatingAscending:
+                    query = query.OrderByDescending(x => x.Ratings.Average(r => r.Stars));
+                    break;
+                case SortedType.RatingDescending:
+                    query = query.OrderBy(x => x.Ratings.Average(r => r.Stars));
+                    break;
+                default:
+                    query = query.OrderByDescending(x => x.CreatedOn);
+                    break;
+            }
+
+            viewModel.SortedType = input.SortedType;
+            viewModel.SeasonalType = input.SeasonalType;
+            viewModel.SkillLevel = input.SkillLevel;
+
+            var filteredRecipes = query.To<RecipeFilteredRecipesViewModel>().ToList();
+            viewModel.FilteredRecipes = filteredRecipes;
+
+            return viewModel;
         }
 
         private async Task SetRecipeToRecipeCookingMthodsAsync(

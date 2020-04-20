@@ -8,8 +8,10 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.Recipes.All;
     using MyCookbook.Web.ViewModels.Recipes.Create;
+    using MyCookbook.Web.ViewModels.Recipes.Filtered;
     using MyCookbook.Web.ViewModels.Recipes.Search;
 
     public class RecipesController : BaseController
@@ -166,7 +168,17 @@
                 return this.View(viewModel);
             }
 
-            return this.Redirect("/");
+            var filteredModel = AutoMapperConfig.MapperInstance.Map<RecipeSearchInputModel, RecipeFilteredInputModel>(input);
+
+            return this.RedirectToAction("Filtered", "Recipes", filteredModel);
+        }
+
+        public IActionResult Filtered(RecipeFilteredInputModel input)
+        {
+            var inputDto = AutoMapperConfig.MapperInstance.Map<RecipeFilteredInputModel, RecipeFilteredInputDto>(input);
+            var viewModel = this.recipesService.GetFiltered(inputDto);
+
+            return this.View(viewModel);
         }
     }
 }

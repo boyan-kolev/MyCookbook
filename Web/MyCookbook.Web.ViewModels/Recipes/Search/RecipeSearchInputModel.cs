@@ -9,7 +9,6 @@
     public class RecipeSearchInputModel
     {
         [Display(Name = "Заглавие")]
-        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         [MaxLength(AttributesConstraints.RecipeTitleMaxLength, ErrorMessage = AttributesErrorMessages.MaxLengthErrorMessage)]
         public string Title { get; set; }
 
@@ -31,7 +30,6 @@
         [DataType(DataType.Duration)]
         [Display(Name = "Време за подготовка")]
         [Range(0, AttributesConstraints.RecipePrepTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
-        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int PrepTime { get; set; }
 
         public bool IsCheckedPrepTime { get; set; }
@@ -39,19 +37,16 @@
         [DataType(DataType.Duration)]
         [Display(Name = "Време за готвене")]
         [Range(0, AttributesConstraints.RecipeCookTimeMaxValue, ErrorMessage = AttributesErrorMessages.RangeErrorMessage)]
-        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public int CookTime { get; set; }
 
         public bool IsCheckedCookTime { get; set; }
 
         [Display(Name = "Сезонен тип")]
-        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public Seasonal SeasonalType { get; set; }
 
         public bool IsCheckedSeasonalType { get; set; }
 
         [Display(Name = "Ниво на трудност")]
-        [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
         public SkillLevel SkillLevel { get; set; }
 
         public bool IsCheckedSkillLevel { get; set; }

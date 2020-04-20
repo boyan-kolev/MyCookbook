@@ -28,5 +28,16 @@
 
             return cookingMethods;
         }
+
+        public string GetNameById(int cookingMethodId)
+        {
+            var cookingMethodName = this.cookingMethodsRepository
+                .All()
+                .Where(c => c.Id == cookingMethodId)
+                .Select(c => c.Name)
+                .FirstOrDefault();
+
+            return cookingMethodName;
+        }
     }
 }

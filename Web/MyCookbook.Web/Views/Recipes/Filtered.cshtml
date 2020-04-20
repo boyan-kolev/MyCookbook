@@ -1,0 +1,127 @@
+﻿@using MyCookbook.Web.ViewModels.Recipes.Filtered
+@using MyCookbook.Web.Infrastructure.Extensions
+@using System.ComponentModel.DataAnnotations
+@using MyCookbook.Common
+@model RecipeFilteredViewModel
+
+@{
+    this.ViewData["Title"] = "Всички рецепти";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Резултати от търсенето</h2>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Recipes" asp-action="Search"><i class="fas fa-search fa-2x"></i>&nbsp; Ново търсене</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Title) || !string.IsNullOrWhiteSpace(Model.Title))
+{
+    <p>
+        <strong>Заглавие: @Model.Title</strong>
+    </p>
+}
+
+@if (Model.Category != null)
+{
+    <p>
+        <strong>Категория: </strong>@Model.Category
+    </p>
+}
+
+@if (Model.Cuisine != null)
+{
+    <div class="media">
+        <img height="25" width="35" class="align-self-center mr-3" src="@Model.Cuisine.ImageUrl" alt="знаме">
+        <div class="media-body">
+            <p>@Model.Cuisine.Name</p>
+        </div>
+    </div>
+}
+
+@if (Model.CookingMethod != null)
+{
+    <p>
+        <strong>Метод на приготвяне: </strong>@Model.CookingMethod
+    </p>
+}
+
+@if (Model.IsCheckedPrepTime)
+{
+    <p>
+        <strong>Време за приготвяне до: </strong>@Model.PrepTime мин.
+    </p>
+}
+
+@if (Model.IsCheckedCookTime)
+{
+    <p>
+        <strong>Време за готвене до: </strong>@Model.CookTime мин.
+    </p>
+}
+
+@if (Model.IsCheckedSeasonalType)
+{
+    var seasonalType = Model.SeasonalType.GetAttribute<DisplayAttribute>();
+    <p>
+        <strong>Подходяща за: </strong> @seasonalType.Name
+    </p>
+}
+
+@if (Model.IsCheckedSkillLevel)
+{
+    var skillLevel = Model.SkillLevel.GetAttribute<DisplayAttribute>();
+    <p>
+        <strong>Рецепта за: </strong> @skillLevel.Name
+    </p>
+}
+
+@{ 
+    var sortedType = Model.SortedType.GetAttribute<DisplayAttribute>();
+}
+
+<p>
+    <strong>Подредени по: </strong> @sortedType.Name
+</p>
+<hr class="border" />
+
+@if (Model.FilteredRecipes.Count() <= 0)
+{
+    <h3>Няма намерени резултати!</h3>
+}
+
+<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var recipe in Model.FilteredRecipes)
+    {
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-title">
+                    <h5 class="card-title">@recipe.Title</h5>
+                </div>
+                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
+                    @if (recipe.TitlePhotoUrl == null)
+                    {
+                        <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+                    else
+                    {
+                        <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+                </a>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i class="far fa-calendar-alt" style="color:black">@recipe.CreatedOn.ToString("MM-dd-yy")</i>
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-star" style="color:gold"></i>
+                            <span class="text-dark">@recipe.Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

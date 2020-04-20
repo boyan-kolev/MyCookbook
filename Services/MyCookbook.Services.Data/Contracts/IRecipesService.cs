@@ -5,6 +5,7 @@
 
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
+    using MyCookbook.Web.ViewModels.Recipes.Filtered;
 
     public interface IRecipesService
     {
@@ -22,6 +23,8 @@
 
         int GetCookTimesById(int recipeId);
 
-        public IEnumerable<T> GetAll<T>();
+        IEnumerable<T> GetAll<T>();
+
+        RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input);
     }
 }

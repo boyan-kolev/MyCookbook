@@ -32,5 +32,16 @@
 
             return query.To<T>().ToList();
         }
+
+        public T GetById<T>(int cuisineId)
+        {
+            var cuisineName = this.cuisinesRepository
+                .All()
+                .Where(c => c.Id == cuisineId)
+                .To<T>()
+                .FirstOrDefault();
+
+            return cuisineName;
+        }
     }
 }

@@ -4,16 +4,16 @@
 
     public enum SortedType
     {
-        [Display(Name = "Дата(възходящо)")]
+        [Display(Name = "Дата(възходящ ред)")]
         DateAscending = 1,
 
-        [Display(Name = "Дата(низходящо)")]
+        [Display(Name = "Дата(низходящ ред)")]
         DateDescending = 2,
 
-        [Display(Name = "Рейтинг(възходящо)")]
+        [Display(Name = "Рейтинг(възходящ ред)")]
         RatingAscending = 3,
 
-        [Display(Name = "Рейтинг(низходящо)")]
+        [Display(Name = "Рейтинг(низходящ ред)")]
         RatingDescending = 4,
     }
 }

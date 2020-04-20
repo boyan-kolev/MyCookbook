@@ -7,5 +7,7 @@
     public interface ICookingMethodsService
     {
         T[] GetAll<T>();
+
+        string GetNameById(int cookingMethodId);
     }
 }
