@@ -9,6 +9,8 @@
 
     public class RecipeDetailsCommentUserViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
+        public string Id { get; set; }
+
         public string FullName { get; set; }
 
         public DateTime Birthdate { get; set; }

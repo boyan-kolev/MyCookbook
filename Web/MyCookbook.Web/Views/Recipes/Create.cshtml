@@ -7,6 +7,17 @@
     var cuisines = Model.Cuisines.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
     this.ViewData["Title"] = "Добавяне на рецепта";
 }
+
+@if (ViewData["Errors"] != null)
+{
+    foreach (var error in ViewData["Errors"].ToString().Split("\r\n"))
+    {
+        <div class="text-danger">
+            @error
+        </div>
+    }
+}
+
 <form asp-action="Create" method="post" enctype="multipart/form-data" id="checkbox">
     <div class="row">
         <div class="col-md-5">

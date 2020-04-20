@@ -1,6 +1,5 @@
 ﻿namespace MyCookbook.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -124,6 +123,7 @@
                     .Where(r => r.Id == recipeId)
                     .Select(x => new RecipeDetailsUserViewModel
                     {
+                        Id = userId,
                         UsersStars = x.Ratings.FirstOrDefault(r => r.UserId == userId).Stars,
                         IsUserFavorite = x.FavoritedBy.Any(f => f.UserId == userId),
                         IsUserCooked = x.CookedBy.Any(c => c.UserId == userId),
@@ -228,7 +228,7 @@
 
         public bool IsExistRecipeTitle(string recipeTtile)
         {
-            return this.recipesRepository.All().Any(x => x.Title == recipeTtile);
+            return this.recipesRepository.All().Any(x => x.Title.ToLower() == recipeTtile.ToLower());
         }
 
         public async Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId)

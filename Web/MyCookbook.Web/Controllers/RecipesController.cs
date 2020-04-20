@@ -1,10 +1,12 @@
 ﻿namespace MyCookbook.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using MyCookbook.Common;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
@@ -17,6 +19,8 @@
     public class RecipesController : BaseController
     {
         private const string ImagesFolderName = "Рецепти";
+        private const string IngredientNameError = "Името на съставката може да бъде между 2 и 80 символа!";
+        private const string RecipeExistNameError = "Съществува рецепта с това име. Моля изберете друго име!";
         private const int DetailsCountOfSimilarRecipes = 9;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
@@ -68,6 +72,11 @@
         {
             var isExist = this.recipesService.IsExistRecipeTitle(input.Title);
 
+            if (isExist)
+            {
+                this.ViewData["Errors"] += RecipeExistNameError + "\r\n";
+            }
+
             var isAtLeastChecked = false;
             foreach (var cookingMethod in input.CookingMethods)
             {
@@ -78,7 +87,20 @@
                 }
             }
 
-            if (!this.ModelState.IsValid || !isAtLeastChecked || isExist)
+            var isValidIngredients = true;
+
+            foreach (var ingredientName in input.IngredientsNames.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (ingredientName.Length > AttributesConstraints.IngredientNameMaxLength 
+                    || ingredientName.Length < AttributesConstraints.IngredientNameMinLength)
+                {
+                    isValidIngredients = false;
+                    this.ViewData["Errors"] += IngredientNameError + "\r\n";
+                    break;
+                }
+            }
+
+            if (!this.ModelState.IsValid || !isAtLeastChecked || isExist || !isValidIngredients)
             {
                 var categories = this.categoriesService.GetAll<RecipeCreateCategoryDropDownViewModel>();
                 var cuisines = this.cuisinesService.GetAll<RecipeCreateCuisineDropDownViewModel>();

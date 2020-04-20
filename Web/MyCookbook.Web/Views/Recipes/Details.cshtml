@@ -286,12 +286,20 @@
                         <article>
                             @comment.Content
                         </article>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            @if (comment.User.Id == Model.User.Id)
+                            {
+                                <div class="col-md-2"> <button type="button" class="btn btn-danger float-right mb-1" onclick='showDeleteCommentForm("@comment.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button> </div>
+                                <div class="col-md-3"> <button type="button" class="btn btn-secondary  float-right mb-1" onclick='showEditCommentForm("@comment.Id")'><i class="fas fa-edit"></i>&nbsp; Редактирай</button> </div>
+                            }
 
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
-                            <div class="px-4 pt-3 mt-1"> <button type="button" class="btn btn-secondary float-right mb-1" onclick='showAddCommentForm("@comment.Id")'><i class="fa fa-comment"></i>&nbsp; Отговор</button> </div>
-                            <div class="clearfix"></div>
-                        }
+                            @if (this.User.Identity.IsAuthenticated)
+                            {
+                                <span class="px-4 pt-3 mt-1"> <button type="button" class="btn btn-secondary float-right mb-1" onclick='showAddCommentForm("@comment.Id")'><i class="fa fa-comment"></i>&nbsp; Отговор</button> </span>
+                                <div class="clearfix"></div>
+                            }
+                        </div>
                         @foreach (var reply in comment.Replies)
                         {
                             <div class="container-fluid mt-100">

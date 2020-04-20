@@ -5,6 +5,8 @@
 
     public class RecipeDetailsUserViewModel : IMapFrom<ApplicationUser>
     {
+        public string Id { get; set; }
+
         public int UsersStars { get; set; }
 
         public bool IsUserFavorite { get; set; }
