@@ -52,6 +52,6 @@
 
         // Comment
         public const int CommentContentMaxLength = 500;
-        public const int CommentContentMinLength = 30;
+        public const int CommentContentMinLength = 8;
     }
 }

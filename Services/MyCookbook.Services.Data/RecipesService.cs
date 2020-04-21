@@ -391,6 +391,18 @@
             return viewModel;
         }
 
+        public IEnumerable<T> GetLastCreatedRecipes<T>(int count)
+        {
+            var lastCreatedRecipes = this.recipesRepository
+                .All()
+                .OrderByDescending(r => r.CreatedOn)
+                .Take(count)
+                .To<T>()
+                .ToList();
+
+            return lastCreatedRecipes;
+        }
+
         private async Task SetRecipeToRecipeCookingMthodsAsync(
             RecipeCreateCookingMethodsCheckboxViewModel[] cookingMethodsCheckBox,
             int recipeId)

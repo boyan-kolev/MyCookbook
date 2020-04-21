@@ -21,7 +21,7 @@
         private const string ImagesFolderName = "Рецепти";
         private const string IngredientNameError = "Името на съставката може да бъде между 2 и 80 символа!";
         private const string RecipeExistNameError = "Съществува рецепта с това име. Моля изберете друго име!";
-        private const int DetailsCountOfSimilarRecipes = 9;
+        private const int DetailsCountOfSimilarRecipes = 6;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
         private readonly ICloudinaryService cloudinaryService;

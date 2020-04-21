@@ -26,5 +26,7 @@
         IEnumerable<T> GetAll<T>();
 
         RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input);
+
+        IEnumerable<T> GetLastCreatedRecipes<T>(int count);
     }
 }

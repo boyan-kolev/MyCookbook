@@ -7,5 +7,17 @@
         Task CreateAsync(int recipeId, string userId, string content);
 
         Task AddReplyToCommentAsync(string commentId, string userId, string content);
+
+        Task EditAsync(string commentId, string content);
+
+        Task EditReplyToCommentAsync(string replyId, string content);
+
+        void DeleteAsync(string commentId);
+
+        void DeleteReplyFromComment(string replyId);
+
+        bool IsCommentUser(string userId, string commentId);
+
+        bool IsReplyUser(string userId, string replyId);
     }
 }
