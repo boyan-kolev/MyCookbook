@@ -2,6 +2,10 @@
 @using MyCookbook.Common
 @model LastCreatedRecipesViewModel
 
+<h3 class="text-center border rounded">
+    Последно добавени рецепти
+</h3>
+<hr class="border" />
 @foreach (var recipe in Model.Recipes)
 {
     <div class="col mb-4">
