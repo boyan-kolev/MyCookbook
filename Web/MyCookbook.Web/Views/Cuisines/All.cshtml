@@ -1,0 +1,21 @@
+﻿@using MyCookbook.Web.ViewModels.Cuisines.All
+@model CuisineViewModel
+
+@{
+    this.ViewData["Title"] = "Всички Национални кухни";
+}
+<div class="row">
+    @foreach (var cuisine in Model.Cuisines)
+    {
+        <div class="col-md-4 media border mb-3">
+            <img src="@cuisine.ImageUrl" width="100" class="mr-3" alt="@cuisine.Name">
+            <div class="media-body">
+                <h5 class="mt-0">
+                    <a href="@cuisine.Url">
+                        @cuisine.Name (@cuisine.RecipesCount)
+                    </a>
+                </h5>
+            </div>
+        </div>
+    }
+</div>

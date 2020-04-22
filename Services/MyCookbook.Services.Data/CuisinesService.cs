@@ -43,5 +43,16 @@
 
             return cuisineName;
         }
+
+        public T GetByName<T>(string name)
+        {
+            var cuisine = this.cuisinesRepository
+                .All()
+                .Where(x => x.Name.Replace(" ", "-") == name.Replace(" ", "-"))
+                .To<T>()
+                .FirstOrDefault();
+
+            return cuisine;
+        }
     }
 }

@@ -33,6 +33,17 @@
             return query.To<T>().ToList();
         }
 
+        public T GetByName<T>(string name)
+        {
+            var category = this.categoriesRepository
+                .All()
+                .Where(x => x.Name.Replace(" ", "-") == name.Replace(" ", "-"))
+                .To<T>()
+                .FirstOrDefault();
+
+            return category;
+        }
+
         public string GetNameById(int categoryId)
         {
             var categoryName = this.categoriesRepository

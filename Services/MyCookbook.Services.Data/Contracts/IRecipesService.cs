@@ -9,7 +9,7 @@
 
     public interface IRecipesService
     {
-        Task AddAsync(RecipeCreateServiceModel model);
+        Task<int> AddAsync(RecipeCreateServiceModel model);
 
         RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes);
 

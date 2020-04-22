@@ -9,5 +9,7 @@
         IEnumerable<T> GetAll<T>(int? count = null);
 
         string GetNameById(int categoryId);
+
+        T GetByName<T>(string name);
     }
 }

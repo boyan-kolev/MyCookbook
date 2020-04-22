@@ -49,7 +49,7 @@
             this.cookingMethodsService = cookingMethodsService;
         }
 
-        public async Task AddAsync(RecipeCreateServiceModel model)
+        public async Task<int> AddAsync(RecipeCreateServiceModel model)
         {
             var recipe = new Recipe()
             {
@@ -106,6 +106,8 @@
 
             await this.SetRecipeToRecipeCookingMthodsAsync(model.CookingMethods, recipe.Id);
             await this.recipesRepository.SaveChangesAsync();
+
+            return recipe.Id;
         }
 
         public RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes)

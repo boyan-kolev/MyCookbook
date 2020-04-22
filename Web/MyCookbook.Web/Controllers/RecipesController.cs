@@ -18,13 +18,11 @@
 
     public class RecipesController : BaseController
     {
-        private const string ImagesFolderName = "Рецепти";
         private const string IngredientNameError = "Името на съставката може да бъде между 2 и 80 символа!";
         private const string RecipeExistNameError = "Съществува рецепта с това име. Моля изберете друго име!";
         private const int DetailsCountOfSimilarRecipes = 6;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
-        private readonly ICloudinaryService cloudinaryService;
         private readonly ICookingMethodsService cookingMethodsService;
         private readonly ICuisinesService cuisinesService;
         private readonly UserManager<ApplicationUser> userManager;
@@ -33,7 +31,6 @@
         public RecipesController(
             IRecipesService recipesService,
             ICategoriesService categoriesService,
-            ICloudinaryService cloudinaryService,
             ICookingMethodsService cookingMethodsService,
             ICuisinesService cuisinesService,
             UserManager<ApplicationUser> userManager,
@@ -41,7 +38,6 @@
         {
             this.recipesService = recipesService;
             this.categoriesService = categoriesService;
-            this.cloudinaryService = cloudinaryService;
             this.cookingMethodsService = cookingMethodsService;
             this.cuisinesService = cuisinesService;
             this.userManager = userManager;
@@ -134,9 +130,9 @@
                 CookingMethods = input.CookingMethods,
             };
 
-            await this.recipesService.AddAsync(serviceModel);
+            int recipeId = await this.recipesService.AddAsync(serviceModel);
 
-            return this.Redirect("/");
+            return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
         }
 
         public IActionResult Details(int id)
