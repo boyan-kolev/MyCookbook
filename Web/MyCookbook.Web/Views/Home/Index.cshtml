@@ -1,9 +1,94 @@
-﻿@using MyCookbook.Common
+﻿@using MyCookbook.Web.ViewModels.Home
+@model IndexViewModel
+@using MyCookbook.Common
 @{
-    this.ViewData["Title"] = "Home Page";
+    this.ViewData["Title"] = "Начална страница";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 peach-gradient"><strong>Добре дошли в   </strong><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587575801/FavIcon_d6k6e1.png" width="60" /><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587576812/Logo3_xbmy41.jpg" width="300" /></h1>
+    <p>Тук можете да откриете любими готварски рецепти според вашите предпочитания. Всеки регистриран потребител на сайта има право да добавя нови рецепти, като по този начин да научат повече хора за нея.</p>
+</div>
+<hr class="border" />
+<div class="text-center">
+    <h3>Топ рецепти <i class="fas fa-star" style="color:gold"></i></h3>
+</div>
+<hr class="border" />
+<div class="row row-cols-1 row-cols-md-3">
+    @foreach (var recipe in Model.TopRecipes)
+    {
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-title">
+                    <h5 class="card-title">@recipe.Title</h5>
+                </div>
+                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
+                    @if (recipe.TitlePhotoUrl == null)
+                    {
+                        <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+                    else
+                    {
+                        <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
+                    }
+                </a>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i class="far fa-calendar-alt" style="color:black">@recipe.CreatedOn.ToString("MM-dd-yy")</i>
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-star" style="color:gold"></i>
+                            <span class="text-dark">@recipe.Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="text-center">
+    <a href="/Recipes/Filtered?CategoryId=-1&CuisineId=-1&CookingMethodId=-1&PrepTime=0&IsCheckedPrepTime=False&CookTime=0&IsCheckedCookTime=False&SeasonalType=0&IsCheckedSeasonalType=False&SkillLevel=0&IsCheckedSkillLevel=False&SortedType=RatingAscending"><i class="fas fa-eye"></i>&nbsp; Виж още топ рецепти</a>
+</div>
+<hr class="border" />
+<h3 class="text-center mt-5">Топ Рецепти</h3>
+<hr class="border" />
+<div class="row">
+    @foreach (var category in Model.Categories)
+    {
+        <div class="col-md-6 media">
+            <img src="@category.ImageUrl" width="180" class="mr-3" alt="@category.Name">
+            <div class="media-body">
+                <h5 class="mt-0">
+                    <a href="@category.Url">
+                        @category.Name (@category.RecipesCount)
+                    </a>
+                </h5>
+            </div>
+        </div>
+    }
+</div>
+<div class="text-center mt-5">
+    <a asp-controller="Categories" asp-action="All"><i class="fas fa-eye"></i>&nbsp; виж всички категории</a>
+</div>
+<hr class="border" />
+<h3 class="text-center mt-5">национални кухни &nbsp;<i class="fas fa-globe-africa" style="color:dodgerblue"></i></h3>
+<hr class="border" />
+<div class="row">
+    @foreach (var cuisine in Model.Cuisines)
+    {
+        <div class="col-md-4 media border mb-3">
+            <img src="@cuisine.ImageUrl" width="100" class="mr-3" alt="@cuisine.Name">
+            <div class="media-body">
+                <h5 class="mt-0">
+                    <a href="@cuisine.Url">
+                        @cuisine.Name (@cuisine.RecipesCount)
+                    </a>
+                </h5>
+            </div>
+        </div>
+    }
+</div>
+<div class="text-center mt-3">
+    <a asp-controller="Cuisines" asp-action="All"><i class="fas fa-eye"></i>&nbsp; виж всички национални кухни</a>
 </div>

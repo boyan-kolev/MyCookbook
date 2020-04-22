@@ -373,10 +373,16 @@
                     query = query.OrderBy(x => x.CreatedOn);
                     break;
                 case SortedType.RatingAscending:
-                    query = query.OrderByDescending(x => x.Ratings.Average(r => r.Stars));
+                    query = query
+                        .OrderByDescending(x => x.Ratings
+                        .Average(r => r.Stars))
+                        .ThenByDescending(r => r.Ratings.Count);
                     break;
                 case SortedType.RatingDescending:
-                    query = query.OrderBy(x => x.Ratings.Average(r => r.Stars));
+                    query = query
+                        .OrderBy(x => x.Ratings
+                        .Average(r => r.Stars))
+                        .ThenBy(r => r.Ratings.Count());
                     break;
                 default:
                     query = query.OrderByDescending(x => x.CreatedOn);
@@ -403,6 +409,19 @@
                 .ToList();
 
             return lastCreatedRecipes;
+        }
+
+        public IEnumerable<T> GetTopRecipes<T>(int count)
+        {
+            var topRecipes = this.recipesRepository
+                .All()
+                .OrderByDescending(r => r.Ratings.Average(x => x.Stars))
+                .ThenByDescending(x => x.Ratings.Count())
+                .Take(count)
+                .To<T>()
+                .ToList();
+
+            return topRecipes;
         }
 
         private async Task SetRecipeToRecipeCookingMthodsAsync(

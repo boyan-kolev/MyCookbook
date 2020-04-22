@@ -4,18 +4,23 @@
 @{
     this.ViewData["Title"] = "Всички категории";
 }
-    <div class="row">
-        @foreach (var category in Model.Categories)
-        {
-            <div class="col-md-6 media">
-                <img src="@category.ImageUrl" width="180" class="mr-3" alt="@category.Name">
-                <div class="media-body">
-                    <h5 class="mt-0">
-                        <a href="@category.Url">
-                            @category.Name (@category.RecipesCount)
-                        </a>
-                    </h5>
-                </div>
+
+<div class="text-center mt-4">
+    <h3>Всички категории</h3>
+</div>
+<hr class="border" />
+<div class="row">
+    @foreach (var category in Model.Categories)
+    {
+        <div class="col-md-6 media">
+            <img src="@category.ImageUrl" width="180" class="mr-3" alt="@category.Name">
+            <div class="media-body">
+                <h5 class="mt-0">
+                    <a href="@category.Url">
+                        @category.Name (@category.RecipesCount)
+                    </a>
+                </h5>
             </div>
-        }
-    </div>
+        </div>
+    }
+</div>
