@@ -1,11 +1,11 @@
-﻿@using MyCookbook.Web.ViewModels.Recipes.Create
+﻿@using MyCookbook.Web.ViewModels.Recipes.Edit
 @using MyCookbook.Data.Models.Enums
-@model RecipeCreateInputModel
+@model RecipeEditInputModel
 
 @{
     var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
     var cuisines = Model.Cuisines.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
-    this.ViewData["Title"] = "Добавяне на рецепта";
+    this.ViewData["Title"] = "Редактиране на рецепта";
 }
 
 @if (ViewData["Errors"] != null)
@@ -19,10 +19,10 @@
 }
 
 <div class="text-center">
-    <h3>Добавяне на рецепта</h3>
+    <h3>Редактиране на рецепта</h3>
 </div>
 <hr class="border" />
-<form asp-action="Create" method="post" enctype="multipart/form-data" id="checkbox">
+<form asp-action="Edit" method="post" enctype="multipart/form-data" id="checkbox">
     <div class="row">
         <div class="col-md-5">
             <div class="form-group">
@@ -51,30 +51,18 @@
                 <select asp-for="SkillLevel" asp-items="@Html.GetEnumSelectList<SkillLevel>()" class="form-control"></select>
                 <span asp-validation-for="SkillLevel" class="text-danger"></span>
             </div>
-            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
-                <input asp-for="TitleImage" class="custom-file-input form-control" />
-                <label asp-for="TitleImage" class="custom-file-label form-control">
-                    <span class="badge badge-light">
-                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
-                    </span>
-                    <span>
-                        Качи заглавна снимка
-                    </span>
-                </label>
-                <span asp-validation-for="TitleImage" class="text-danger"></span>
-            </div>
             <div class="form-group"></div>
-            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб! Максимум до 5 снимки!">
-                <input asp-for="Images" class="custom-file-input input-group-lg form-control" />
-                <label asp-for="Images" class="custom-file-label col-form-label-lg form-control">
+            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
+                <input asp-for="NewImages" class="custom-file-input input-group-lg form-control" />
+                <label asp-for="NewImages" class="custom-file-label col-form-label-lg form-control">
                     <span class="badge badge-light">
                         <i class="fas fa-cloud-upload-alt fa-2x"></i>
                     </span>
                     <span>
-                        Качи допълнителни снимки
+                        Качи нови снимки
                     </span>
                 </label>
-                <span asp-validation-for="Images" class="text-danger"></span>
+                <span asp-validation-for="NewImages" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-7">
@@ -94,16 +82,16 @@
     </div>
     <div class="row">
         <div class="col-md-4" id="checkBox">
-            <label asp-for="CookingMethods"></label>
+            <label asp-for="AllCookingMethods"></label>
             <div class="border rounded">
-                @for (var i = 0; i < Model.CookingMethods.Length; i++)
+                @for (var i = 0; i < Model.AllCookingMethods.Length; i++)
                 {
                     <div>
-                        <input type="checkbox" asp-for="@Model.CookingMethods[i].Selected" />
-                        <label asp-for="@Model.CookingMethods[i].Selected">@Model.CookingMethods[i].Name</label>
-                        <input type="hidden" asp-for="@Model.CookingMethods[i].Id" />
-                        <input type="hidden" asp-for="@Model.CookingMethods[i].Name" />
-                        <span asp-validation-for="@Model.CookingMethods[i].Name"></span>
+                        <input type="checkbox" asp-for="@Model.AllCookingMethods[i].Selected" />
+                        <label asp-for="@Model.AllCookingMethods[i].Selected">@Model.AllCookingMethods[i].Name</label>
+                        <input type="hidden" asp-for="@Model.AllCookingMethods[i].Id" />
+                        <input type="hidden" asp-for="@Model.AllCookingMethods[i].Name" />
+                        <span asp-validation-for="@Model.AllCookingMethods[i].Name"></span>
                     </div>
                 }
             </div>
@@ -145,25 +133,6 @@
         </div>
     </div>
 </form>
-
-@*@using MyCookbook.Web.ViewModels.Recipes.InputModels
-    @model TestInputModel
-    <form class="col-md-4" asp-action="Create" method="post" id="chktech">
-        <ul id="checkBox">
-            @for (var i = 0; i < Model.CookingMethods.Length; i++)
-            {
-                <li>
-                    <input type="checkbox" asp-for="@Model.CookingMethods[i].Selected" />
-                    <label asp-for="@Model.CookingMethods[i].Selected">@Model.CookingMethods[i].Name</label>
-                    <input type="hidden" asp-for="@Model.CookingMethods[i].Id" />
-                    <input type="hidden" asp-for="@Model.CookingMethods[i].Name" />
-                    <span asp-validation-for="@Model.CookingMethods[i].Name"></span>
-                </li>
-            }
-        </ul>
-        <span asp-validation-for="CookingMethods"></span>
-        <button type="submit" id="btnSubmit">Filtrer</button>
-    </form>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

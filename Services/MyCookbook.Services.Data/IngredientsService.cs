@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -16,6 +17,19 @@
         public IngredientsService(IDeletableEntityRepository<Ingredient> ingredientRepository)
         {
             this.ingredientRepository = ingredientRepository;
+        }
+
+        public void DeleteIngredientsFromRecipe(int recipeId)
+        {
+            var ingredientsInRecipe = this.ingredientRepository
+                .All()
+                .Where(i => i.RecipeId == recipeId)
+                .ToList();
+
+            foreach (var ingredient in ingredientsInRecipe)
+            {
+                this.ingredientRepository.Delete(ingredient);
+            }
         }
 
         public async Task SetIngredientToRecipeAsync(string ingredientName, int recipeId)

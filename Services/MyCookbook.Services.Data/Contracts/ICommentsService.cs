@@ -12,7 +12,7 @@
 
         Task EditReplyToCommentAsync(string replyId, string content);
 
-        void DeleteAsync(string commentId);
+        Task DeleteAsync(string commentId);
 
         void DeleteReplyFromComment(string replyId);
 

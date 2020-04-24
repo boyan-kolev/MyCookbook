@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     using MyCookbook.Data.Common.Repositories;
@@ -29,6 +30,15 @@
             return age;
         }
 
-        
+        public bool IsUserRecipeAuthor(string userId, int recipeId)
+        {
+            var result = this.userRepository
+                .All()
+                .Where(u => u.Id == userId)
+                .Select(u => u.Recipes.Any(r => r.Id == recipeId))
+                .FirstOrDefault();
+
+            return result;
+        }
     }
 }

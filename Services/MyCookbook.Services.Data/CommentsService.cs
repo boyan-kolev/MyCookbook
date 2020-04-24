@@ -6,6 +6,7 @@
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
 
     public class CommentsService : ICommentsService
     {
@@ -68,15 +69,23 @@
             await this.repliesRepository.SaveChangesAsync();
         }
 
-        public void DeleteAsync(string commentId)
+        public async Task DeleteAsync(string commentId)
         {
-            var comment = this.commentsRepository
-                .All()
-                .FirstOrDefault(c => c.Id == commentId);
+            var comment = await this.commentsRepository.GetByIdWithDeletedAsync(commentId);
 
             this.commentsRepository.Delete(comment);
-            this.commentsRepository.SaveChangesAsync();
-            this.repliesRepository.SaveChangesAsync();
+            var repliesInComments = this.repliesRepository
+                .All()
+                .Where(r => r.CommentId == comment.Id)
+                .ToList();
+
+            foreach (var reply in repliesInComments)
+            {
+                this.repliesRepository.Delete(reply);
+            }
+
+            await this.commentsRepository.SaveChangesAsync();
+            await this.repliesRepository.SaveChangesAsync();
         }
 
         public void DeleteReplyFromComment(string replyId)

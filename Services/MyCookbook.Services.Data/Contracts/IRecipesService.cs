@@ -5,13 +5,18 @@
 
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
+    using MyCookbook.Web.ViewModels.Recipes.Edit;
     using MyCookbook.Web.ViewModels.Recipes.Filtered;
 
     public interface IRecipesService
     {
         Task<int> AddAsync(RecipeCreateServiceModel model);
 
-        RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes);
+        Task<int> EditAsync(RecipeEditDto model);
+
+        RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes);
+
+        RecipeEditInputModel GetByIdForEdit(int recipeId);
 
         IEnumerable<T> GetAllFromCategory<T>(int categoryId, int? count = null, int? withoutRecipeId = null);
 
@@ -30,5 +35,9 @@
         IEnumerable<T> GetLastCreatedRecipes<T>(int count);
 
         IEnumerable<T> GetTopRecipes<T>(int count);
+
+        bool IsExistRecipe(int id);
+
+        string GetRecipeTitle(int recipeId);
     }
 }

@@ -7,5 +7,7 @@
     public interface IUsersService
     {
         int GetAge(DateTime birthdate);
+
+        bool IsUserRecipeAuthor(string userId, int recipeId);
     }
 }

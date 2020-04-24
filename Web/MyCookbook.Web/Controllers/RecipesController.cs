@@ -13,6 +13,7 @@
     using MyCookbook.Services.Mapping;
     using MyCookbook.Web.ViewModels.Recipes.All;
     using MyCookbook.Web.ViewModels.Recipes.Create;
+    using MyCookbook.Web.ViewModels.Recipes.Edit;
     using MyCookbook.Web.ViewModels.Recipes.Filtered;
     using MyCookbook.Web.ViewModels.Recipes.Search;
 
@@ -44,6 +45,7 @@
             this.usersService = usersService;
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             var categories = this.categoriesService.GetAll<RecipeCreateCategoryDropDownViewModel>();
@@ -87,7 +89,7 @@
 
             foreach (var ingredientName in input.IngredientsNames.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
             {
-                if (ingredientName.Length > AttributesConstraints.IngredientNameMaxLength 
+                if (ingredientName.Length > AttributesConstraints.IngredientNameMaxLength
                     || ingredientName.Length < AttributesConstraints.IngredientNameMinLength)
                 {
                     isValidIngredients = false;
@@ -135,10 +137,133 @@
             return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
         }
 
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var isUserRecipeAuthor = this.usersService.IsUserRecipeAuthor(userId, id);
+
+            if (!isUserRecipeAuthor)
+            {
+                return this.BadRequest();
+            }
+
+            var viewModel = this.recipesService.GetByIdForEdit(id);
+            var imagesCount = viewModel.Images?.Count ?? 0;
+            this.TempData["MaxCountImages"] = AttributesConstraints.RecipeImagesMaxCount - imagesCount;
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(RecipeEditInputModel input)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var isUserRecipeAuthor = this.usersService.IsUserRecipeAuthor(userId, input.Id);
+            var allowedMaxCountImages = int.Parse(this.TempData["MaxCountImages"].ToString());
+
+            var isValidImages = true;
+            if (input.Images != null)
+            {
+                isValidImages = input.NewImages?.Count <= allowedMaxCountImages;
+                if (!isValidImages)
+                {
+                    this.ViewData["Errors"] += $"Можете да качите най-много {allowedMaxCountImages} снимки" + "\r\n";
+                }
+            }
+
+            var isExist = this.recipesService.IsExistRecipeTitle(input.Title);
+            var title = this.recipesService.GetRecipeTitle(input.Id);
+            var isValidTitle = true;
+
+            if (isExist && title != input.Title)
+            {
+                isValidTitle = false;
+                this.ViewData["Errors"] += RecipeExistNameError + "\r\n";
+            }
+
+            var isAtLeastChecked = false;
+            foreach (var cookingMethod in input.AllCookingMethods)
+            {
+                if (cookingMethod.Selected)
+                {
+                    isAtLeastChecked = true;
+                    break;
+                }
+            }
+
+            var isValidIngredients = true;
+            foreach (var ingredientName in input.IngredientsNames.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (ingredientName.Length > AttributesConstraints.IngredientNameMaxLength
+                    || ingredientName.Length < AttributesConstraints.IngredientNameMinLength)
+                {
+                    isValidIngredients = false;
+                    this.ViewData["Errors"] += IngredientNameError + "\r\n";
+                    break;
+                }
+            }
+
+            if (!this.ModelState.IsValid
+                || !isAtLeastChecked
+                || !isValidTitle
+                || !isValidIngredients
+                || !isValidImages
+                || !isUserRecipeAuthor)
+            {
+                var categories = this.categoriesService.GetAll<RecipeEditCategoryDropDownViewModel>();
+                var cuisines = this.cuisinesService.GetAll<RecipeEditCuisineDropDownViewModel>();
+                var cookingMethods = this.cookingMethodsService.GetAll<RecipeEditCookingMethodsCheckboxViewModel>();
+
+                input.Categories = categories;
+                input.Cuisines = cuisines;
+                input.AllCookingMethods = cookingMethods;
+
+                var imagesCount = input.Images?.Count ?? 0;
+                this.TempData["MaxCountImages"] = AttributesConstraints.RecipeImagesMaxCount - imagesCount;
+
+                return this.View(input);
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var recipeDto = new RecipeEditDto
+            {
+                Id = input.Id,
+                Title = input.Title,
+                AuthorId = user.Id,
+                Description = input.Description,
+                Advices = input.Advices,
+                Servings = input.Servings,
+                PrepTime = input.PrepTime,
+                CookTime = input.CookTime,
+                SeasonalType = input.SeasonalType,
+                SkillLevel = input.SkillLevel,
+                CategoryId = input.CategoryId,
+                CuisineId = input.CuisineId,
+                NewImages = input.NewImages,
+                IngredientsNames = input.IngredientsNames,
+                CookingMethods = input.AllCookingMethods,
+            };
+
+            int recipeId = await this.recipesService.EditAsync(recipeDto);
+
+            return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
+        }
+
         public IActionResult Details(int id)
         {
+            var isExestRecipe = this.recipesService.IsExistRecipe(id);
+
+            if (isExestRecipe == false)
+            {
+                return this.NotFound();
+            }
+
             var user = this.userManager.GetUserId(this.User);
-            var viewModel = this.recipesService.GetById(id, user, DetailsCountOfSimilarRecipes);
+            var viewModel = this.recipesService.GetByIdForDetails(id, user, DetailsCountOfSimilarRecipes);
+
 
             return this.View(viewModel);
         }

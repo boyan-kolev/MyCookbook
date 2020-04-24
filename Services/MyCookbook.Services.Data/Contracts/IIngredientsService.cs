@@ -8,5 +8,7 @@
     public interface IIngredientsService
     {
         Task SetIngredientToRecipeAsync(string ingredientName, int recipeId);
+
+        void DeleteIngredientsFromRecipe(int recipeId);
     }
 }

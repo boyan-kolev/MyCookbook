@@ -1,5 +1,6 @@
 ﻿namespace MyCookbook.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -11,8 +12,10 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
+    using MyCookbook.Web.ViewModels.Recipes;
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
+    using MyCookbook.Web.ViewModels.Recipes.Edit;
     using MyCookbook.Web.ViewModels.Recipes.Filtered;
     using MyCookbook.Web.ViewModels.Recipes.Search;
 
@@ -28,6 +31,7 @@
         private readonly ICategoriesService categoriesService;
         private readonly ICuisinesService cuisinesService;
         private readonly ICookingMethodsService cookingMethodsService;
+        private readonly IImagesService imagesService;
 
         public RecipesService(
             IDeletableEntityRepository<Recipe> recipesRepository,
@@ -37,7 +41,8 @@
             IUsersService usersService,
             ICategoriesService categoriesService,
             ICuisinesService cuisinesService,
-            ICookingMethodsService cookingMethodsService)
+            ICookingMethodsService cookingMethodsService,
+            IImagesService imagesService)
         {
             this.recipesRepository = recipesRepository;
             this.cookingMethodsRepository = cookingMethodRepository;
@@ -47,6 +52,7 @@
             this.categoriesService = categoriesService;
             this.cuisinesService = cuisinesService;
             this.cookingMethodsService = cookingMethodsService;
+            this.imagesService = imagesService;
         }
 
         public async Task<int> AddAsync(RecipeCreateServiceModel model)
@@ -81,7 +87,7 @@
                         RecipeId = recipe.Id,
                     };
 
-                    recipe.Images.Add(image);
+                    await this.imagesService.AddAsync(image);
                 }
             }
 
@@ -94,7 +100,8 @@
                     IsTitlePhoto = true,
                     RecipeId = recipe.Id,
                 };
-                recipe.Images.Add(titleImage);
+
+                await this.imagesService.AddAsync(titleImage);
             }
 
             var ingredientsNames = model.IngredientsNames.Split("\r\n");
@@ -104,13 +111,106 @@
                 await this.ingredientsService.SetIngredientToRecipeAsync(ingredientName, recipe.Id);
             }
 
-            await this.SetRecipeToRecipeCookingMthodsAsync(model.CookingMethods, recipe.Id);
+            foreach (var cookingMethod in model.CookingMethods)
+            {
+                if (cookingMethod.Selected)
+                {
+                    await this.SetRecipeToRecipeCookingMthodsAsync(cookingMethod.Id, recipe.Id);
+                }
+            }
+
             await this.recipesRepository.SaveChangesAsync();
 
             return recipe.Id;
         }
 
-        public RecipeDetailsViewModel GetById(int recipeId, string userId, int countOfSimilarRecipes)
+        public async Task<int> EditAsync(RecipeEditDto model)
+        {
+            var recipe = this.recipesRepository
+                .All()
+                .FirstOrDefault(r => r.Id == model.Id);
+
+            recipe.Title = model.Title;
+            recipe.Description = model.Description;
+            recipe.Advices = model.Advices;
+            recipe.Servings = model.Servings;
+            recipe.PrepTime = model.PrepTime;
+            recipe.CookTime = model.CookTime;
+            recipe.SeasonalType = model.SeasonalType;
+            recipe.SkillLevel = model.SkillLevel;
+            recipe.AuthorId = model.AuthorId;
+            recipe.CategoryId = model.CategoryId;
+            recipe.CuisineId = model.CuisineId;
+
+            this.recipesRepository.Update(recipe);
+            await this.recipesRepository.SaveChangesAsync();
+
+            if (model.NewImages != null)
+            {
+                foreach (var imageFile in model.NewImages)
+                {
+                    var imageUrl = await this.cloudinaryService.UploadAsync(imageFile, imageFile.FileName, CloudinaryFolderName);
+
+                    var image = new Image()
+                    {
+                        Url = imageUrl,
+                        RecipeId = recipe.Id,
+                    };
+
+                    await this.imagesService.AddAsync(image);
+                }
+            }
+
+            this.ingredientsService.DeleteIngredientsFromRecipe(recipe.Id);
+
+            var ingredientsNames = model.IngredientsNames.Split("\r\n");
+            foreach (var ingredientName in ingredientsNames)
+            {
+                await this.ingredientsService.SetIngredientToRecipeAsync(ingredientName, recipe.Id);
+            }
+
+            await this.DeleteCookingMethodInRecipe(recipe.Id);
+
+            foreach (var cookingMethod in model.CookingMethods)
+            {
+                if (cookingMethod.Selected)
+                {
+                    await this.SetRecipeToRecipeCookingMthodsAsync(cookingMethod.Id, recipe.Id);
+                }
+            }
+
+            await this.recipesRepository.SaveChangesAsync();
+
+            return recipe.Id;
+        }
+
+        public RecipeEditInputModel GetByIdForEdit(int recipeId)
+        {
+            var recipe = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .To<RecipeEditInputModel>()
+                .FirstOrDefault();
+
+            recipe.Categories = this.categoriesService.GetAll<RecipeEditCategoryDropDownViewModel>();
+            recipe.Cuisines = this.cuisinesService.GetAll<RecipeEditCuisineDropDownViewModel>();
+            recipe.AllCookingMethods = this.cookingMethodsService.GetAll<RecipeEditCookingMethodsCheckboxViewModel>();
+
+            foreach (var cookingMethodId in recipe.RecipeCookingMethodsIds)
+            {
+                foreach (var cookingMethod in recipe.AllCookingMethods)
+                {
+                    if (cookingMethodId == cookingMethod.Id)
+                    {
+                        cookingMethod.Selected = true;
+                    }
+                }
+            }
+
+            return recipe;
+        }
+
+        public RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes)
         {
             var viewModel = this.recipesRepository
                 .All()
@@ -424,28 +524,60 @@
             return topRecipes;
         }
 
+        public bool IsExistRecipe(int id)
+        {
+            var isExist = this.recipesRepository.All().Any(r => r.Id == id);
+
+            return isExist;
+        }
+
+        public string GetRecipeTitle(int recipeId)
+        {
+            var title = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .Select(r => r.Title)
+                .FirstOrDefault();
+
+            return title;
+        }
+
         private async Task SetRecipeToRecipeCookingMthodsAsync(
-            RecipeCreateCookingMethodsCheckboxViewModel[] cookingMethodsCheckBox,
+            int cookingMethodId,
             int recipeId)
         {
             var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
 
-            foreach (var cookingMethodModel in cookingMethodsCheckBox)
+            recipe.RecipesCookingMethods.Add(new RecipeCookingMethod
             {
-                // TODO add validation if null
-                if (cookingMethodModel.Selected)
-                {
-                    var cookingMethod = await this.cookingMethodsRepository
-                        .GetByIdWithDeletedAsync(cookingMethodModel.Id);
-
-                    recipe.RecipesCookingMethods.Add(new RecipeCookingMethod
-                    {
-                        CookingMethod = cookingMethod,
-                    });
-                }
-            }
+                CookingMethodId = cookingMethodId,
+                RecipeId = recipeId,
+            });
 
             this.recipesRepository.Update(recipe);
         }
+
+        private async Task DeleteCookingMethodInRecipe(int recipeId)
+        {
+            //var recipeCookingMethods = this.cookingMethodsRepository
+            //    .All()
+            //    .SelectMany(x => x.RecipesCookingMethods)
+            //    .Where(x => x.RecipeId == recipeId);
+
+            var recipe = this.recipesRepository
+                .All()
+                .FirstOrDefault(x => x.Id == recipeId);
+
+            //var recipeCookingMethods = this.recipesRepository
+            //    .All()
+            //    .Where(x => x.Id == recipeId)
+            //    .Select(x => x.RecipesCookingMethods)
+            //    .FirstOrDefault();
+
+            recipe.RecipesCookingMethods.Clear();
+
+            this.recipesRepository.Update(recipe);
+        }
+
     }
 }

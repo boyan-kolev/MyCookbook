@@ -1,7 +1,7 @@
 ﻿namespace MyCookbook.Web.Controllers
 {
     using System.Diagnostics;
-
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels;
@@ -41,6 +41,7 @@
 
             return this.View(viewModel);
         }
+
 
         public IActionResult Privacy()
         {

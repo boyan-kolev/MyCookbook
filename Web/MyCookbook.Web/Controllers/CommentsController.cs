@@ -110,7 +110,7 @@
 
         [Authorize]
         [HttpPost]
-        public IActionResult Delete(CommentDeleteInputModel input)
+        public async Task<IActionResult> Delete(CommentDeleteInputModel input)
         {
             var userId = this.userManager.GetUserId(this.User);
             var isValidComment = false;
@@ -131,7 +131,7 @@
 
             if (input.ReplyId == null)
             {
-                this.commentsService.DeleteAsync(input.CommentId);
+                await this.commentsService.DeleteAsync(input.CommentId);
             }
             else
             {

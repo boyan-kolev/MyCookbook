@@ -4,10 +4,8 @@
 
     using MyCookbook.Data.Models;
 
-    public interface ICookingMethodsService
+    public interface IImagesService
     {
-        T[] GetAll<T>();
-
-        string GetNameById(int cookingMethodId);
+        Task AddAsync(Image image);
     }
 }
