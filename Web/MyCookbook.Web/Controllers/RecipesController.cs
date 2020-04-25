@@ -177,7 +177,7 @@
             var title = this.recipesService.GetRecipeTitle(input.Id);
             var isValidTitle = true;
 
-            if (isExist && title != input.Title)
+            if (isExist && title.ToLower() != input.Title.ToLower())
             {
                 isValidTitle = false;
                 this.ViewData["Errors"] += RecipeExistNameError + "\r\n";

@@ -5,6 +5,8 @@
 @{
     var categories = Model.Categories.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
     var cuisines = Model.Cuisines.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+    var allowedMaxCountImages = this.TempData["MaxCountImages"];
+    this.TempData["MaxCountImages"] = allowedMaxCountImages;
     this.ViewData["Title"] = "Редактиране на рецепта";
 }
 
@@ -52,7 +54,7 @@
                 <span asp-validation-for="SkillLevel" class="text-danger"></span>
             </div>
             <div class="form-group"></div>
-            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
+            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Можете да качите до @allowedMaxCountImages снимки. Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
                 <input asp-for="NewImages" class="custom-file-input input-group-lg form-control" />
                 <label asp-for="NewImages" class="custom-file-label col-form-label-lg form-control">
                     <span class="badge badge-light">
@@ -129,7 +131,7 @@
         <div class="col-md-5">
         </div>
         <div class="col-md-4">
-            <input type="submit" value="Качване на рецепта" class="btn btn-primary btn-md" id="btnSubmit" />
+            <input type="submit" value="Редактиране" class="btn btn-primary btn-md" id="btnSubmit" />
         </div>
     </div>
 </form>

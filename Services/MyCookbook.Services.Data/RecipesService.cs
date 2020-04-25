@@ -417,7 +417,7 @@
 
             if (!string.IsNullOrEmpty(input.Title) && !string.IsNullOrWhiteSpace(input.Title))
             {
-                query = query.Where(x => x.Title.Contains(input.Title));
+                query = query.Where(x => x.Title.ToLower().Contains(input.Title.ToLower()));
             }
 
             if (input.CategoryId > 0)
@@ -559,14 +559,18 @@
 
         private async Task DeleteCookingMethodInRecipe(int recipeId)
         {
-            //var recipeCookingMethods = this.cookingMethodsRepository
-            //    .All()
-            //    .SelectMany(x => x.RecipesCookingMethods)
-            //    .Where(x => x.RecipeId == recipeId);
+            var recipe = await this.recipesRepository.GetByIdWithDeletedAsync(recipeId);
 
-            var recipe = this.recipesRepository
+            var userFavoriteRecipe = this.recipesRepository
                 .All()
-                .FirstOrDefault(x => x.Id == recipeId);
+                .Where(x => x.Id == recipeId)
+                .Select(x => x.RecipesCookingMethods)
+                .ToList();
+
+            recipe.RecipesCookingMethods.Clear();
+            this.recipesRepository.Update(recipe);
+            await this.recipesRepository.SaveChangesAsync();
+
 
             //var recipeCookingMethods = this.recipesRepository
             //    .All()
@@ -574,9 +578,7 @@
             //    .Select(x => x.RecipesCookingMethods)
             //    .FirstOrDefault();
 
-            recipe.RecipesCookingMethods.Clear();
 
-            this.recipesRepository.Update(recipe);
         }
 
     }
