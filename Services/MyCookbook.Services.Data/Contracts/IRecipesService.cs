@@ -14,6 +14,8 @@
 
         Task<int> EditAsync(RecipeEditDto model);
 
+        Task DeleteAsync(int recipeId);
+
         RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes);
 
         RecipeEditInputModel GetByIdForEdit(int recipeId);

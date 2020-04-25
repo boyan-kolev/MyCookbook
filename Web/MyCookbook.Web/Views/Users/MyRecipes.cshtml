@@ -1,0 +1,89 @@
+﻿@using MyCookbook.Web.ViewModels.Users.MyRecipes
+@using MyCookbook.Common
+@model UsersMyRecipesViewModel
+
+@{
+    this.ViewData["Title"] = "МоитеРецепти";
+}
+
+<div class="text-center">
+    <h2>@this.ViewData["Title"]</h2>
+</div>
+<hr class="border" />
+
+@if (Model.Recipes.Count() <= 0)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Нямате качени рецепти!</h4>
+        </div>
+        <div class="col-md-6">
+            <a asp-controller="Recipes" asp-action="Create" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Качи рецепта</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <table class="table table-striped">
+            <thead class="table-primary">
+                <tr class="d-flex">
+                    <th scope="col">#</th>
+                    <th class="col-md-2" scope="col">Заглавие</th>
+                    <th class="col-md-2" scope="col">Снимка</th>
+                    <th class="col-md-2" scope="col">Дата</th>
+                    <th class="col-md-1" scope="col">Рейтинг</th>
+                    <th class="col-md-5" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var counter = 1;
+                }
+                @foreach (var recipe in Model.Recipes)
+                {
+                    <tr class="d-flex">
+                        <th scope="row">@counter</th>
+                        <td class="col-md-2">@recipe.Title</td>
+                        <td class="col-md-2">
+                            @if (recipe.TitlePhotoUrl == null)
+                            {
+                                <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                            }
+                            else
+                            {
+                                <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                            }
+                        </td>
+                        <td class="col-md-2">@recipe.CreatedOn</td>
+                        <td class="col-md-1">@recipe.Rating<i class="fas fa-star" style="color:gold"></i></td>
+                        <td><a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary"><i class="fas fa-search">&nbsp; Преглед</i></a></td>
+                        <td><a asp-controller="Recipes" asp-action="Edit" asp-route-id="@recipe.Id" class="btn btn-secondary"><i class="fas fa-edit">&nbsp; Редактиране</i></a></td>
+                        <td><button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteComment("@recipe.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button></td>
+                    </tr>
+                    counter++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <form asp-controller="Recipes" asp-action="Delete" method="post" id="DeleteRecipeForm" style="display: none">
+            <input type="hidden" name="RecipeId" value="null" />
+            <div>
+                <input type="submit" id="deleteSubmit" />
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function DeleteComment(recipeId) {
+            if (confirm("Сигурни ли сте, че искате да изтриете рецептата ?")) {
+                $("#DeleteRecipeForm input[name='RecipeId']").val(recipeId);
+                document.getElementById('deleteSubmit').click();
+            }
+        }
+    </script>
+}

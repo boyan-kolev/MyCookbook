@@ -32,6 +32,8 @@
         private readonly ICuisinesService cuisinesService;
         private readonly ICookingMethodsService cookingMethodsService;
         private readonly IImagesService imagesService;
+        private readonly ICommentsService commentsService;
+        private readonly IRatingsService ratingsService;
 
         public RecipesService(
             IDeletableEntityRepository<Recipe> recipesRepository,
@@ -42,7 +44,9 @@
             ICategoriesService categoriesService,
             ICuisinesService cuisinesService,
             ICookingMethodsService cookingMethodsService,
-            IImagesService imagesService)
+            IImagesService imagesService,
+            ICommentsService commentsService,
+            IRatingsService ratingsService)
         {
             this.recipesRepository = recipesRepository;
             this.cookingMethodsRepository = cookingMethodRepository;
@@ -53,6 +57,8 @@
             this.cuisinesService = cuisinesService;
             this.cookingMethodsService = cookingMethodsService;
             this.imagesService = imagesService;
+            this.commentsService = commentsService;
+            this.ratingsService = ratingsService;
         }
 
         public async Task<int> AddAsync(RecipeCreateServiceModel model)
@@ -115,7 +121,7 @@
             {
                 if (cookingMethod.Selected)
                 {
-                    await this.SetRecipeToRecipeCookingMthodsAsync(cookingMethod.Id, recipe.Id);
+                    await this.SetRecipeToRecipeCookingMethodsAsync(cookingMethod.Id, recipe.Id);
                 }
             }
 
@@ -161,7 +167,7 @@
                 }
             }
 
-            this.ingredientsService.DeleteIngredientsFromRecipe(recipe.Id);
+            await this.ingredientsService.DeleteIngredientsByRecipeIdAsync(recipe.Id);
 
             var ingredientsNames = model.IngredientsNames.Split("\r\n");
             foreach (var ingredientName in ingredientsNames)
@@ -175,13 +181,44 @@
             {
                 if (cookingMethod.Selected)
                 {
-                    await this.SetRecipeToRecipeCookingMthodsAsync(cookingMethod.Id, recipe.Id);
+                    await this.SetRecipeToRecipeCookingMethodsAsync(cookingMethod.Id, recipe.Id);
                 }
             }
 
             await this.recipesRepository.SaveChangesAsync();
 
             return recipe.Id;
+        }
+
+        public async Task DeleteAsync(int recipeId)
+        {
+            await this.commentsService.DeleteCommentsByRecipeIdAsync(recipeId);
+            await this.DeleteCookingMethodInRecipe(recipeId);
+            await this.imagesService.DeleteImagesByRecipeIdAsync(recipeId);
+            await this.ingredientsService.DeleteIngredientsByRecipeIdAsync(recipeId);
+            await this.ratingsService.DeleteRatingsByRecipeIdAsync(recipeId);
+
+            var recipe = this.recipesRepository
+                .All()
+                .FirstOrDefault(r => r.Id == recipeId);
+
+            var favoritedRecipes = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .Select(r => r.FavoritedBy)
+                .FirstOrDefault();
+
+            var cookedRecipes = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .Select(r => r.CookedBy)
+                .FirstOrDefault();
+
+            recipe.FavoritedBy.Clear();
+            recipe.CookedBy.Clear();
+
+            this.recipesRepository.Delete(recipe);
+            await this.recipesRepository.SaveChangesAsync();
         }
 
         public RecipeEditInputModel GetByIdForEdit(int recipeId)
@@ -542,7 +579,7 @@
             return title;
         }
 
-        private async Task SetRecipeToRecipeCookingMthodsAsync(
+        private async Task SetRecipeToRecipeCookingMethodsAsync(
             int cookingMethodId,
             int recipeId)
         {
@@ -570,16 +607,6 @@
             recipe.RecipesCookingMethods.Clear();
             this.recipesRepository.Update(recipe);
             await this.recipesRepository.SaveChangesAsync();
-
-
-            //var recipeCookingMethods = this.recipesRepository
-            //    .All()
-            //    .Where(x => x.Id == recipeId)
-            //    .Select(x => x.RecipesCookingMethods)
-            //    .FirstOrDefault();
-
-
         }
-
     }
 }

@@ -10,5 +10,7 @@
         Task RatingAsync(int recipeId, string userId, int stars);
 
         double GetRatings(int recipeId);
+
+        Task DeleteRatingsByRecipeIdAsync(int recipeId);
     }
 }

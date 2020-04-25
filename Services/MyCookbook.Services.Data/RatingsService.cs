@@ -1,9 +1,6 @@
 ﻿namespace MyCookbook.Services.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using MyCookbook.Data.Common.Repositories;
@@ -17,6 +14,21 @@
         public RatingsService(IRepository<Rating> ratingsRepository)
         {
             this.ratingsRepository = ratingsRepository;
+        }
+
+        public async Task DeleteRatingsByRecipeIdAsync(int recipeId)
+        {
+            var ratings = this.ratingsRepository
+                .All()
+                .Where(r => r.RecipeId == recipeId)
+                .ToList();
+
+            foreach (var rating in ratings)
+            {
+                this.ratingsRepository.Delete(rating);
+            }
+
+            await this.ratingsRepository.SaveChangesAsync();
         }
 
         public double GetRatings(int recipeId)

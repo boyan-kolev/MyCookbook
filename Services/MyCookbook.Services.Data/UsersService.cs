@@ -8,6 +8,7 @@
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Services.Mapping;
 
     public class UsersService : IUsersService
     {
@@ -28,6 +29,17 @@
             }
 
             return age;
+        }
+
+        public T GetById<T>(string userId)
+        {
+            var userRecipes = this.userRepository
+                .All()
+                .Where(u => u.Id == userId)
+                .To<T>()
+                .FirstOrDefault();
+
+            return userRecipes;
         }
 
         public bool IsUserRecipeAuthor(string userId, int recipeId)

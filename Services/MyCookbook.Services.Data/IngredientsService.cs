@@ -19,7 +19,7 @@
             this.ingredientRepository = ingredientRepository;
         }
 
-        public void DeleteIngredientsFromRecipe(int recipeId)
+        public async Task DeleteIngredientsByRecipeIdAsync(int recipeId)
         {
             var ingredientsInRecipe = this.ingredientRepository
                 .All()
@@ -30,6 +30,8 @@
             {
                 this.ingredientRepository.Delete(ingredient);
             }
+
+            await this.ingredientRepository.SaveChangesAsync();
         }
 
         public async Task SetIngredientToRecipeAsync(string ingredientName, int recipeId)

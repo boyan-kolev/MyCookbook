@@ -7,5 +7,7 @@
     public interface IImagesService
     {
         Task AddAsync(Image image);
+
+        Task DeleteImagesByRecipeIdAsync(int recipeId);
     }
 }

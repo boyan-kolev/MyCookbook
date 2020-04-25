@@ -9,6 +9,6 @@
     {
         Task SetIngredientToRecipeAsync(string ingredientName, int recipeId);
 
-        void DeleteIngredientsFromRecipe(int recipeId);
+        Task DeleteIngredientsByRecipeIdAsync(int recipeId);
     }
 }

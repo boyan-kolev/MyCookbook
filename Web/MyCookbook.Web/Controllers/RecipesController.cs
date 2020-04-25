@@ -252,6 +252,23 @@
             return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int recipeId)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var isUserRecipeAuthor = this.usersService.IsUserRecipeAuthor(userId, recipeId);
+
+            if (!isUserRecipeAuthor)
+            {
+                return this.BadRequest();
+            }
+
+            await this.recipesService.DeleteAsync(recipeId);
+
+            return this.Redirect("/Users/MyRecipes");
+        }
+
         public IActionResult Details(int id)
         {
             var isExestRecipe = this.recipesService.IsExistRecipe(id);

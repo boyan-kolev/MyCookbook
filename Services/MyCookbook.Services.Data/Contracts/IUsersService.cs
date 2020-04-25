@@ -9,5 +9,7 @@
         int GetAge(DateTime birthdate);
 
         bool IsUserRecipeAuthor(string userId, int recipeId);
+
+        T GetById<T>(string userId);
     }
 }

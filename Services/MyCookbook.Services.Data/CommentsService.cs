@@ -6,19 +6,21 @@
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Services.Mapping;
 
     public class CommentsService : ICommentsService
     {
         private readonly IDeletableEntityRepository<Comment> commentsRepository;
         private readonly IDeletableEntityRepository<Reply> repliesRepository;
+        private readonly IRepliesService repliesService;
 
         public CommentsService(
             IDeletableEntityRepository<Comment> commentsRepository,
-            IDeletableEntityRepository<Reply> repliesRepository)
+            IDeletableEntityRepository<Reply> repliesRepository,
+            IRepliesService repliesService)
         {
             this.commentsRepository = commentsRepository;
             this.repliesRepository = repliesRepository;
+            this.repliesService = repliesService;
         }
 
         public async Task AddReplyToCommentAsync(string commentId, string userId, string content)
@@ -119,6 +121,22 @@
                 .FirstOrDefault();
 
             return replyUserId == userId;
+        }
+
+        public async Task DeleteCommentsByRecipeIdAsync(int recipeId)
+        {
+            var comments = this.commentsRepository
+                .All()
+                .Where(c => c.RecipeId == recipeId)
+                .ToList();
+
+            foreach (var comment in comments)
+            {
+                this.commentsRepository.Delete(comment);
+                await this.repliesService.DeleteAllByCommentsIdAsync(comment.Id);
+            }
+
+            await this.commentsRepository.SaveChangesAsync();
         }
     }
 }

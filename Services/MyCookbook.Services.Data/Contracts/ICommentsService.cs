@@ -19,5 +19,7 @@
         bool IsCommentUser(string userId, string commentId);
 
         bool IsReplyUser(string userId, string replyId);
+
+        Task DeleteCommentsByRecipeIdAsync(int recipeId);
     }
 }
