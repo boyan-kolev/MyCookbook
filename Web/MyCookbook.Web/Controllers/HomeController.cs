@@ -6,6 +6,7 @@
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels;
     using MyCookbook.Web.ViewModels.Home;
+    using MyCookbook.Web.ViewModels.Partials;
 
     public class HomeController : BaseController
     {
@@ -30,7 +31,7 @@
         {
             var categories = this.categoriesService.GetAll<IndexCategoriesViewModel>(CountOfCategories);
             var cuisines = this.cuisinesService.GetAll<IndexCuisinesViewModel>(CountOfCuisines);
-            var topRecipes = this.recipesService.GetTopRecipes<IndexTopRecipesViewModel>(CountOfTopRecipes);
+            var topRecipes = this.recipesService.GetTopRecipes<ListRecipesCollectionPartailViewModel>(CountOfTopRecipes);
 
             var viewModel = new IndexViewModel
             {

@@ -11,6 +11,7 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
+    using MyCookbook.Web.ViewModels.Partials;
     using MyCookbook.Web.ViewModels.Recipes.All;
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Edit;
@@ -287,7 +288,7 @@
 
         public IActionResult All()
         {
-            var recipes = this.recipesService.GetAll<RecipeAllRecipesViewModel>();
+            var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>();
             var viewModel = new RecipeAllViewModel { Recipes = recipes };
 
             return this.View(viewModel);

@@ -1,14 +1,14 @@
-﻿@using MyCookbook.Web.ViewModels.Users.Favorites
+﻿@using MyCookbook.Web.ViewModels.Users.Cooked
 @using MyCookbook.Web.ViewModels.Partials
-@model UsersFavoritesViewModel
+@model UsersCookedViewModel
 
 @{
-    this.ViewData["Title"] = "Любими рецепти";
+    this.ViewData["Title"] = "Сготвени рецепти";
     var listRecipesPartialViewModel = new ListRecipesPartialViewModel { Recipes = Model.Recipes };
 }
 
 <div class="text-center text-primary">
-    <h2>@this.ViewData["Title"] <i class="fas fa-heart fa-2x" style="color:red"></i></h2>
+    <h2>@this.ViewData["Title"] <i class="fas fa-check fa-2x" style="color:limegreen"></i></h2>
 </div>
 <hr class="border" />
 <partial name="_ListRecipesPartial" model="@listRecipesPartialViewModel" />

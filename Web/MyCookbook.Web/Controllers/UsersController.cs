@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Web.ViewModels.Users.Cooked;
     using MyCookbook.Web.ViewModels.Users.Favorites;
     using MyCookbook.Web.ViewModels.Users.MyRecipes;
 
@@ -30,10 +31,20 @@
             return this.View(viewModel);
         }
 
+        [Authorize]
         public IActionResult Favorites()
         {
             var userId = this.userManager.GetUserId(this.User);
             var viewModel = this.usersService.GetById<UsersFavoritesViewModel>(userId);
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
+        public IActionResult Cooked()
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var viewModel = this.usersService.GetById<UsersCookedViewModel>(userId);
 
             return this.View(viewModel);
         }

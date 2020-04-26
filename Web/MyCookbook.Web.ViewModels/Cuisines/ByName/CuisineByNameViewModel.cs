@@ -4,6 +4,7 @@
 
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
+    using MyCookbook.Web.ViewModels.Partials;
 
     public class CuisineByNameViewModel : IMapFrom<Cuisine>
     {
@@ -11,6 +12,6 @@
 
         public string ImageUrl { get; set; }
 
-        public IEnumerable<RecipeInCuisineViewModel> Recipes { get; set; }
+        public IEnumerable<ListRecipesCollectionPartailViewModel> Recipes { get; set; }
     }
 }

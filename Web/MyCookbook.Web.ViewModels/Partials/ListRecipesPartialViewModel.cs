@@ -1,10 +1,8 @@
-﻿namespace MyCookbook.Web.ViewModels.Recipes.All
+﻿namespace MyCookbook.Web.ViewModels.Partials
 {
     using System.Collections.Generic;
 
-    using MyCookbook.Web.ViewModels.Partials;
-
-    public class RecipeAllViewModel
+    public class ListRecipesPartialViewModel
     {
         public IEnumerable<ListRecipesCollectionPartailViewModel> Recipes { get; set; }
     }

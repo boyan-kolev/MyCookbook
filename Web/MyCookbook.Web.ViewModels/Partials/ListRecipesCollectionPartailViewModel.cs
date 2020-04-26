@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.ViewModels.Categories.ByName
+﻿namespace MyCookbook.Web.ViewModels.Partials
 {
     using System;
     using System.Linq;
@@ -7,7 +7,7 @@
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
 
-    public class RecipeInCategoryViewModel : IMapFrom<Recipe>, IHaveCustomMappings
+    public class ListRecipesCollectionPartailViewModel : IMapFrom<Recipe>, IHaveCustomMappings
     {
         public int Id { get; set; }
 
@@ -21,7 +21,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Recipe, RecipeInCategoryViewModel>()
+            configuration.CreateMap<Recipe, ListRecipesCollectionPartailViewModel>()
                 .ForMember(
                     dest => dest.TitlePhotoUrl,
                     opt => opt

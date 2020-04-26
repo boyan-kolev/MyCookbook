@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using MyCookbook.Data.Models.Enums;
+    using MyCookbook.Web.ViewModels.Partials;
     using MyCookbook.Web.ViewModels.Recipes.Search;
 
     public class RecipeFilteredViewModel
@@ -33,6 +34,6 @@
 
         public SortedType SortedType { get; set; }
 
-        public IEnumerable<RecipeFilteredRecipesViewModel> FilteredRecipes { get; set; }
+        public IEnumerable<ListRecipesCollectionPartailViewModel> FilteredRecipes { get; set; }
     }
 }

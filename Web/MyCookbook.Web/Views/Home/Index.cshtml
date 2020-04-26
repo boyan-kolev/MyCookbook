@@ -1,8 +1,9 @@
 ﻿@using MyCookbook.Web.ViewModels.Home
+@using MyCookbook.Web.ViewModels.Partials
 @model IndexViewModel
-@using MyCookbook.Common
 @{
     this.ViewData["Title"] = "Начална страница";
+    var listRecipesPartialViewModel = new ListRecipesPartialViewModel { Recipes = Model.TopRecipes };
 }
 
 <div class="text-center">
@@ -15,39 +16,7 @@
     <h3>Топ рецепти <i class="fas fa-star" style="color:gold"></i></h3>
 </div>
 <hr class="border" />
-<div class="row row-cols-1 row-cols-md-3">
-    @foreach (var recipe in Model.TopRecipes)
-    {
-        <div class="col mb-4">
-            <div class="card">
-                <div class="card-title">
-                    <h5 class="card-title">@recipe.Title</h5>
-                </div>
-                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
-                    @if (recipe.TitlePhotoUrl == null)
-                    {
-                        <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
-                    }
-                    else
-                    {
-                        <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
-                    }
-                </a>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <i class="far fa-calendar-alt" style="color:black">@recipe.CreatedOn.ToString("MM-dd-yy")</i>
-                        </div>
-                        <div class="col-md-4">
-                            <i class="fas fa-star" style="color:gold"></i>
-                            <span class="text-dark">@recipe.Rating</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+<partial name="_ListRecipesPartial" model="@listRecipesPartialViewModel" />
 <div class="text-center">
     <a href="/Recipes/Filtered?CategoryId=-1&CuisineId=-1&CookingMethodId=-1&PrepTime=0&IsCheckedPrepTime=False&CookTime=0&IsCheckedCookTime=False&SeasonalType=0&IsCheckedSeasonalType=False&SkillLevel=0&IsCheckedSkillLevel=False&SortedType=RatingAscending"><i class="fas fa-eye"></i>&nbsp; Виж още топ рецепти</a>
 </div>

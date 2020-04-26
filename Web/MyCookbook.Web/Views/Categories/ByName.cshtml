@@ -1,14 +1,15 @@
 ﻿@using MyCookbook.Web.ViewModels.Categories.ByName
-@using MyCookbook.Common
+@using MyCookbook.Web.ViewModels.Partials
 @model CategoryByNameViewModel
 
 @{
     this.ViewData["Title"] = Model.Name;
+    var listRecipesPartialViewModel = new ListRecipesPartialViewModel { Recipes = Model.Recipes };
 }
 
 <div class="row mb-4">
     <div class="col-md-8">
-        <h2>Категория: @Model.Name</h2>
+        <h2>Категория: @this.ViewData["Title"]</h2>
     </div>
     <div class="col-md-4">
         <a asp-controller="Categories" asp-action="All"><i class="fas fa-hand-point-right fa-2x"></i>&nbsp; виж всички категории</a>
@@ -16,36 +17,4 @@
 </div>
 
 <hr class="border" />
-<div class="row row-cols-1 row-cols-md-3">
-    @foreach (var recipe in Model.Recipes)
-    {
-        <div class="col mb-4">
-            <div class="card border-secondary">
-                <div class="card-title">
-                    <h5 class="card-title">@recipe.Title</h5>
-                </div>
-                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
-                    @if (recipe.TitlePhotoUrl == null)
-                    {
-                        <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
-                    }
-                    else
-                    {
-                        <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
-                    }
-                </a>
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <i class="far fa-calendar-alt" style="color:black">@recipe.CreatedOn.ToString("MM-dd-yy")</i>
-                        </div>
-                        <div class="col-md-4">
-                            <i class="fas fa-star" style="color:gold"></i>
-                            <span class="text-dark">@recipe.Rating</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+<partial name="_ListRecipesPartial" model="@listRecipesPartialViewModel" />

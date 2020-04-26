@@ -12,6 +12,7 @@
     using MyCookbook.Services.Contracts;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Services.Mapping;
+    using MyCookbook.Web.ViewModels.Partials;
     using MyCookbook.Web.ViewModels.Recipes;
     using MyCookbook.Web.ViewModels.Recipes.Create;
     using MyCookbook.Web.ViewModels.Recipes.Details;
@@ -530,7 +531,7 @@
             viewModel.SeasonalType = input.SeasonalType;
             viewModel.SkillLevel = input.SkillLevel;
 
-            var filteredRecipes = query.To<RecipeFilteredRecipesViewModel>().ToList();
+            var filteredRecipes = query.To<ListRecipesCollectionPartailViewModel>().ToList();
             viewModel.FilteredRecipes = filteredRecipes;
 
             return viewModel;
