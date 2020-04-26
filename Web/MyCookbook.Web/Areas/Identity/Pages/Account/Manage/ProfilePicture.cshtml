@@ -1,0 +1,46 @@
+﻿@page
+@model ProfilePicture
+@{
+    ViewData["Title"] = "Редактиране на профилната снимка";
+    ViewData["ActivePage"] = ManageNavPages.ProfilePicture;
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <form id="email-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <img src="@Model.ProfilePictureUrl" width="120" class="border border-primary rounded" />
+            </div>
+            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
+                <input asp-for="Input.NewProfilePicture" class="custom-file-input form-control" />
+                <label asp-for="Input.NewProfilePicture" class="custom-file-label form-control">
+                    <span class="badge badge-light">
+                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    </span>
+                    <span>
+                        Качи нова профилна снимка
+                    </span>
+                </label>
+            </div>
+            <button id="changeProfilePicture" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">Промени профилната снимка</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Add the following code if you want the name of the file(for image) appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

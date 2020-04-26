@@ -286,6 +286,7 @@
             return this.View(viewModel);
         }
 
+        [Route("/Identity/Recipes/All")]
         public IActionResult All()
         {
             var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>();
