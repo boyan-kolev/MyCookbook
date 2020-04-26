@@ -3,21 +3,19 @@
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using MyCookbook.Common;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Web.Infrastructure.ValidationAttributes;
 
-    public class ProfilePicture : PageModel
+    public class FirstLastName : PageModel
     {
         private readonly IUsersService usersService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ProfilePicture(
+        public FirstLastName(
             IUsersService usersService,
             UserManager<ApplicationUser> userManager)
         {
@@ -25,7 +23,11 @@
             this.userManager = userManager;
         }
 
-        public string ProfilePictureUrl { get; set; }
+        [Display(Name = "име")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Фамилия")]
+        public string LastName { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -33,18 +35,28 @@
         public class InputModel
         {
             [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
-            [Display(Name = "Нова профилна снимка")]
-            [DataType(DataType.Upload)]
-            [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
-            [AllowedExtensions(new string[] { ".jpeg", ".jpg", ".png" })]
-            public IFormFile NewProfilePicture { get; set; }
+            [StringLength(
+                AttributesConstraints.UserFirstNameMaxLength,
+                MinimumLength = AttributesConstraints.UserFirstNameMinLength,
+                ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
+            [Display(Name = "Ново име")]
+            public string NewFirstName { get; set; }
+
+            [Required(ErrorMessage = AttributesErrorMessages.RequiredErrorMessage)]
+            [StringLength(
+                AttributesConstraints.UserLastNameMaxLength,
+                MinimumLength = AttributesConstraints.UserLastNameMinLength,
+                ErrorMessage = AttributesErrorMessages.StringLengthErrorMessage)]
+            [Display(Name = "Нова фамилия")]
+            public string NewLastName { get; set; }
         }
 
         private void Load()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var profilePictureUrl = this.usersService.GetProfilePictureUrl(userId);
-            this.ProfilePictureUrl = profilePictureUrl;
+            var firstAndLastName = this.usersService.GetFirstAndLastName(userId);
+            this.FirstName = firstAndLastName.FirstName;
+            this.LastName = firstAndLastName.LastName;
         }
 
         public IActionResult OnGet()
@@ -63,7 +75,7 @@
             }
 
             var userId = this.userManager.GetUserId(this.User);
-            await this.usersService.ChangeProfilePictureAsync(userId, this.Input.NewProfilePicture);
+            await this.usersService.ChangeFirstAndLastNameAsync(userId, this.Input.NewFirstName, this.Input.NewLastName);
 
             return this.RedirectToPage();
         }

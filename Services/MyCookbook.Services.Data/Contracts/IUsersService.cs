@@ -2,7 +2,9 @@
 {
     using System;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
+    using MyCookbook.Web.ViewModels.Users.Profile;
 
     public interface IUsersService
     {
@@ -15,5 +17,13 @@
         string GetProfilePictureUrl(string userId);
 
         Task ChangeProfilePictureAsync(string userId, IFormFile newPicture);
+
+        FirstAndLastNameDto GetFirstAndLastName(string userId);
+
+        Task ChangeFirstAndLastNameAsync(string userId, string firstName, string lastName);
+
+        DateTime GetBirthdate(string userId);
+
+        Task ChangeBirthdate(string userId, DateTime birthdate);
     }
 }

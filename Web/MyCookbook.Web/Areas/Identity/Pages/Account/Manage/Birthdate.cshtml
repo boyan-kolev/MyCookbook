@@ -1,0 +1,32 @@
+﻿@page
+@model Birthdate
+@{
+    ViewData["Title"] = "Редактиране на рождената дата";
+    ViewData["ActivePage"] = ManageNavPages.Birthdate;
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr class="border border-primary" />
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="UserBirthdate"></label>
+            <input asp-for="UserBirthdate" class="form-control" disabled />
+        </div>
+        <hr class="border" />
+        <form id="email-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.NewUserBirthdate"></label>
+                <input asp-for="Input.NewUserBirthdate" class="form-control" />
+                <span asp-validation-for="Input.NewUserBirthdate" class="text-danger"></span>
+            </div>
+            <hr class="border border-primary" />
+            <button id="changeBirthdate" type="submit" asp-page-handler="Birthdate" class="btn btn-primary">Редактиране</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

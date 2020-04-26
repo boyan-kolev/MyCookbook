@@ -112,7 +112,7 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account
             [Display(Name = "Заглавна снимка")]
             [DataType(DataType.Upload)]
             [MaxFileSize(AttributesConstraints.RecipeImageMaxSize)]
-            [AllowedExtensions(new string[] { ".jpeg", ".jpg", "png" })]
+            [AllowedExtensions(new string[] { ".jpeg", ".jpg", ".png" })]
             public IFormFile ProfilePhoto { get; set; }
         }
 

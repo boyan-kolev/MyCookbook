@@ -14,6 +14,10 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account.Manage
 
         public static string ProfilePicture => "ProfilePicture";
 
+        public static string FirstLastName => "FirstLastName";
+
+        public static string Birthdate => "Birthdate";
+
         public static string ChangePassword => "ChangePassword";
 
         public static string ExternalLogins => "ExternalLogins";
@@ -27,6 +31,10 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account.Manage
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
 
         public static string ProfilePictureNavClass(ViewContext viewContext) => PageNavClass(viewContext, ProfilePicture);
+
+        public static string FirstLastNameNavClass(ViewContext viewContext) => PageNavClass(viewContext, FirstLastName);
+
+        public static string BirthdateNavClass(ViewContext viewContext) => PageNavClass(viewContext, Birthdate);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 

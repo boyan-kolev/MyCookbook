@@ -1,0 +1,52 @@
+﻿@page
+@model FirstLastName
+@{
+    ViewData["Title"] = "Редактиране на име и фамилия";
+    ViewData["ActivePage"] = ManageNavPages.FirstLastName;
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr class="border border-primary" />
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" disabled />
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" disabled />
+            </div>
+        </div>
+        <hr class="border" />
+        <form id="email-form" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Input.NewFirstName"></label>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Името, трябва да бъде между 3 и 20 символа!"></i>
+                    <input asp-for="Input.NewFirstName" class="form-control" />
+                    <span asp-validation-for="Input.NewFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Input.NewLastName"></label>
+                    <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Фамилията, трябва да бъде между 3 и 20 символа!"></i>
+                    <input asp-for="Input.NewLastName" class="form-control" />
+                    <span asp-validation-for="Input.NewLastName" class="text-danger"></span>
+                </div>
+            </div>
+            <hr class="border border-primary" />
+            <button id="changeFirstLastName" type="submit" asp-page-handler="FirstLastName" class="btn btn-primary">Редактиране</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
