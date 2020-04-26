@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Web.ViewModels.Users.Favorites;
     using MyCookbook.Web.ViewModels.Users.MyRecipes;
 
     public class UsersController : BaseController
@@ -25,6 +26,14 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var viewModel = this.usersService.GetById<UsersMyRecipesViewModel>(userId);
+
+            return this.View(viewModel);
+        }
+
+        public IActionResult Favorites()
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var viewModel = this.usersService.GetById<UsersFavoritesViewModel>(userId);
 
             return this.View(viewModel);
         }
