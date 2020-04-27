@@ -23,6 +23,7 @@ namespace MyCookbook.Web.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        [Display(Name = "Потребителско име")]
         public string Username { get; set; }
 
         [TempData]
