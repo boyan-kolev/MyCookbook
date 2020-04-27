@@ -13,7 +13,7 @@
             <div class="card-title">
                 <h5 class="card-title">@recipe.Title</h5>
             </div>
-            <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
+            <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
                 @if (recipe.TitlePhotoUrl == null)
                 {
                     <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="200" alt="Снимка на рецептата">

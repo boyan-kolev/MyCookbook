@@ -1,0 +1,62 @@
+﻿@using MyCookbook.Web.ViewModels.Administration.Categories.Edit
+@model CategoriesEditInputModel
+
+@{
+    this.ViewData["Title"] = "Редактиране на категория";
+}
+
+<div class="text-center">
+    <h3>@this.ViewData["Title"]</h3>
+</div>
+
+<div class="text-danger">
+    @ViewData["Error"]
+</div>
+
+<hr class="border" />
+<div class="row">
+    <div class="col-md-3">
+        <h6 class="mb-3">Снимка на категорията</h6>
+        <img src="@Model.ImageUrl" width="200" class="border border-primary rounded" />
+    </div>
+    <div class="col-md-6">
+        <form asp-area="Administration" asp-controller="Categories" asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="Полето е задължително!"></i>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="custom-file fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Позволени формати: '.JPEG', '.JPG', '.PNG' до 5мб!">
+                <input asp-for="NewImageUrl" class="custom-file-input form-control" />
+                <label asp-for="NewImageUrl" class="custom-file-label form-control">
+                    <span class="badge badge-light">
+                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    </span>
+                    <span>
+                        Качи нова снимка
+                    </span>
+                </label>
+                <span asp-validation-for="NewImageUrl" class="text-danger"></span>
+            </div>
+            <hr class="border border-primary"/>
+            <div class="text-center">
+                <input type="submit" value="Добави категорията" class="btn btn-primary btn-md" id="btnSubmit" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

@@ -1,0 +1,72 @@
+﻿@using MyCookbook.Web.ViewModels.Administration.Categories.All
+@model AdminCategoryViewModel
+
+@{
+    this.ViewData["Title"] = "Всички категории";
+}
+
+<div class="row">
+    <div class="col-md-7 ml-5">
+        <h2>@this.ViewData["Title"]</h2>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center">
+            <a asp-area="Administration" asp-controller="Categories" asp-action="Create" class="btn btn-primary btn-lg">Добави нова категория</a>
+        </div>
+    </div>
+</div>
+<hr class="border" />
+
+<div class="container-fluid">
+    <table class="table table-striped">
+        <thead class="table-primary">
+            <tr class="d-flex">
+                <th scope="col">#</th>
+                <th class="col-md-2" scope="col">Име</th>
+                <th class="col-md-3" scope="col">Снимка</th>
+                <th class="col-md-2" scope="col">Дата</th>
+                <th class="col-md-6" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var counter = 1;
+            }
+            @foreach (var category in Model.Categories)
+            {
+                <tr class="d-flex">
+                    <th scope="row">@counter</th>
+                    <td class="col-md-2">@category.Name</td>
+                    <td class="col-md-2">
+                        <img src="@category.ImageUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                    </td>
+                    <td class="col-md-3">@category.CreatedOn</td>
+                    <td><a asp-area="Administration" asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-secondary"><i class="fas fa-edit">&nbsp; Редактиране</i></a></td>
+                    <td><button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteCategory("@category.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button></td>
+                </tr>
+                counter++;
+            }
+        </tbody>
+    </table>
+</div>
+<hr class="border border-primary" />
+
+<div>
+    <form asp-area="Administration" asp-controller="Categories" asp-action="Delete" method="post" id="DeleteRecipeForm" style="display: none">
+        <input type="hidden" name="CategoryId" value="null" />
+        <div>
+            <input type="submit" id="deleteSubmit" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function DeleteCategory(categoryId) {
+            if (confirm("Сигурни ли сте, че искате да изтриете категорията ?")) {
+                $("#DeleteRecipeForm input[name='CategoryId']").val(categoryId);
+                document.getElementById('deleteSubmit').click();
+            }
+        }
+    </script>
+}

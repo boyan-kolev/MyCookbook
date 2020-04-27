@@ -53,5 +53,9 @@
         // Comment
         public const int CommentContentMaxLength = 500;
         public const int CommentContentMinLength = 8;
+
+        // Category
+        public const int CategoryNameMaxLength = 40;
+        public const int CategoryNameMinLength = 3;
     }
 }
