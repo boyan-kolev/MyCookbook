@@ -30,6 +30,8 @@
                               new CategoriesSeeder(),
                               new CookingMethodsSeeder(),
                               new CuisineSeeder(),
+                              new AdministratorsSeeder(),
+                              new ModeratorsSeeder(),
                           };
 
             foreach (var seeder in seeders)

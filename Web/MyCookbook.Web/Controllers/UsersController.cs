@@ -8,6 +8,7 @@
     using MyCookbook.Web.ViewModels.Users.Cooked;
     using MyCookbook.Web.ViewModels.Users.Favorites;
     using MyCookbook.Web.ViewModels.Users.MyRecipes;
+    using MyCookbook.Web.ViewModels.Users.Profile;
 
     public class UsersController : BaseController
     {
@@ -45,6 +46,15 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var viewModel = this.usersService.GetById<UsersCookedViewModel>(userId);
+
+            return this.View(viewModel);
+        }
+
+        [Authorize]
+        public IActionResult MyProfile()
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var viewModel = this.usersService.GetById<UsersMyProfileViewModel>(userId);
 
             return this.View(viewModel);
         }

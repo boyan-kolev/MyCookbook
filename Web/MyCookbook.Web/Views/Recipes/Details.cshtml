@@ -232,6 +232,14 @@
         @Model.Description
     </div>
 </div>
+@if (Model.Advices != null)
+{
+    <hr class="border" />
+    <div class="border rounded">
+        <h4>Допълнителни съвети и препоръки</h4>
+        @Model.Advices
+    </div>
+}
 <hr class="border" />
 <h4>Още рецепти от категория "@Model.CategoryName"</h4>
 <div class="row row-cols-1 row-cols-md-3">
@@ -257,7 +265,9 @@
         </div>
     }
 </div>
-<h6 class="text-md-center">Виж всички рецепти от категория "@Model.CategoryName"</h6>
+<div class="text-center">
+    <a href="/category/@Model.CategoryName">Виж всички рецепти от категория "@Model.CategoryName"</a>
+</div>
 
 @if (TempData["CommentContentError"] != null)
 {

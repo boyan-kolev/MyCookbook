@@ -6,6 +6,8 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string ModeratorRoleName = "Moderator";
+
         public const string DefaultRecipeImageUrl = "https://gorving.com/_assets/_images/recipes/recipe-default@2x.png";
 
         public const string DefaultUserPhotoMaleUrl = "https://d17bobgtnxioyl.cloudfront.net/cdn/beautifulpeople/images/default_profile/signup_male.png";
