@@ -57,5 +57,13 @@
         // Category
         public const int CategoryNameMaxLength = 40;
         public const int CategoryNameMinLength = 3;
+
+        // Cuisine
+        public const int CuisineNameMaxLength = 25;
+        public const int CuisineNameMinLength = 3;
+
+        // CookingMethod
+        public const int CookingMethodMaxLength = 25;
+        public const int CookingMethodMinLength = 3;
     }
 }

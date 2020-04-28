@@ -1,0 +1,72 @@
+﻿@using MyCookbook.Web.ViewModels.Administration.CookingMethods.Manage
+@model AdminCookingMethodsManageViewModel
+
+@{
+    this.ViewData["Title"] = "Управлявай начините на приготвяне";
+}
+
+<div class="row">
+    <div class="col-md-7 ml-5">
+        <h2>@this.ViewData["Title"]</h2>
+    </div>
+    <div class="col-md-4">
+        <div class="text-center">
+            <a asp-area="Administration" asp-controller="CookingMethods" asp-action="Create" class="btn btn-primary btn-lg">Добави нов начин на приготвяне</a>
+        </div>
+    </div>
+</div>
+<hr class="border" />
+
+<div class="container-fluid">
+    <table class="table table-striped">
+        <thead class="table-primary">
+            <tr class="d-flex">
+                <th scope="col">#</th>
+                <th class="col-md-2" scope="col">Име</th>
+                <th class="col-md-3" scope="col">Снимка</th>
+                <th class="col-md-2" scope="col">Дата</th>
+                <th class="col-md-6" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var counter = 1;
+            }
+            @foreach (var cookingMethods in Model.CookingMethods)
+            {
+                <tr class="d-flex">
+                    <th scope="row">@counter</th>
+                    <td class="col-md-2">@cookingMethods.Name</td>
+                    <td class="col-md-2">
+                        <img src="@cookingMethods.ImageUrl" class="card-img-top" height="80" alt="Снимка на начина на приготвяне">
+                    </td>
+                    <td class="col-md-3"><time datetime="@cookingMethods.CreatedOn.ToString("O")"></time></td>
+                    <td><a asp-area="Administration" asp-controller="CookingMethods" asp-action="Edit" asp-route-id="@cookingMethods.Id" class="btn btn-secondary"><i class="fas fa-edit">&nbsp; Редактиране</i></a></td>
+                    <td><button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteCookingMethod("@cookingMethods.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button></td>
+                </tr>
+                counter++;
+            }
+        </tbody>
+    </table>
+</div>
+<hr class="border border-primary" />
+
+<div>
+    <form asp-area="Administration" asp-controller="CookingMethods" asp-action="Delete" method="post" id="DeleteCookingMethodForm" style="display: none">
+        <input type="hidden" name="CookingMethodId" value="null" />
+        <div>
+            <input type="submit" id="deleteSubmit" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function DeleteCookingMethod(cookingMethodId) {
+            if (confirm("Сигурни ли сте, че искате да изтриете начина на приготвяне ?")) {
+                $("#DeleteCookingMethodForm input[name='CookingMethodId']").val(cookingMethodId);
+                document.getElementById('deleteSubmit').click();
+            }
+        }
+    </script>
+}

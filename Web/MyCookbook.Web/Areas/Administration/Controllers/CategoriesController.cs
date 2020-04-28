@@ -4,9 +4,9 @@
 
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Data.Contracts;
-    using MyCookbook.Web.ViewModels.Administration.Categories.All;
     using MyCookbook.Web.ViewModels.Administration.Categories.Create;
     using MyCookbook.Web.ViewModels.Administration.Categories.Edit;
+    using MyCookbook.Web.ViewModels.Administration.Categories.Manage;
 
     public class CategoriesController : AdministrationController
     {
@@ -18,7 +18,7 @@
             this.categoriesService = categoriesService;
         }
 
-        public IActionResult All()
+        public IActionResult Manage()
         {
             var categories = this.categoriesService.GetAll<AdminCategoriesAllViewModel>();
             var viewModel = new AdminCategoryViewModel { Categories = categories };
@@ -48,7 +48,7 @@
 
             await this.categoriesService.CreateAsync(input.Name, input.ImageUrl);
 
-            return this.Redirect("/Administration/Categories/All");
+            return this.Redirect("/Administration/Categories/Manage");
         }
 
         public IActionResult Edit(int id)
@@ -73,20 +73,19 @@
 
             if (!this.ModelState.IsValid || !isValidTitle)
             {
-                return this.View();
+                return this.View(input);
             }
 
             await this.categoriesService.EditAsync(input.Id, input.Name, input.NewImageUrl);
 
-            return this.Redirect("/Administration/Categories/All");
+            return this.Redirect("/Administration/Categories/Manage");
         }
-
 
         public async Task<IActionResult> Delete(int categoryId)
         {
             await this.categoriesService.DeleteAsync(categoryId);
 
-            return this.Redirect("/Administration/Categories/All");
+            return this.Redirect("/Administration/Categories/Manage");
         }
     }
 }

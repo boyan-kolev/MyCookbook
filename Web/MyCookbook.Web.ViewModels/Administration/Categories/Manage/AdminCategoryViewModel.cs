@@ -1,4 +1,4 @@
-﻿namespace MyCookbook.Web.ViewModels.Administration.Categories.All
+﻿namespace MyCookbook.Web.ViewModels.Administration.Categories.Manage
 {
     using System.Collections.Generic;
 

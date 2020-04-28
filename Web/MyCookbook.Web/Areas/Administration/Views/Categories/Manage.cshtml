@@ -1,8 +1,8 @@
-﻿@using MyCookbook.Web.ViewModels.Administration.Categories.All
+﻿@using MyCookbook.Web.ViewModels.Administration.Categories.Manage
 @model AdminCategoryViewModel
 
 @{
-    this.ViewData["Title"] = "Всички категории";
+    this.ViewData["Title"] = "Управлявай категориите";
 }
 
 <div class="row">
@@ -38,9 +38,9 @@
                     <th scope="row">@counter</th>
                     <td class="col-md-2">@category.Name</td>
                     <td class="col-md-2">
-                        <img src="@category.ImageUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                        <img src="@category.ImageUrl" class="card-img-top" height="80" alt="Снимка на категорията">
                     </td>
-                    <td class="col-md-3">@category.CreatedOn</td>
+                    <td class="col-md-3"><time datetime="@category.CreatedOn.ToString("O")"></time></td>
                     <td><a asp-area="Administration" asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-secondary"><i class="fas fa-edit">&nbsp; Редактиране</i></a></td>
                     <td><button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteCategory("@category.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button></td>
                 </tr>
@@ -52,7 +52,7 @@
 <hr class="border border-primary" />
 
 <div>
-    <form asp-area="Administration" asp-controller="Categories" asp-action="Delete" method="post" id="DeleteRecipeForm" style="display: none">
+    <form asp-area="Administration" asp-controller="Categories" asp-action="Delete" method="post" id="DeleteCategoryForm" style="display: none">
         <input type="hidden" name="CategoryId" value="null" />
         <div>
             <input type="submit" id="deleteSubmit" />
@@ -64,7 +64,7 @@
     <script>
         function DeleteCategory(categoryId) {
             if (confirm("Сигурни ли сте, че искате да изтриете категорията ?")) {
-                $("#DeleteRecipeForm input[name='CategoryId']").val(categoryId);
+                $("#DeleteCategoryForm input[name='CategoryId']").val(categoryId);
                 document.getElementById('deleteSubmit').click();
             }
         }

@@ -1,11 +1,11 @@
-﻿namespace MyCookbook.Web.ViewModels.Administration.Categories.All
+﻿namespace MyCookbook.Web.ViewModels.Administration.Cuisines.Manage
 {
     using System;
 
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
 
-    public class AdminCategoriesAllViewModel : IMapFrom<Category>
+    public class AdminCuisinesAllViewModel : IMapFrom<Cuisine>
     {
         public int Id { get; set; }
 
