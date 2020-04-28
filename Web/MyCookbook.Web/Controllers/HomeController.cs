@@ -55,5 +55,12 @@
             return this.View(
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
+
+        public IActionResult HttpError(int statusCode)
+        {
+            var viewModel = new HomeHttpErrorViewModel { StatusCode = statusCode };
+
+            return this.View("HttpError", viewModel);
+        }
     }
 }
