@@ -3,6 +3,7 @@
     using AutoMapper;
     using MyCookbook.Data.Models;
     using MyCookbook.Services.Mapping;
+    using System.Linq;
 
     public class CategoriesAllViewModel : IMapFrom<Category>, IHaveCustomMappings
     {
@@ -21,7 +22,7 @@
             configuration.CreateMap<Category, CategoriesAllViewModel>()
                 .ForMember(
                 opt => opt.RecipesCount,
-                dest => dest.MapFrom(x => x.Recipes.Count));
+                dest => dest.MapFrom(x => x.Recipes.Where(r => r.IsApproved == true).Count()));
         }
     }
 }

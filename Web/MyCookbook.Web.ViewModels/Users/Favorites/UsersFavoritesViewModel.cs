@@ -17,7 +17,7 @@
             configuration.CreateMap<ApplicationUser, UsersFavoritesViewModel>()
                 .ForMember(
                 dest => dest.Recipes,
-                opt => opt.MapFrom(x => x.FavoriteRecipes.Select(r => r.Recipe)));
+                opt => opt.MapFrom(x => x.FavoriteRecipes.Select(r => r.Recipe).Where(r => r.IsApproved == true)));
         }
     }
 }

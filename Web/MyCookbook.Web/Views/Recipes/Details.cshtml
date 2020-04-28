@@ -97,6 +97,12 @@
             </div>
         </div>
         <hr class="border" />
+        @if (Model.IsApproved == false)
+        {
+            <div>
+                <button type="button" class="btn btn-success btn-lg float-right mb-1" onclick='ApproveRecipe("@Model.Id")'><i class="fas fa-check"></i>&nbsp; Одобри</button>
+            </div>
+        }
         <div class="media">
             <img height="25" width="35" class="align-self-center mr-3" src="@Model.Cuisine.ImageUrl" alt="знаме">
             <div class="media-body">
@@ -397,7 +403,14 @@
         </div>
     </form>
 </div>
-
+<div>
+    <form asp-area="Moderation" asp-controller="Recipes" asp-action="Approve" method="post" id="ApproveRecipeForm" style="display: none">
+        <input type="hidden" name="RecipeId" value="null" />
+        <div>
+            <input type="submit" id="approveSubmit" />
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     <script>
@@ -542,6 +555,14 @@
                         }
                     }
                 });
+            }
+        }
+    </script>
+    <script>
+        function ApproveRecipe(recipeId) {
+            if (confirm("Сигурни ли сте, че искате да одобрите рецептата ?")) {
+                $("#ApproveRecipeForm input[name='RecipeId']").val(recipeId);
+                document.getElementById('approveSubmit').click();
             }
         }
     </script>

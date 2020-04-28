@@ -22,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587575801/FavIcon_d6k6e1.png" width="60" /><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587576812/Logo3_xbmy41.jpg" class="rounded-pill" /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587575801/FavIcon_d6k6e1.png" width="60" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -42,12 +42,36 @@
                                 <a class="dropdown-item" asp-area="" asp-controller="Cuisines" asp-action="All">Национални кухни</a>
                             </div>
                         </li>
+
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white" asp-area="" asp-controller="Recipes" asp-action="Create">Добави рецепта</a>
                             </li>
                         }
+
+                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.ModeratorRoleName))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Модерация</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="Moderation" asp-controller="Recipes" asp-action="Manage">Одобряване на рецепти</a>
+                                </div>
+                            </li>
+                        }
+
+                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Администрация</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Categories" asp-action="Manage">Категории</a>
+                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Cuisines" asp-action="Manage">Национални кухни</a>
+                                    <a class="dropdown-item" asp-area="Administration" asp-controller="CookingMethods" asp-action="Manage">Начини на приготвяне</a>
+                                </div>
+                            </li>
+                        }
+
                         @if (this.User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item dropdown">
@@ -60,9 +84,10 @@
                                 </div>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Политика</a>
-                        </li>
+
+                        @*<li class="nav-item">
+            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Политика</a>
+        </li>*@
                     </ul>
                 </div>
             </div>

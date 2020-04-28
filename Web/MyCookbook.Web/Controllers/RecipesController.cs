@@ -22,6 +22,8 @@
     {
         private const string IngredientNameError = "Името на съставката може да бъде между 2 и 80 символа!";
         private const string RecipeExistNameError = "Съществува рецепта с това име. Моля изберете друго име!";
+        private const string SuccessCreateRecipe = "Вашата рецепта беше качена успешно. Очаква се одобрение от модератор!";
+        private const string SuccessEditRecipe = "Вашата рецепта беше редактиране успешно. Очаква се одобрение от модератор!";
         private const int DetailsCountOfSimilarRecipes = 6;
         private readonly IRecipesService recipesService;
         private readonly ICategoriesService categoriesService;
@@ -134,8 +136,9 @@
             };
 
             int recipeId = await this.recipesService.AddAsync(serviceModel);
+            this.TempData["SuccessCreateRecipe"] = SuccessCreateRecipe;
 
-            return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
+            return this.Redirect("/");
         }
 
         [Authorize]
@@ -249,8 +252,9 @@
             };
 
             int recipeId = await this.recipesService.EditAsync(recipeDto);
+            this.TempData["SuccessEditRecipe"] = SuccessEditRecipe;
 
-            return this.RedirectToAction("Details", "Recipes", new { id = recipeId });
+            return this.Redirect("/");
         }
 
         [Authorize]
@@ -272,24 +276,32 @@
 
         public IActionResult Details(int id)
         {
-            var isExestRecipe = this.recipesService.IsExistRecipe(id);
+            var isWithNotApproved = false;
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.ModeratorRoleName))
+            {
+                isWithNotApproved = true;
+            }
+
+            var isExestRecipe = this.recipesService.IsExistRecipe(id, isWithNotApproved);
 
             if (isExestRecipe == false)
             {
                 return this.NotFound();
             }
 
-            var user = this.userManager.GetUserId(this.User);
-            var viewModel = this.recipesService.GetByIdForDetails(id, user, DetailsCountOfSimilarRecipes);
 
+            var user = this.userManager.GetUserId(this.User);
+            var viewModel = this.recipesService.GetByIdForDetails(id, user, DetailsCountOfSimilarRecipes, isWithNotApproved);
 
             return this.View(viewModel);
         }
 
+        // TODO
         [Route("/Identity/Recipes/All")]
         public IActionResult All()
         {
-            var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>();
+            var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>(true);
             var viewModel = new RecipeAllViewModel { Recipes = recipes };
 
             return this.View(viewModel);

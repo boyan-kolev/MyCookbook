@@ -6,6 +6,22 @@
     var listRecipesPartialViewModel = new ListRecipesPartialViewModel { Recipes = Model.TopRecipes };
 }
 
+@if (this.TempData["SuccessCreateRecipe"] != null)
+{
+    <div class="text-success text-center">
+        <h3>@this.TempData["SuccessCreateRecipe"]</h3>
+        <hr class="border border-primary" />
+    </div>
+}
+
+@if (this.TempData["SuccessEditRecipe"] != null)
+{
+    <div class="text-success text-center">
+        <h3>@this.TempData["SuccessEditRecipe"]</h3>
+        <hr class="border border-primary" />
+    </div>
+}
+
 <div class="text-center">
     <h1 class="display-4 peach-gradient"><strong>Добре дошли в   </strong><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587575801/FavIcon_d6k6e1.png" width="60" /><img src="https://res.cloudinary.com/mycookbook/image/upload/v1587576812/Logo3_xbmy41.jpg" width="300" /></h1>
     <hr class="border border-primary" />

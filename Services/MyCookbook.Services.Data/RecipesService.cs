@@ -77,6 +77,7 @@
                 AuthorId = model.AuthorId,
                 CategoryId = model.CategoryId,
                 CuisineId = model.CuisineId,
+                IsApproved = false,
             };
 
             await this.recipesRepository.AddAsync(recipe);
@@ -148,6 +149,7 @@
             recipe.AuthorId = model.AuthorId;
             recipe.CategoryId = model.CategoryId;
             recipe.CuisineId = model.CuisineId;
+            recipe.IsApproved = false;
 
             this.recipesRepository.Update(recipe);
             await this.recipesRepository.SaveChangesAsync();
@@ -226,7 +228,7 @@
         {
             var recipe = this.recipesRepository
                 .All()
-                .Where(r => r.Id == recipeId)
+                .Where(r => r.Id == recipeId && r.IsApproved == true)
                 .To<RecipeEditInputModel>()
                 .FirstOrDefault();
 
@@ -248,13 +250,23 @@
             return recipe;
         }
 
-        public RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes)
+        public RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes, bool isWithNotApproved)
         {
-            var viewModel = this.recipesRepository
+            var query = this.recipesRepository
                 .All()
-                .Where(x => x.Id == recipeId)
-                .To<RecipeDetailsViewModel>()
-                .FirstOrDefault();
+                .Where(x => x.Id == recipeId);
+
+            if (isWithNotApproved == false)
+            {
+                query = query.Where(x => x.IsApproved == true);
+            }
+
+            var viewModel = query.To<RecipeDetailsViewModel>().FirstOrDefault();
+
+            if (viewModel == null)
+            {
+                return null;
+            }
 
             if (userId != null)
             {
@@ -350,7 +362,7 @@
         {
             IQueryable<Recipe> query = this.recipesRepository
                 .All()
-                .Where(r => r.CategoryId == categoryId)
+                .Where(r => r.CategoryId == categoryId && r.IsApproved == true)
                 .OrderBy(r => r.CreatedOn);
 
             if (withoutRecipeId.HasValue)
@@ -438,10 +450,11 @@
             return cookTimes;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IEnumerable<T> GetAll<T>(bool isWithApproved)
         {
             var recipes = this.recipesRepository
                 .All()
+                .Where(r => r.IsApproved == isWithApproved)
                 .OrderByDescending(r => r.CreatedOn)
                 .To<T>();
 
@@ -451,7 +464,7 @@
         public RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input)
         {
             var viewModel = new RecipeFilteredViewModel();
-            var query = this.recipesRepository.All();
+            var query = this.recipesRepository.All().Where(r => r.IsApproved == true);
 
             if (!string.IsNullOrEmpty(input.Title) && !string.IsNullOrWhiteSpace(input.Title))
             {
@@ -541,6 +554,7 @@
         {
             var lastCreatedRecipes = this.recipesRepository
                 .All()
+                .Where(r => r.IsApproved == true)
                 .OrderByDescending(r => r.CreatedOn)
                 .Take(count)
                 .To<T>()
@@ -553,6 +567,7 @@
         {
             var topRecipes = this.recipesRepository
                 .All()
+                .Where(r => r.IsApproved == true)
                 .OrderByDescending(r => r.Ratings.Average(x => x.Stars))
                 .ThenByDescending(x => x.Ratings.Count())
                 .Take(count)
@@ -562,9 +577,18 @@
             return topRecipes;
         }
 
-        public bool IsExistRecipe(int id)
+        public bool IsExistRecipe(int id, bool isWithNotApproved)
         {
-            var isExist = this.recipesRepository.All().Any(r => r.Id == id);
+            bool isExist;
+
+            if (isWithNotApproved)
+            {
+                isExist = this.recipesRepository.All().Any(r => r.Id == id);
+            }
+            else
+            {
+                isExist = this.recipesRepository.All().Any(r => r.Id == id && r.IsApproved == true);
+            }
 
             return isExist;
         }
@@ -578,6 +602,19 @@
                 .FirstOrDefault();
 
             return title;
+        }
+
+        public async Task Approve(int recipeId)
+        {
+            var recipe = this.recipesRepository
+                .All()
+                .Where(r => r.Id == recipeId)
+                .FirstOrDefault();
+
+            recipe.IsApproved = true;
+
+            this.recipesRepository.Update(recipe);
+            await this.recipesRepository.SaveChangesAsync();
         }
 
         private async Task SetRecipeToRecipeCookingMethodsAsync(
@@ -609,5 +646,6 @@
             this.recipesRepository.Update(recipe);
             await this.recipesRepository.SaveChangesAsync();
         }
+
     }
 }

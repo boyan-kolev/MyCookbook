@@ -16,7 +16,7 @@
 
         Task DeleteAsync(int recipeId);
 
-        RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes);
+        RecipeDetailsViewModel GetByIdForDetails(int recipeId, string userId, int countOfSimilarRecipes, bool isWithNotApproved);
 
         RecipeEditInputModel GetByIdForEdit(int recipeId);
 
@@ -30,7 +30,7 @@
 
         int GetCookTimesById(int recipeId);
 
-        IEnumerable<T> GetAll<T>();
+        IEnumerable<T> GetAll<T>(bool isWithApproved);
 
         RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input);
 
@@ -38,8 +38,10 @@
 
         IEnumerable<T> GetTopRecipes<T>(int count);
 
-        bool IsExistRecipe(int id);
+        bool IsExistRecipe(int id, bool isWithNotApproved);
 
         string GetRecipeTitle(int recipeId);
+
+        Task Approve(int recipeId);
     }
 }
