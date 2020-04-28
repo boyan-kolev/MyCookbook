@@ -13,9 +13,6 @@
         public void Configure(EntityTypeBuilder<CookingMethod> builder)
         {
             builder.HasKey(x => x.Id);
-
-            builder.HasIndex(x => x.Name)
-                .IsUnique();
         }
     }
 }

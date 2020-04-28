@@ -14,9 +14,6 @@
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasIndex(x => x.Name)
-                .IsUnique();
-
             builder.HasMany(x => x.Recipes)
                 .WithOne(x => x.Cuisine)
                 .HasForeignKey(x => x.CuisineId);

@@ -14,9 +14,6 @@
         {
             builder.HasKey(x => x.Id);
 
-            builder.HasIndex(x => x.Title)
-                .IsUnique();
-
             builder.HasMany(x => x.Images)
                 .WithOne(x => x.Recipe)
                 .HasForeignKey(x => x.RecipeId);
