@@ -1,5 +1,6 @@
 ﻿namespace MyCookbook.Web.ViewModels.Recipes.Details
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -64,7 +65,7 @@
                     opt => opt.MapFrom(x => x.CookedBy.Count))
                 .ForMember(
                     dest => dest.Ratings,
-                    opt => opt.MapFrom(x => x.Ratings.Average(r => r.Stars)));
+                    opt => opt.MapFrom(x => Math.Round(x.Ratings.Average(r => r.Stars), 2)));
         }
     }
 }

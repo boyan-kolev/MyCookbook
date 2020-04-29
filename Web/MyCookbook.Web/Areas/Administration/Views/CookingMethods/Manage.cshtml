@@ -2,7 +2,7 @@
 @model AdminCookingMethodsManageViewModel
 
 @{
-    this.ViewData["Title"] = "Управлявай начините на приготвяне";
+    this.ViewData["Title"] = "Управлявай методите на приготвяне";
 }
 
 <div class="row">
@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-4">
         <div class="text-center">
-            <a asp-area="Administration" asp-controller="CookingMethods" asp-action="Create" class="btn btn-primary btn-lg">Добави нов начин на приготвяне</a>
+            <a asp-area="Administration" asp-controller="CookingMethods" asp-action="Create" class="btn btn-primary btn-lg">Добави нов метод на приготвяне</a>
         </div>
     </div>
 </div>
@@ -63,7 +63,7 @@
 @section Scripts {
     <script>
         function DeleteCookingMethod(cookingMethodId) {
-            if (confirm("Сигурни ли сте, че искате да изтриете начина на приготвяне ?")) {
+            if (confirm("Сигурни ли сте, че искате да изтриете метода на приготвяне ?")) {
                 $("#DeleteCookingMethodForm input[name='CookingMethodId']").val(cookingMethodId);
                 document.getElementById('deleteSubmit').click();
             }

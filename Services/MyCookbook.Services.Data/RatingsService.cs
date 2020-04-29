@@ -1,5 +1,6 @@
 ﻿namespace MyCookbook.Services.Data
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -37,6 +38,8 @@
                 .All()
                 .Where(x => x.RecipeId == recipeId)
                 .Average(x => x.Stars);
+
+            ratings = Math.Round(ratings, 2);
 
             return ratings;
         }

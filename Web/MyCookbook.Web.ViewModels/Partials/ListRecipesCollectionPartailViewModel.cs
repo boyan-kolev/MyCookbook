@@ -32,7 +32,7 @@
                     .MapFrom(x => x.Title.Length < 40 ? x.Title : x.Title.Substring(0, 40) + "..."))
                 .ForMember(
                     dest => dest.Rating,
-                    opt => opt.MapFrom(x => x.Ratings.Average(r => r.Stars)));
+                    opt => opt.MapFrom(x => Math.Round(x.Ratings.Average(r => r.Stars), 2)));
         }
     }
 }
