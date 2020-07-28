@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyCookbook.Services.Data.Contracts;
-using MyCookbook.Web.ViewModels.Administration.CookingMethods.Create;
-using MyCookbook.Web.ViewModels.Administration.CookingMethods.Edit;
-using MyCookbook.Web.ViewModels.Administration.CookingMethods.Manage;
-using System.Threading.Tasks;
-
-namespace MyCookbook.Web.Areas.Administration.Controllers
+﻿namespace MyCookbook.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Mvc;
+    using MyCookbook.Services.Data.Contracts;
+    using MyCookbook.Web.ViewModels.Administration.CookingMethods.Create;
+    using MyCookbook.Web.ViewModels.Administration.CookingMethods.Delete;
+    using MyCookbook.Web.ViewModels.Administration.CookingMethods.Edit;
+    using MyCookbook.Web.ViewModels.Administration.CookingMethods.Manage;
+
     public class CookingMethodsController : AdministrationController
     {
         private const string IsExistCookingMethodError = "Съществува начин на приготвяне с това име, моля изберете друго име!";
+        private const string HasRecipesInCookingMethodError = "Има добавени рецепти в този начин на приготвяне. Не може да бъде изтрит!";
         private readonly ICookingMethodsService cookingMethodService;
 
         public CookingMethodsController(ICookingMethodsService cookingMethodService)
@@ -82,7 +85,16 @@ namespace MyCookbook.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Delete(int cookingMethodId)
         {
-            await this.cookingMethodService.DeleteAsync(cookingMethodId);
+            var cookingMethod = this.cookingMethodService.GetById<CookingMethodsDeleteViewModel>(cookingMethodId);
+
+            if (cookingMethod.CountOfRecipes <= 0)
+            {
+                await this.cookingMethodService.DeleteAsync(cookingMethodId);
+            }
+            else
+            {
+                this.TempData["Error"] += HasRecipesInCookingMethodError;
+            }
 
             return this.Redirect("/Administration/CookingMethods/Manage");
         }

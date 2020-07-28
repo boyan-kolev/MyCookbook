@@ -1,9 +1,10 @@
 ﻿namespace MyCookbook.Web.Areas.Moderation.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels.Moderation;
-    using System.Threading.Tasks;
 
     public class RecipesController : ModerationController
     {
@@ -25,6 +26,13 @@
         public async Task<IActionResult> Approve(int recipeId)
         {
             await this.recipesService.Approve(recipeId);
+
+            return this.Redirect("/Moderation/Recipes/Manage");
+        }
+
+        public async Task<IActionResult> Delete(int recipeId)
+        {
+            await this.recipesService.DeleteAsync(recipeId);
 
             return this.Redirect("/Moderation/Recipes/Manage");
         }

@@ -5,12 +5,14 @@
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels.Administration.Categories.Create;
+    using MyCookbook.Web.ViewModels.Administration.Categories.Delete;
     using MyCookbook.Web.ViewModels.Administration.Categories.Edit;
     using MyCookbook.Web.ViewModels.Administration.Categories.Manage;
 
     public class CategoriesController : AdministrationController
     {
         private const string IsExistCategoryError = "Съществува категория с това име, моля изберете друго име!";
+        private const string HasRecipesInCategoryError = "Има рецепти в тази категория. Не може да бъде изтрита!";
         private readonly ICategoriesService categoriesService;
 
         public CategoriesController(ICategoriesService categoriesService)
@@ -83,7 +85,16 @@
 
         public async Task<IActionResult> Delete(int categoryId)
         {
-            await this.categoriesService.DeleteAsync(categoryId);
+            var category = this.categoriesService.GetById<CategoryDeleteViewModel>(categoryId);
+
+            if (category.CountOfRecipes <= 0)
+            {
+                await this.categoriesService.DeleteAsync(categoryId);
+            }
+            else
+            {
+                this.TempData["Error"] += HasRecipesInCategoryError;
+            }
 
             return this.Redirect("/Administration/Categories/Manage");
         }

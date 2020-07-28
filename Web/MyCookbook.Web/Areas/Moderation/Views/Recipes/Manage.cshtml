@@ -1,4 +1,5 @@
 ﻿@using MyCookbook.Web.ViewModels.Moderation
+@using MyCookbook.Common
 @model ModerationRecipesManageViewModel
 
 @{
@@ -38,12 +39,20 @@ else
                         <th scope="row">@counter</th>
                         <td class="col-md-2">@recipe.Title</td>
                         <td class="col-md-2">
-                            <img src="@recipe.TitlePictureUrl" class="card-img-top" height="80" alt="Снимка на категорията">
+                            @if (recipe.TitlePictureUrl == null)
+                            {
+                                <img src="@GlobalConstants.DefaultRecipeImageUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                            }
+                            else
+                            {
+                                <img src="@recipe.TitlePictureUrl" class="card-img-top" height="80" alt="Снимка на рецептата">
+                            }
                         </td>
                         <td class="col-md-2"><time datetime="@recipe.CreatedOn.ToString("O")"></time></td>
-                        <td class="col-md-2">@recipe.AuthorFullName</td>
+                        <td class="col-md-1 mr-4">@recipe.AuthorFullName</td>
                         <td><a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-primary"><i class="fas fa-search"></i>&nbsp; Преглед</a></td>
                         <td><button type="button" class="btn btn-success float-right mb-1" onclick='ApproveRecipe("@recipe.Id")'><i class="fas fa-check"></i>&nbsp; Одобри</button></td>
+                        <td><button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteRecipe("@recipe.Id")'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button></td>
                     </tr>
                     counter++;
                 }
@@ -60,6 +69,13 @@ else
             <input type="submit" id="approveSubmit" />
         </div>
     </form>
+
+    <form asp-area="Moderation" asp-controller="Recipes" asp-action="Delete" method="post" id="DeleteRecipeForm" style="display: none">
+        <input type="hidden" name="RecipeId" value="null" />
+        <div>
+            <input type="submit" id="DeleteSubmit" />
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -68,6 +84,13 @@ else
             if (confirm("Сигурни ли сте, че искате да одобрите рецептата ?")) {
                 $("#ApproveRecipeForm input[name='RecipeId']").val(recipeId);
                 document.getElementById('approveSubmit').click();
+            }
+        }
+
+        function DeleteRecipe(recipeId) {
+            if (confirm("Сигурни ли сте, че искате да изтриете рецептата ?")) {
+                $("#DeleteRecipeForm input[name='RecipeId']").val(recipeId);
+                document.getElementById('DeleteSubmit').click();
             }
         }
     </script>

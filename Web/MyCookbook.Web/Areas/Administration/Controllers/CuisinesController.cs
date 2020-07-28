@@ -6,12 +6,14 @@
     using Microsoft.AspNetCore.Mvc;
     using MyCookbook.Services.Data.Contracts;
     using MyCookbook.Web.ViewModels.Administration.Cuisines.Create;
+    using MyCookbook.Web.ViewModels.Administration.Cuisines.Delete;
     using MyCookbook.Web.ViewModels.Administration.Cuisines.Edit;
     using MyCookbook.Web.ViewModels.Administration.Cuisines.Manage;
 
     public class CuisinesController : AdministrationController
     {
         private const string IsExistCuisineError = "Съществува национална кухня с това име, моля изберете друго име!";
+        private const string HasRecipesInCuisineError = "Има рецепти в тази национална кухня. Не може да бъде изтрита!";
         private readonly ICuisinesService cuisinesService;
 
         public CuisinesController(ICuisinesService cuisinesService)
@@ -84,7 +86,16 @@
 
         public async Task<IActionResult> Delete(int cuisineId)
         {
-            await this.cuisinesService.DeleteAsync(cuisineId);
+            var cuisine = this.cuisinesService.GetById<CuisinesDeleteViewModel>(cuisineId);
+
+            if (cuisine.CountOfRecipes <= 0)
+            {
+                await this.cuisinesService.DeleteAsync(cuisineId);
+            }
+            else
+            {
+                this.TempData["Error"] += HasRecipesInCuisineError;
+            }
 
             return this.Redirect("/Administration/Cuisines/Manage");
         }

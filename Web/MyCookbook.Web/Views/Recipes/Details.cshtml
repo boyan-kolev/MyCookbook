@@ -99,9 +99,10 @@
         <hr class="border" />
         @if (Model.IsApproved == false)
         {
-            <div>
-                <button type="button" class="btn btn-success btn-lg float-right mb-1" onclick='ApproveRecipe("@Model.Id")'><i class="fas fa-check"></i>&nbsp; Одобри</button>
-            </div>
+    <div>
+        <button type="button" class="btn btn-danger btn-lg float-right mb-1" onclick='DeleteRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Изтриване на рецептата"><i class="fas fa-times"></i></button>
+        <button type="button" class="btn btn-success btn-lg float-right mb-1" onclick='ApproveRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Одобряване на рецептата"><i class="fas fa-check"></i></button>
+    </div>
         }
         <div class="media">
             <img height="25" width="35" class="align-self-center mr-3" src="@Model.Cuisine.ImageUrl" alt="знаме">
@@ -410,6 +411,13 @@
             <input type="submit" id="approveSubmit" />
         </div>
     </form>
+
+    <form asp-area="Moderation" asp-controller="Recipes" asp-action="Delete" method="post" id="DeleteRecipeForm" style="display: none">
+        <input type="hidden" name="RecipeId" value="null" />
+        <div>
+            <input type="submit" id="DeleteSubmit" />
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -565,5 +573,16 @@
                 document.getElementById('approveSubmit').click();
             }
         }
+
+        function DeleteRecipe(recipeId) {
+            if (confirm("Сигурни ли сте, че искате да изтриете рецептата ?")) {
+                $("#DeleteRecipeForm input[name='RecipeId']").val(recipeId);
+                document.getElementById('DeleteSubmit').click();
+            }
+        }
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 }

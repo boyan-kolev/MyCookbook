@@ -290,7 +290,6 @@
                 return this.NotFound();
             }
 
-
             var user = this.userManager.GetUserId(this.User);
             var viewModel = this.recipesService.GetByIdForDetails(id, user, DetailsCountOfSimilarRecipes, isWithNotApproved);
 
