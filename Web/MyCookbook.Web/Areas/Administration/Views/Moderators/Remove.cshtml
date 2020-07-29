@@ -1,0 +1,80 @@
+﻿@using MyCookbook.Web.ViewModels.Administration.Moderators.Remove
+@model ModeratorsRemoveViewModel
+
+@{
+    this.ViewData["Title"] = "Премахване на модератори";
+}
+
+<div class="text-center">
+    <h3>@this.ViewData["Title"]</h3>
+</div>
+
+<form asp-action="Remove" asp-area="Administration" asp-controller="Moderators" method="post" id="checkbox">
+    <div id="checkBox">
+    </div>
+    <div class="container-fluid">
+        <table class="table table-striped">
+            <thead class="table-primary">
+                <tr class="d-flex">
+                    <th scope="col">№</th>
+                    <th class="col-md-3" scope="col">Потребителско име</th>
+                    <th class="col-md-2" scope="col">Снимка</th>
+                    <th class="col-md-2" scope="col">Име</th>
+                    <th class="col-md-2" scope="col">Фамилия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Model.Moderators.Length; i++)
+                {
+                    <tr class="d-flex">
+                        <th scope="row">@(i+1)</th>
+                        <td class="col-md-3">
+                            <div>
+                                <input type="checkbox" asp-for="@Model.Moderators[i].Selected" />
+                                <label asp-for="@Model.Moderators[i].Selected">@Model.Moderators[i].UserName</label>
+                                <input type="hidden" asp-for="@Model.Moderators[i].Id" />
+                            </div>
+                        </td>
+                        <td class="col-md-2">
+                            <div class="w-50">
+                                <img src="@Model.Moderators[i].ProfilePhoto" class="card-img-top" height="50" alt="Снимка на модератора">
+                            </div>
+                        </td>
+                        <td class="col-md-2">@Model.Moderators[i].FirstName</td>
+                        <td class="col-md-2">@Model.Moderators[i].LastName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr class="border border-primary" />
+    <div class="row">
+        <div class="col-md-5">
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Премахни модераторите" class="btn btn-primary btn-md" id="btnSubmit" />
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        var isPushedButton = false;
+        $(document).ready(function () {
+            $('#btnSubmit').click(function () {
+                if ($('#checkbox input:checked').length > 0) {
+                    return true;
+                }
+                else {
+                    if (isPushedButton == false) {
+                        document.getElementById("checkBox").innerHTML += "Моля изберете поне един модератор!";
+                    }
+                    isPushedButton = true;
+                    return false;
+                }
+            })
+        });
+    </script>
+}

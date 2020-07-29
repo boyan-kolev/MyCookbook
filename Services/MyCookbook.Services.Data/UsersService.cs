@@ -1,10 +1,12 @@
 ﻿namespace MyCookbook.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using MyCookbook.Common;
     using MyCookbook.Data.Common.Repositories;
     using MyCookbook.Data.Models;
@@ -19,13 +21,23 @@
         private const string CloudinaryFolderName = "Профилни снимки";
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UsersService(
             IDeletableEntityRepository<ApplicationUser> userRepository,
-            ICloudinaryService cloudinaryService)
+            ICloudinaryService cloudinaryService,
+            UserManager<ApplicationUser> userManager)
         {
             this.userRepository = userRepository;
             this.cloudinaryService = cloudinaryService;
+            this.userManager = userManager;
+        }
+
+        public async Task AddToModeratorRoleAsync(string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            await this.userManager.AddToRoleAsync(user, GlobalConstants.ModeratorRoleName);
         }
 
         public async Task ChangeBirthdate(string userId, DateTime birthdate)
@@ -76,6 +88,30 @@
             }
 
             return age;
+        }
+
+        public T[] GetAllModerators<T>()
+        {
+            var moderators = this.userRepository
+                .All()
+                .Where(x => x.Roles.Count == 1)
+                .OrderBy(x => x.UserName)
+                .To<T>()
+                .ToArray();
+
+            return moderators;
+        }
+
+        public T[] GetAllUsers<T>()
+        {
+            var users = this.userRepository
+                .All()
+                .Where(x => x.Roles.Count == 0)
+                .OrderBy(x => x.UserName)
+                .To<T>()
+                .ToArray();
+
+            return users;
         }
 
         public DateTime GetBirthdate(string userId)
@@ -153,6 +189,13 @@
                 .FirstOrDefault();
 
             return result;
+        }
+
+        public async Task RemoveFromModeratorRoleAsync(string userId)
+        {
+            var moderator = await this.userManager.FindByIdAsync(userId);
+
+            await this.userManager.RemoveFromRoleAsync(moderator, GlobalConstants.ModeratorRoleName);
         }
     }
 }

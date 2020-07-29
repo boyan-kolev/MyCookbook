@@ -1,6 +1,7 @@
 ﻿namespace MyCookbook.Services.Data.Contracts
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
@@ -25,5 +26,13 @@
         DateTime GetBirthdate(string userId);
 
         Task ChangeBirthdate(string userId, DateTime birthdate);
+
+        T[] GetAllUsers<T>();
+
+        T[] GetAllModerators<T>();
+
+        Task AddToModeratorRoleAsync(string userId);
+
+        Task RemoveFromModeratorRoleAsync(string userId);
     }
 }
