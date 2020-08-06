@@ -544,8 +544,18 @@
             viewModel.SeasonalType = input.SeasonalType;
             viewModel.SkillLevel = input.SkillLevel;
 
+            var count = query.Count();
+
+            query = query.Skip(input.Skip);
+
+            if (input.Take.HasValue)
+            {
+                query = query.Take(input.Take.Value);
+            }
+
             var filteredRecipes = query.To<ListRecipesCollectionPartailViewModel>().ToList();
             viewModel.FilteredRecipes = filteredRecipes;
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / GlobalConstants.ItemsPerPage);
 
             return viewModel;
         }
@@ -617,6 +627,29 @@
             await this.recipesRepository.SaveChangesAsync();
         }
 
+        public IEnumerable<T> GetByCategoryId<T>(int categoryId, int? take = null, int skip = 0)
+        {
+            var query = this.recipesRepository
+                .All()
+                .OrderByDescending(x => x.CreatedOn)
+                .Where(x => x.CategoryId == categoryId && x.IsApproved == true)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>().ToList();
+        }
+
+        public int GetCountByCategoryId(int categoryId)
+        {
+            return this.recipesRepository
+                .All()
+                .Count(x => x.CategoryId == categoryId);
+        }
+
         private async Task SetRecipeToRecipeCookingMethodsAsync(
             int cookingMethodId,
             int recipeId)
@@ -646,6 +679,5 @@
             this.recipesRepository.Update(recipe);
             await this.recipesRepository.SaveChangesAsync();
         }
-
     }
 }

@@ -349,7 +349,13 @@
         public IActionResult Filtered(RecipeFilteredInputModel input)
         {
             var inputDto = AutoMapperConfig.MapperInstance.Map<RecipeFilteredInputModel, RecipeFilteredInputDto>(input);
+
+            inputDto.Take = GlobalConstants.ItemsPerPage;
+            inputDto.Skip = (inputDto.Page - 1) * GlobalConstants.ItemsPerPage;
+
             var viewModel = this.recipesService.GetFiltered(inputDto);
+
+            viewModel.CurrentPage = input.Page;
 
             return this.View(viewModel);
         }

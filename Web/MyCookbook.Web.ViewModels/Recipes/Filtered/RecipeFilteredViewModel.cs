@@ -10,11 +10,17 @@
     {
         public string Title { get; set; }
 
+        public int CategoryId { get; set; }
+
         public string Category { get; set; }
+
+        public int CuisineId { get; set; }
 
         public RecipeFilteredCuisineViewModel Cuisine { get; set; }
 
         public string CookingMethod { get; set; }
+
+        public int CookingMethodId { get; set; }
 
         public int PrepTime { get; set; }
 
@@ -33,6 +39,10 @@
         public bool IsCheckedSkillLevel { get; set; }
 
         public SortedType SortedType { get; set; }
+
+        public int CurrentPage { get; set; }
+
+        public int PagesCount { get; set; }
 
         public IEnumerable<ListRecipesCollectionPartailViewModel> FilteredRecipes { get; set; }
     }

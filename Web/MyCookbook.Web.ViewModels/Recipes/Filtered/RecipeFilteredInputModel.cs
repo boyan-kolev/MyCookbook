@@ -31,5 +31,11 @@
         public bool IsCheckedSkillLevel { get; set; }
 
         public SortedType SortedType { get; set; }
+
+        public int Page { get; set; } = 1;
+
+        public int? Take { get; set; } = null;
+
+        public int Skip { get; set; } = 0;
     }
 }

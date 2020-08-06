@@ -94,3 +94,89 @@
 }
 
 <partial name="_ListRecipesPartial" model="@listRecipesPartialViewModel" />
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (this.Model.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Предишна</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Recipes"
+                   asp-action="Filtered"
+                   asp-route-title="@this.Model.Title"
+                   asp-route-categoryId="@this.Model.CategoryId"
+                   asp-route-cookingMethodId="@this.Model.CookingMethodId"
+                   asp-route-cookTime="@this.Model.CookTime"
+                   asp-route-cuisineId="@this.Model.CuisineId"
+                   asp-route-isCheckedCookTime="@this.Model.IsCheckedCookTime"
+                   asp-route-isCheckedPrepTime="@this.Model.IsCheckedPrepTime"
+                   asp-route-isCheckedSeasonalType="@this.Model.IsCheckedSeasonalType"
+                   asp-route-isCheckedSkillLevel="@this.Model.IsCheckedSkillLevel"
+                   asp-route-prepTime="@this.Model.PrepTime"
+                   asp-route-seasonalType="@this.Model.SeasonalType"
+                   asp-route-skillLevel="@this.Model.SkillLevel"
+                   asp-route-sortedType="@this.Model.SortedType"
+                   asp-route-page="@(this.Model.CurrentPage - 1)">Предишна</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= this.Model.PagesCount; i++)
+        {
+            var active = i == this.Model.CurrentPage ? "active" : string.Empty;
+            <li class="page-item @active">
+                <a class="page-link"
+                   asp-controller="Recipes"
+                   asp-action="Filtered"
+                   asp-route-title="@this.Model.Title"
+                   asp-route-categoryId="@this.Model.CategoryId"
+                   asp-route-cookingMethodId="@this.Model.CookingMethodId"
+                   asp-route-cookTime="@this.Model.CookTime"
+                   asp-route-cuisineId="@this.Model.CuisineId"
+                   asp-route-isCheckedCookTime="@this.Model.IsCheckedCookTime"
+                   asp-route-isCheckedPrepTime="@this.Model.IsCheckedPrepTime"
+                   asp-route-isCheckedSeasonalType="@this.Model.IsCheckedSeasonalType"
+                   asp-route-isCheckedSkillLevel="@this.Model.IsCheckedSkillLevel"
+                   asp-route-prepTime="@this.Model.PrepTime"
+                   asp-route-seasonalType="@this.Model.SeasonalType"
+                   asp-route-skillLevel="@this.Model.SkillLevel"
+                   asp-route-sortedType="@this.Model.SortedType"
+                   asp-route-page="@i">@i</a>
+            </li>
+        }
+
+        @if (this.Model.CurrentPage == this.Model.PagesCount)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Следваща</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Recipes"
+                   asp-action="Filtered"
+                   asp-route-title="@this.Model.Title"
+                   asp-route-categoryId="@this.Model.CategoryId"
+                   asp-route-cookingMethodId="@this.Model.CookingMethodId"
+                   asp-route-cookTime="@this.Model.CookTime"
+                   asp-route-cuisineId="@this.Model.CuisineId"
+                   asp-route-isCheckedCookTime="@this.Model.IsCheckedCookTime"
+                   asp-route-isCheckedPrepTime="@this.Model.IsCheckedPrepTime"
+                   asp-route-isCheckedSeasonalType="@this.Model.IsCheckedSeasonalType"
+                   asp-route-isCheckedSkillLevel="@this.Model.IsCheckedSkillLevel"
+                   asp-route-prepTime="@this.Model.PrepTime"
+                   asp-route-seasonalType="@this.Model.SeasonalType"
+                   asp-route-skillLevel="@this.Model.SkillLevel"
+                   asp-route-sortedType="@this.Model.SortedType"
+                   asp-route-page="@(this.Model.CurrentPage + 1)">Следваща</a>
+            </li>
+        }
+    </ul>
+</nav>
