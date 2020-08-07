@@ -38,7 +38,9 @@
 
         int GetCookTimesById(int recipeId);
 
-        IEnumerable<T> GetAll<T>(bool isWithApproved);
+        IEnumerable<T> GetAll<T>(bool isApproved, int? take = null, int skip = 0);
+
+        int GetCountOfAllRecipes(bool isApproved);
 
         RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input);
 

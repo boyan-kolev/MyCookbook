@@ -297,11 +297,15 @@
         }
 
         // TODO
-        [Route("/Identity/Recipes/All")]
-        public IActionResult All()
+        // [Route("/Identity/Recipes/All")]
+        public IActionResult All(int page = 1)
         {
-            var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>(true);
+            var recipes = this.recipesService.GetAll<ListRecipesCollectionPartailViewModel>(true, GlobalConstants.ItemsPerPage, (page - 1) * GlobalConstants.ItemsPerPage);
             var viewModel = new RecipeAllViewModel { Recipes = recipes };
+
+            var count = this.recipesService.GetCountOfAllRecipes(true);
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / GlobalConstants.ItemsPerPage);
+            viewModel.CurrentPage = page;
 
             return this.View(viewModel);
         }

@@ -450,15 +450,20 @@
             return cookTimes;
         }
 
-        public IEnumerable<T> GetAll<T>(bool isWithApproved)
+        public IEnumerable<T> GetAll<T>(bool isApproved, int? take = null, int skip = 0)
         {
-            var recipes = this.recipesRepository
+            var query = this.recipesRepository
                 .All()
-                .Where(r => r.IsApproved == isWithApproved)
+                .Where(r => r.IsApproved == isApproved)
                 .OrderByDescending(r => r.CreatedOn)
-                .To<T>();
+                .Skip(skip);
 
-            return recipes;
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>();
         }
 
         public RecipeFilteredViewModel GetFiltered(RecipeFilteredInputDto input)
@@ -675,6 +680,14 @@
             return this.recipesRepository
                 .All()
                 .Count(x => x.CuisineId == cuisineId);
+        }
+
+        public int GetCountOfAllRecipes(bool isApproved)
+        {
+            var count = this.recipesRepository.All()
+                .Count(x => x.IsApproved == isApproved);
+
+            return count;
         }
 
         private async Task SetRecipeToRecipeCookingMethodsAsync(
