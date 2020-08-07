@@ -469,24 +469,28 @@
             if (!string.IsNullOrEmpty(input.Title) && !string.IsNullOrWhiteSpace(input.Title))
             {
                 query = query.Where(x => x.Title.ToLower().Contains(input.Title.ToLower()));
+                viewModel.Title = input.Title;
             }
 
             if (input.CategoryId > 0)
             {
                 query = query.Where(x => x.CategoryId == input.CategoryId);
                 viewModel.Category = this.categoriesService.GetNameById(input.CategoryId);
+                viewModel.CategoryId = input.CategoryId;
             }
 
             if (input.CuisineId > 0)
             {
                 query = query.Where(x => x.CuisineId == input.CuisineId);
                 viewModel.Cuisine = this.cuisinesService.GetById<RecipeFilteredCuisineViewModel>(input.CuisineId);
+                viewModel.CuisineId = input.CuisineId;
             }
 
             if (input.CookingMethodId > 0)
             {
                 query = query.Where(x => x.RecipesCookingMethods.Any(c => c.CookingMethodId == input.CookingMethodId));
                 viewModel.CookingMethod = this.cookingMethodsService.GetNameById(input.CookingMethodId);
+                viewModel.CookingMethodId = input.CookingMethodId;
             }
 
             if (input.IsCheckedPrepTime)
@@ -648,6 +652,29 @@
             return this.recipesRepository
                 .All()
                 .Count(x => x.CategoryId == categoryId);
+        }
+
+        public IEnumerable<T> GetByCuisineId<T>(int cuisineId, int? take = null, int skip = 0)
+        {
+            var query = this.recipesRepository
+                .All()
+                .OrderByDescending(x => x.CreatedOn)
+                .Where(x => x.CuisineId == cuisineId && x.IsApproved == true)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>().ToList();
+        }
+
+        public int GetCountByCuisineId(int cuisineId)
+        {
+            return this.recipesRepository
+                .All()
+                .Count(x => x.CuisineId == cuisineId);
         }
 
         private async Task SetRecipeToRecipeCookingMethodsAsync(

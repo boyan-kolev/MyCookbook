@@ -26,6 +26,10 @@
 
         int GetCountByCategoryId(int categoryId);
 
+        IEnumerable<T> GetByCuisineId<T>(int cuisineId, int? take = null, int skip = 0);
+
+        int GetCountByCuisineId(int cuisineId);
+
         bool IsExistRecipeTitle(string recipeTtile);
 
         Task<bool> SetRecipeToUserFavoriteRecipesAsync(int recipeId, string userId);
