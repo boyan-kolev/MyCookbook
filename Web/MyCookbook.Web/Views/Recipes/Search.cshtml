@@ -16,6 +16,10 @@
     this.ViewData["Title"] = "Търсене на рецепта";
 }
 
+<div class="text-center text-primary">
+    <h2>@this.ViewData["Title"]</h2>
+</div>
+
 <form asp-controller="Recipes" asp-action="Search" method="post">
     <div class="form-group">
         <label asp-for="Title"></label>
@@ -108,7 +112,7 @@
     <div class="row">
         <div class="col-md-5">
         </div>
-        
+
     </div>
 </form>
 

@@ -88,8 +88,8 @@
                         }
 
                         @*<li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Политика</a>
-                        </li>*@
+                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Политика</a>
+                            </li>*@
                     </ul>
                 </div>
             </div>
@@ -98,10 +98,10 @@
 
     </header>
     <div class="container-fluid row">
-        <div class="col-md-3" style="background-color:lightgray">
+        <div class="col-sm-3" id="lastAddedRecipes" style="background-color:lightgray">
             <vc:last-created-recipes count="7"></vc:last-created-recipes>
         </div>
-        <div class="col-md-9">
+        <div class="col-sm-9">
             <partial name="_CookieConsentPartial" />
             <main role="main" class="pb-3">
                 @this.RenderBody()
@@ -133,6 +133,19 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <input type="hidden" value=""
+           name="clientScreenWidth" id="clientScreenWidth" />
+
     @this.RenderSection("Scripts", required: false)
+<script>
+        $(document).ready(function () {
+            $("#clientScreenWidth").val($(window).width());
+            var browserWidth = parseInt(document.getElementById("clientScreenWidth").value);    
+            if (browserWidth < 910) {
+                $("#lastAddedRecipes").remove();
+            }
+
+        });
+</script>
 </body>
 </html>

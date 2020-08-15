@@ -14,6 +14,6 @@
 
         public const string DefaultUserPhotoFemaleUrl = "https://st2.depositphotos.com/4111759/12123/v/950/depositphotos_121233300-stock-illustration-female-default-avatar-gray-profile.jpg";
 
-        public const int ItemsPerPage = 3;
+        public const int ItemsPerPage = 9;
     }
 }

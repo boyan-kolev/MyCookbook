@@ -99,10 +99,10 @@
         <hr class="border" />
         @if (Model.IsApproved == false)
         {
-    <div>
-        <button type="button" class="btn btn-danger btn-lg float-right mb-1" onclick='DeleteRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Изтриване на рецептата"><i class="fas fa-times"></i></button>
-        <button type="button" class="btn btn-success btn-lg float-right mb-1" onclick='ApproveRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Одобряване на рецептата"><i class="fas fa-check"></i></button>
-    </div>
+            <div>
+                <button type="button" class="btn btn-danger btn-lg float-right mb-1" onclick='DeleteRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Изтриване на рецептата"><i class="fas fa-times"></i></button>
+                <button type="button" class="btn btn-success btn-lg float-right mb-1" onclick='ApproveRecipe("@Model.Id")' data-toggle="tooltip" data-placement="top" title="Одобряване на рецептата"><i class="fas fa-check"></i></button>
+            </div>
         }
         <div class="media">
             <img height="25" width="35" class="align-self-center mr-3" src="@Model.Cuisine.ImageUrl" alt="знаме">
@@ -315,7 +315,7 @@
                                 {
                                     <div> <button type="button" class="btn btn-success float-right mb-1" onclick='showAddCommentForm("@comment.Id")'><i class="fa fa-comment"></i>&nbsp; Отговор</button> </div>
                                 }
-                                @if (comment.User.Id == Model.User.Id)
+                                @if (comment.User.Id == Model?.User?.Id)
                                 {
                                     <div> <button type="button" class="btn btn-secondary float-right mb-1" onclick='showEditCommentForm("@comment.Id", null, "@comment.Content")'><i class="fas fa-edit"></i>&nbsp; Редактирай</button> </div>
                                     <div> <button type="button" class="btn btn-danger float-right mb-1" onclick='DeleteComment("@comment.Id", null)'><i class="fas fa-trash-alt"></i>&nbsp; Изтрий</button> </div>
@@ -346,7 +346,7 @@
                                                     @reply.Content
                                                 </article>
                                                 <div class="row">
-                                                    @if (reply.User.Id == Model.User.Id)
+                                                    @if (reply.User.Id == Model?.User?.Id)
                                                     {
                                                         <div class="col-md-7"></div>
                                                         <div class="input-group-prepend px-4 pt-3 mt-1 col-md-5">

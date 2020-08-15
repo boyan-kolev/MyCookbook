@@ -9,8 +9,8 @@
 @foreach (var recipe in Model.Recipes)
 {
     <div class="col mb-4">
-        <div class="card">
-            <div class="card-title">
+        <div class="card bg-primary">
+            <div class="card-title text-white">
                 <h5 class="card-title">@recipe.Title</h5>
             </div>
             <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.Id" class="alert-info">
@@ -23,10 +23,10 @@
                     <img src="@recipe.TitlePhotoUrl" class="card-img-top" height="200" alt="Снимка на рецептата">
                 }
             </a>
-            <div class="card-footer">
+            <div class="card-footer bg-light">
                 <div class="row">
                     <div class="col-md-6">
-                        <i class="far fa-calendar-alt" style="color:black">@recipe.CreatedOn.ToString("MM-dd-yy")</i>
+                        <i class="far fa-calendar-alt" style="color:black">&nbsp;@recipe.CreatedOn.ToString("MM-dd-yy")</i>
                     </div>
                     <div class="col-md-5">
                         <i class="fas fa-star" style="color:gold"></i>
